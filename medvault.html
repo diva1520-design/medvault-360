@@ -1,0 +1,3230 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedVault 360 - Smart Telehealth, Diagnostics & Pharmacy Ecosystem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-subtle: #e0f2fe;
+      --primary-gradient: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      --emerald-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      --purple-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      --cyan-gradient: linear-gradient(135deg, #0891b2 0%, #0284c7 100%);
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-subtle: #f1f5f9;
+      --border: #e2e8f0;
+      --border-focus: #38bdf8;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --rx-bg: #fee2e2;
+      --rx-text: #991b1b;
+      --otc-bg: #dcfce7;
+      --otc-text: #166534;
+      --savings-bg: #fef9c3;
+      --savings-text: #854d0e;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08);
+      --card-radius: 18px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #090d16;
+      --surface: #111827;
+      --surface-subtle: #1e293b;
+      --border: #243042;
+      --border-focus: #0284c7;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary-subtle: #172554;
+      --rx-bg: #450a0a;
+      --rx-text: #fca5a5;
+      --otc-bg: #052e16;
+      --otc-text: #86efac;
+      --savings-bg: #3b2408;
+      --savings-text: #fef08a;
+      --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+    /* Top Navigation Bar */
+    .topbar {
+      height: 72px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 19px;
+      cursor: pointer;
+      letter-spacing: -0.5px;
+    }
+    .brand-mini-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+
+    .menu-dots-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      font-weight: 900;
+      line-height: 1;
+      transition: all 0.2s ease;
+    }
+    .menu-dots-btn:hover { background: var(--primary-subtle); color: var(--primary); transform: rotate(90deg); }
+
+    .btn-action {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 15px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:hover { border-color: var(--border-focus); }
+    .btn-sos {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+    }
+    .btn-sos:hover { transform: translateY(-1px); }
+
+    /* Floating Toast Alerts */
+    #medvaultToastContainer {
+      position: fixed;
+      top: 86px;
+      right: 24px;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .inapp-toast {
+      pointer-events: auto;
+      background: var(--surface);
+      border: 1.5px solid var(--primary);
+      border-left: 6px solid var(--primary);
+      border-radius: 14px;
+      padding: 16px 20px;
+      min-width: 320px;
+      max-width: 420px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s;
+    }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+    .toast-icon { font-size: 26px; line-height: 1; }
+    .toast-content { flex: 1; }
+    .toast-title { font-weight: 800; font-size: 14px; color: var(--text); margin-bottom: 2px; }
+    .toast-body { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
+    .toast-close { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 0 4px; }
+
+    /* Side Drawer */
+    .drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+    .drawer-overlay.open { opacity: 1; visibility: visible; }
+
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 320px;
+      height: 100%;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -15px 0 35px rgba(0, 0, 0, 0.2);
+      z-index: 210;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .side-drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      padding: 24px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .drawer-nav { flex: 1; padding: 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+    .drawer-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 12px 14px 4px;
+      letter-spacing: 0.8px;
+    }
+    .drawer-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+    .drawer-btn:hover { background: var(--surface-subtle); color: var(--text); transform: translateX(4px); }
+    .drawer-btn.active { background: var(--primary-subtle); color: var(--primary); font-weight: 700; }
+
+    /* Main Body */
+    .main-body { flex: 1; padding: 32px 24px; max-width: 1180px; margin: 0 auto; width: 100%; }
+    .page-view { display: none; animation: fadeIn 0.25s ease-out; }
+    .page-view.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Home Hero */
+    #page-welcome { position: relative; }
+    .welcome-ambient-bg {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 480px;
+      background: radial-gradient(circle at 50% 20%, rgba(2, 132, 199, 0.12) 0%, rgba(99, 102, 241, 0.06) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .welcome-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 10px 10px 50px;
+    }
+    .hero-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(2, 132, 199, 0.1);
+      border: 1px solid rgba(2, 132, 199, 0.25);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulseGreen 1.8s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .hero-emblem-wrapper { position: relative; margin-bottom: 20px; }
+    .hero-emblem-glow {
+      position: absolute;
+      inset: -10px;
+      background: linear-gradient(135deg, #0284c7, #6366f1);
+      border-radius: 32px;
+      filter: blur(16px);
+      opacity: 0.45;
+    }
+    .hero-logo-box {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 54px;
+      font-weight: 900;
+      user-select: none;
+      box-shadow: 0 12px 28px rgba(2, 132, 199, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease;
+    }
+    .hero-logo-box:hover { transform: scale(1.05) rotate(-3deg); }
+    .hero-title {
+      font-size: 46px;
+      font-weight: 900;
+      letter-spacing: -1.2px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text) 40%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: 17px;
+      color: var(--text-muted);
+      max-width: 720px;
+      line-height: 1.65;
+      margin-bottom: 26px;
+    }
+
+    /* Embedded Dual Widgets on Home */
+    .home-widgets-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 980px;
+      margin-bottom: 34px;
+    }
+    @media (max-width: 860px) { .home-widgets-grid { grid-template-columns: 1fr; } }
+
+    .home-widget-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      text-align: left;
+    }
+    .symptom-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .symptom-chip {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .symptom-chip:hover { border-color: var(--primary); background: var(--primary-subtle); color: var(--primary); }
+
+    .hero-stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      width: 100%;
+      max-width: 900px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      margin-bottom: 38px;
+    }
+    @media (max-width: 768px) {
+      .hero-stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .hero-title { font-size: 34px; }
+    }
+    .stat-metric-item { text-align: center; }
+    .stat-metric-item:not(:last-child) { border-right: 1px solid var(--border); }
+    @media (max-width: 768px) { .stat-metric-item:nth-child(2) { border-right: none; } }
+    .metric-value { font-size: 22px; font-weight: 900; color: var(--primary); }
+    .metric-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 980px;
+    }
+    .hub-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hub-card:hover { transform: translateY(-6px); box-shadow: 0 18px 36px -8px rgba(2, 132, 199, 0.18); }
+    .card-accent-blue:hover { border-color: #0284c7; }
+    .card-accent-amber:hover { border-color: #d97706; }
+    .card-accent-green:hover { border-color: #10b981; }
+    .card-accent-pink:hover { border-color: #db2777; }
+    .card-accent-purple:hover { border-color: #8b5cf6; }
+    .card-accent-cyan:hover { border-color: #06b6d4; }
+
+    .hub-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .hub-card-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .hub-tag { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .hub-arrow { font-size: 14px; font-weight: 700; color: var(--primary); margin-top: 14px; display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Common Card & Form Styles */
+    .ui-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); }
+    .form-control {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14.5px;
+      outline: none;
+      transition: all 0.15s;
+    }
+    .form-control:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--primary-subtle); }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14.5px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+      transition: all 0.15s;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4); }
+
+    .btn-success {
+      background: var(--emerald-gradient);
+      color: white;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14.5px;
+      width: 100%;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+      transition: all 0.15s;
+    }
+    .btn-success:hover { transform: translateY(-1px); }
+
+    .tab-nav-bar {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1.5px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .tab-nav-btn {
+      background: none;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 9px 18px;
+      border-radius: 12px;
+    }
+    .tab-nav-btn.active {
+      background: var(--primary-subtle);
+      color: var(--primary);
+    }
+
+    /* Auth Switch Buttons */
+    .auth-switch-bar {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .auth-switch-btn {
+      background: none;
+      border: none;
+      font-weight: 800;
+      font-size: 14.5px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .auth-switch-btn.active {
+      color: var(--primary);
+    }
+
+    /* Medicines Grid */
+    .med-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .med-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .med-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: var(--shadow); }
+    .badge { padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+    .badge-rx { background: var(--rx-bg); color: var(--rx-text); }
+    .badge-otc { background: var(--otc-bg); color: var(--otc-text); }
+    .savings-box {
+      background: var(--savings-bg);
+      color: var(--savings-text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin: 12px 0;
+      border: 1px dashed var(--savings-text);
+    }
+    .category-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .cat-btn {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+    /* Doctor/Patient Columns */
+    .two-col-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; }
+    @media (max-width: 900px) { .two-col-grid { grid-template-columns: 1fr; } }
+
+    .patient-queue-item {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .patient-queue-item:hover { border-color: var(--primary); transform: translateX(3px); }
+
+    .queue-action-btns {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-connect {
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-phone { background: #e0f2fe; color: #0284c7; }
+    .btn-live-video { background: #0284c7; color: white; }
+    .btn-wa-call { background: #25d366; color: white; }
+
+    .rx-paper {
+      background: #ffffff;
+      color: #0f172a;
+      padding: 28px;
+      border: 2px dashed #94a3b8;
+      border-radius: 16px;
+      font-family: monospace;
+      min-height: 400px;
+      position: relative;
+    }
+
+    .reminder-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-delete { background: #fee2e2; color: #991b1b; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; }
+
+    /* Live Delivery Timeline */
+    .delivery-tracker-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .tracking-timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 22px 0 14px;
+    }
+    .tracking-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      z-index: 2;
+      text-align: center;
+      flex: 1;
+    }
+    .tracking-step.done { color: #16a34a; }
+    .tracking-step.active { color: #0284c7; }
+    .tracking-step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface-subtle);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .tracking-step.done .tracking-step-circle {
+      background: #dcfce7;
+      border-color: #16a34a;
+      color: #16a34a;
+      font-weight: 800;
+    }
+    .tracking-step.active .tracking-step-circle {
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0284c7;
+      animation: pulseBlue 1.5s infinite;
+    }
+    @keyframes pulseBlue {
+      0% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6); }
+      70% { box-shadow: 0 0 0 8px rgba(2, 132, 199, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+    }
+
+    /* Razorpay Modal */
+    .rzp-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 19, 43, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .rzp-modal-overlay.active { display: flex; }
+    .rzp-modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      animation: rzpPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes rzpPop { from { opacity: 0; transform: scale(0.92) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .rzp-header { background: #072654; color: white; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .rzp-header-brand { display: flex; align-items: center; gap: 12px; }
+    .rzp-logo-circle { width: 42px; height: 42px; background: linear-gradient(135deg, #0284c7, #2563eb); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; color: white; }
+    .rzp-amount-badge { text-align: right; }
+    .rzp-amount-badge small { font-size: 11px; opacity: 0.8; display: block; text-transform: uppercase; font-weight: 700; }
+    .rzp-amount-badge span { font-size: 24px; font-weight: 800; }
+    .rzp-body { padding: 24px; background: #ffffff; color: #1e293b; }
+    .rzp-section-title { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #64748b; margin-bottom: 12px; }
+    .rzp-method-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .rzp-method-item { display: flex; align-items: center; justify-content: space-between; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; cursor: pointer; }
+    .rzp-method-item:hover, .rzp-method-item.selected { border-color: #0284c7; background: #f0f9ff; }
+    .rzp-method-left { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; }
+    .rzp-icon-box { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; }
+    .rzp-pay-btn { width: 100%; background: #0284c7; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4); }
+    .rzp-pay-btn:hover { background: #0369a1; }
+    .rzp-footer { background: #f8fafc; padding: 12px 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #64748b; font-weight: 600; }
+    .rzp-footer svg { width: 14px; height: 14px; fill: #0284c7; }
+    .rzp-processing { display: none; text-align: center; padding: 40px 20px; }
+    .rzp-spinner { width: 48px; height: 48px; border: 4px solid #e2e8f0; border-top: 4px solid #0284c7; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 18px; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box { background: var(--surface); border-radius: 20px; padding: 26px; max-width: 440px; width: 90%; }
+    .sos-link { display: block; text-align: center; background: #fee2e2; color: #991b1b; text-decoration: none; padding: 13px; border-radius: 10px; font-weight: 700; margin-top: 10px; }
+
+    /* Real Working Tele-Video Modal */
+    .video-modal-card {
+      background: #0f172a;
+      border-radius: 24px;
+      max-width: 820px;
+      width: 95%;
+      height: 580px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    }
+    .video-modal-header {
+      background: #1e293b;
+      color: white;
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .video-modal-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: #000;
+    }
+    #localLiveVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+    .video-controls {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      gap: 14px;
+      z-index: 10;
+    }
+    .btn-ctrl {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-ctrl:hover { background: rgba(255, 255, 255, 0.35); }
+    .btn-ctrl-end { background: #dc2626; }
+    .btn-ctrl-end:hover { background: #b91c1c; }
+  </style>
+</head>
+<body>
+
+  <!-- FLOATING TOAST NOTIFICATION CONTAINER -->
+  <div id="medvaultToastContainer"></div>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand-mini" onclick="navigateTo('page-welcome')">
+        <div class="brand-mini-icon">⚕</div>
+        MedVault 360
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-action" id="themeToggle">🌓 Theme</button>
+      <button class="btn-sos" id="sosBtn">🚨 SOS</button>
+      <button class="menu-dots-btn" id="drawerOpenBtn" title="Open Menu">⋮</button>
+    </div>
+  </header>
+
+  <!-- SIDE DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <div style="font-weight:800; font-size:17px; display:flex; align-items:center; gap:8px;">
+        <span style="color:var(--primary);">⚕</span> Quick Navigation
+      </div>
+      <button id="drawerCloseBtn" style="background:none; border:none; font-size:20px; cursor:pointer; color:var(--text);">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <div class="drawer-label">Overview</div>
+      <button class="drawer-btn active" data-target="page-welcome">
+        <span>🏠</span> Welcome & Quick Desks
+      </button>
+
+      <div class="drawer-label">Clinical & Telehealth</div>
+      <button class="drawer-btn" data-target="page-medicines">
+        <span>🔍</span> 50+ Generic Medicines
+      </button>
+      <button class="drawer-btn" data-target="page-patient">
+        <span>🩺</span> Patient Consult Desk (₹50-₹99)
+      </button>
+      <button class="drawer-btn" data-target="page-doctor">
+        <span>👨‍⚕️</span> Doctor Tele-Desk (Call & Video)
+      </button>
+
+      <div class="drawer-label">Delivery & Diagnostics</div>
+      <button class="drawer-btn" data-target="page-chemist">
+        <span>💊</span> Pharmacy & Chemist Delivery App
+      </button>
+      <button class="drawer-btn" data-target="page-lab">
+        <span>🧪</span> Diagnostic Lab & Phlebotomist Desk
+      </button>
+
+      <div class="drawer-label">Assistance & Health Tools</div>
+      <button class="drawer-btn" data-target="page-specialists">
+        <span>🩺</span> Specialist Finder (14 Types)
+      </button>
+      <button class="drawer-btn" data-target="page-firstaid">
+        <span>🩹</span> Emergency First-Aid (15 Guides)
+      </button>
+      <button class="drawer-btn" data-target="page-reminders">
+        <span>⏰</span> Daily Pill Reminder
+      </button>
+    </nav>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="main-body">
+
+    <!-- ================= PAGE 0: VIBRANT WELCOME PORTAL ================= -->
+    <section id="page-welcome" class="page-view active">
+      <div class="welcome-ambient-bg"></div>
+
+      <div class="welcome-container">
+        <div class="hero-live-badge">
+          <span class="pulse-dot"></span>
+          <span>Unified Telehealth, Diagnostics, Chemist Delivery & Jan-Aushadhi Network</span>
+        </div>
+
+        <div class="hero-emblem-wrapper">
+          <div class="hero-emblem-glow"></div>
+          <div class="hero-logo-box">⚕</div>
+        </div>
+
+        <h1 class="hero-title">MedVault 360</h1>
+        <p class="hero-subtitle">
+          Sasti Jan-Aushadhi dawaiyon ka verified generic network, verified doctor consultation ₹50–₹99 transparent fee ke sath, nearby medical store delivery network, aur home blood sample collection.
+        </p>
+
+        <!-- DUAL QUICK ACTION WIDGETS -->
+        <div class="home-widgets-grid">
+          <!-- Widget 1: Specialist Matcher -->
+          <div class="home-widget-card" style="border-left:4px solid var(--primary);">
+            <div style="font-weight:800; font-size:15.5px; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+              <span>🩺</span> Instant Specialist Symptom Matcher:
+            </div>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <input type="text" id="homeSymptomInput" class="form-control" style="padding:10px 12px; font-size:13.5px;" placeholder="Lakshan likhein (Chest pain, Sugar, Moch, Skin)...">
+              <button class="btn-primary" id="homeSymptomSearchBtn" style="padding:10px 14px; font-size:13px; white-space:nowrap;">Match</button>
+            </div>
+            <div class="symptom-chips">
+              <span class="symptom-chip" onclick="quickMatch('Chest pain')">💔 Chest Pain</span>
+              <span class="symptom-chip" onclick="quickMatch('Sugar')">🩸 Sugar / Diabetes</span>
+              <span class="symptom-chip" onclick="quickMatch('Skin')">🧴 Skin Allergy</span>
+              <span class="symptom-chip" onclick="quickMatch('Haddi')">🦴 Haddi Fracture</span>
+            </div>
+            <div id="homeMatchResult" style="margin-top:10px; display:none;"></div>
+          </div>
+
+          <!-- Widget 2: Laboratory Quick Booking -->
+          <div class="home-widget-card" style="border-left:4px solid #0891b2;">
+            <div style="font-weight:800; font-size:15.5px; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+              <span>🧪</span> Quick Home Blood Test Booking (70% Off):
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:10px;">
+              Certified phlebotomist will visit home for sample pickup:
+            </p>
+            <div style="display:flex; gap:8px;">
+              <select id="homeQuickLabSelect" class="form-control" style="padding:10px 12px; font-size:13px;">
+                <option value="Comprehensive Full Body Health Checkup">Full Body Checkup (68 Tests) - ₹499</option>
+                <option value="Complete Blood Count (CBC) + ESR">CBC + Hemoglobin Test - ₹149</option>
+                <option value="Lipid Profile (Heart & Cholesterol)">Lipid Heart Profile - ₹199</option>
+                <option value="Thyroid Profile (T3, T4, TSH)">Thyroid Profile - ₹199</option>
+                <option value="HbA1c & Blood Sugar Fasting">Diabetes Sugar Check - ₹249</option>
+              </select>
+              <button class="btn-primary" onclick="navigateTo('page-lab')" style="background:linear-gradient(135deg, #0891b2, #0284c7); padding:10px 14px; font-size:13px; white-space:nowrap;">
+                Book Pickup
+              </button>
+            </div>
+            <div style="font-size:11.5px; color:#0e7490; font-weight:700; margin-top:8px;">
+              ⚡ NABL Certified Labs | Digital Report within 12 Hours
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-stats-bar">
+          <div class="stat-metric-item">
+            <div class="metric-value">50+</div>
+            <div class="metric-label">Generic Salts Directory</div>
+          </div>
+          <div class="stat-metric-item">
+            <div class="metric-value">₹50 - ₹99</div>
+            <div class="metric-label">Doctor Consult Fee</div>
+          </div>
+          <div class="stat-metric-item">
+            <div class="metric-value">2-Hour</div>
+            <div class="metric-label">Local Chemist Delivery</div>
+          </div>
+          <div class="stat-metric-item">
+            <div class="metric-value">Up to 80%</div>
+            <div class="metric-label">Jan-Aushadhi Bachat</div>
+          </div>
+        </div>
+
+        <div class="welcome-grid">
+          <div class="hub-card card-accent-blue" onclick="navigateTo('page-medicines')">
+            <div>
+              <div class="hub-card-top">
+                <div class="hub-card-icon" style="background:#e0f2fe; color:#0284c7;">💊</div>
+                <span class="hub-tag" style="background:#e0f2fe; color:#0369a1;">Save 70-80%</span>
+              </div>
+              <h3 style="font-size:18px; font-weight:800; margin-bottom:6px;">50+ Generic Medicines</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Brand dawaiyon ke salt formula aur saste Jan-Aushadhi chemical salts ka live price comparison.</p>
+            </div>
+            <div class="hub-arrow">Dawai Search Karein ➔</div>
+          </div>
+
+          <div class="hub-card card-accent-amber" onclick="navigateTo('page-patient')">
+            <div>
+              <div class="hub-card-top">
+                <div class="hub-card-icon" style="background:#fef3c7; color:#d97706;">📝</div>
+                <span class="hub-tag" style="background:#fef3c7; color:#b45309;">₹50 Fixed Fee</span>
+              </div>
+              <h3 style="font-size:18px; font-weight:800; margin-bottom:6px;">Patient Consult Desk</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Lakshan darj karein, Razorpay se ₹50 pay karein aur seedha official doctor parchi paayein.</p>
+            </div>
+            <div class="hub-arrow">Consultation Form Kholein ➔</div>
+          </div>
+
+          <div class="hub-card card-accent-green" onclick="navigateTo('page-doctor')">
+            <div>
+              <div class="hub-card-top">
+                <div class="hub-card-icon" style="background:#dcfce7; color:#16a34a;">👨‍⚕️</div>
+                <span class="hub-tag" style="background:#dcfce7; color:#15803d;">Queue & Live Video</span>
+              </div>
+              <h3 style="font-size:18px; font-weight:800; margin-bottom:6px;">Doctor Tele-Desk</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Incoming patient queue dekhein, Live Video Call connect karein aur Rx dispatch karein.</p>
+            </div>
+            <div class="hub-arrow">Doctor Login / Demo ➔</div>
+          </div>
+
+          <div class="hub-card card-accent-pink" onclick="navigateTo('page-chemist')">
+            <div>
+              <div class="hub-card-top">
+                <div class="hub-card-icon" style="background:#fce7f3; color:#db2777;">🏪</div>
+                <span class="hub-tag" style="background:#fce7f3; color:#be185d;">Delivery App Desk</span>
+              </div>
+              <h3 style="font-size:18px; font-weight:800; margin-bottom:6px;">Pharmacy & Chemist Network</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Patient delivery order karein aur local chemist partner delivery app ki tarah orders dispatch karein.</p>
+            </div>
+            <div class="hub-arrow">Pharmacy Portal Kholein ➔</div>
+          </div>
+
+          <div class="hub-card card-accent-cyan" onclick="navigateTo('page-lab')">
+            <div>
+              <div class="hub-card-top">
+                <div class="hub-card-icon" style="background:#cffafe; color:#0891b2;">🧪</div>
+                <span class="hub-tag" style="background:#cffafe; color:#0e7490;">Home Sample</span>
+              </div>
+              <h3 style="font-size:18px; font-weight:800; margin-bottom:6px;">Pathology Diagnostic Lab</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Ghar baithe blood test, CBC, Thyroid, Sugar aur Full Body Checkup book karein at 70% off.</p>
+            </div>
+            <div class="hub-arrow">Lab Test & Partner Desk ➔</div>
+          </div>
+
+          <div class="hub-card card-accent-purple" onclick="navigateTo('page-reminders')">
+            <div>
+              <div class="hub-card-top">
+                <div class="hub-card-icon" style="background:#ede9fe; color:#7c3aed;">⏰</div>
+                <span class="hub-tag" style="background:#ede9fe; color:#6d28d9;">Audio Alarm</span>
+              </div>
+              <h3 style="font-size:18px; font-weight:800; margin-bottom:6px;">Pill Schedule Reminder</h3>
+              <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Apni medicines ka time schedule set karein taaki exact time aane par loud chime aur alarm baje.</p>
+            </div>
+            <div class="hub-arrow">Schedule Set Karein ➔</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= PAGE 1: 50+ MEDICINES DIRECTORY ================= -->
+    <section id="page-medicines" class="page-view">
+      <div class="ui-card">
+        <h3 style="margin-bottom:6px; color:var(--primary); font-size:20px;">🔍 50+ Generic Medicines & Jan-Aushadhi Rates</h3>
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">Dawai ka naam, chemical formula (salt) ya bimari search karein:</p>
+        <input type="text" id="medicineSearch" class="form-control" placeholder="Search brand name, salt, or symptom (e.g. Paracetamol, Acidity, Cough)...">
+        <div class="category-pills">
+          <button class="cat-btn active" data-cat="all">All (50+)</button>
+          <button class="cat-btn" data-cat="pain">Fever & Pain</button>
+          <button class="cat-btn" data-cat="stomach">Acidity & Gas</button>
+          <button class="cat-btn" data-cat="allergy">Allergy & Cold</button>
+          <button class="cat-btn" data-cat="infection">Antibiotics</button>
+          <button class="cat-btn" data-cat="vitamins">Vitamins</button>
+          <button class="cat-btn" data-cat="firstaid">Ointments</button>
+        </div>
+      </div>
+      <div id="medicinesContainer" class="med-grid"></div>
+    </section>
+
+    <!-- ================= PAGE 2: PATIENT CONSULTATION DESK ================= -->
+    <section id="page-patient" class="page-view">
+      <div class="two-col-grid">
+        <div class="ui-card">
+          <h3 style="color:var(--primary); margin-bottom:6px; font-size:20px;">📝 Doctor Ko Apni Bimari Batayein</h3>
+          <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">Details submit karein, Razorpay se payment karein aur doctor desk par connect ho jayein:</p>
+          
+          <form id="consultForm">
+            <div class="form-group">
+              <label>Patient Ka Pura Naam</label>
+              <input type="text" id="pName" class="form-control" placeholder="e.g. Suresh Kumar" required>
+            </div>
+            <div style="display:flex; gap:12px;">
+              <div class="form-group" style="flex:1;">
+                <label>Age</label>
+                <input type="number" id="pAge" class="form-control" placeholder="32" required>
+              </div>
+              <div class="form-group" style="flex:2;">
+                <label>Mobile Number (For Call & WhatsApp)</label>
+                <input type="tel" id="pPhone" class="form-control" placeholder="10-digit mobile number" maxlength="10" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Apni Bimari ya Lakshan Detail Me Likhein</label>
+              <textarea id="pSymptoms" class="form-control" rows="3" placeholder="Kahan dard hai, kitne din se bukhar hai..." required></textarea>
+            </div>
+
+            <div class="form-group" style="margin-top:14px; margin-bottom: 20px;">
+              <label>Consultation Plan Chunein</label>
+              <div style="display:flex; gap:12px; margin-top:6px;">
+                <label style="flex:1; border:1.5px solid var(--border); padding:12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:10px;">
+                  <input type="radio" name="consultFee" value="50" checked>
+                  <div>
+                    <b style="font-size:16px;">₹50</b> <small style="display:block; color:var(--text-muted);">Standard Consult</small>
+                  </div>
+                </label>
+                <label style="flex:1; border:1.5px solid var(--border); padding:12px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:10px;">
+                  <input type="radio" name="consultFee" value="99">
+                  <div>
+                    <b style="font-size:16px;">₹99</b> <small style="display:block; color:var(--text-muted);">Priority Consult + Video</small>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width:100%; display:flex; align-items:center; justify-content:center; gap:8px;">
+              <span>💳 Proceed to Pay & Consult</span>
+            </button>
+          </form>
+        </div>
+
+        <div class="ui-card">
+          <h3 style="margin-bottom:6px; font-size:20px;">📥 Parchi (Prescription) Download Karein</h3>
+          <p style="color:var(--text-muted); font-size:13.5px; margin-bottom:16px;">Doctor dwara approve karne ke baad apni official parchi nikalne ke liye number daalein:</p>
+          <div style="display:flex; gap:10px; margin-bottom:16px;">
+            <input type="tel" id="searchPatientPhone" class="form-control" placeholder="10-digit number..." maxlength="10">
+            <button id="btnFetchRx" class="btn-primary" style="white-space:nowrap;">Search Rx</button>
+          </div>
+          <div id="patientRxResult"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE 3: DOCTOR TELE-DESK ================= -->
+    <section id="page-doctor" class="page-view">
+      <div id="doctorAuthContainer" class="ui-card" style="max-width: 480px; margin: 20px auto;">
+        <div class="auth-switch-bar">
+          <button type="button" class="auth-switch-btn active" id="showDocLoginBtn">🔑 Doctor Login</button>
+          <button type="button" class="auth-switch-btn" id="showDocSignupBtn">📝 New Doctor Sign-Up</button>
+        </div>
+
+        <form id="docLoginForm">
+          <div class="form-group">
+            <label>Doctor Email</label>
+            <input type="email" id="loginEmail" class="form-control" placeholder="doctor@medvault.com" value="dr.divakar@medvault.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" value="123456" required>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;">Login to Doctor Desk</button>
+
+          <div style="text-align:center; margin:14px 0; font-size:12px; color:var(--text-muted);">--- YA FIR ---</div>
+          <button type="button" id="quickDemoDocBtn" style="width:100%; background:var(--emerald-gradient); color:white; border:none; padding:12px; border-radius:12px; font-weight:700; cursor:pointer; font-size:14px;">
+            ⚡ Instant Demo Doctor Login (Direct Access)
+          </button>
+        </form>
+
+        <form id="docSignupForm" style="display:none;">
+          <div class="form-group">
+            <label>Doctor Full Name & Degree</label>
+            <input type="text" id="regDocName" class="form-control" placeholder="Dr. Divakar Nayak (MBBS, MD)" required>
+          </div>
+          <div class="form-group">
+            <label>Medical Reg. No.</label>
+            <input type="text" id="regDocReg" class="form-control" placeholder="NMC-RJ-94821" required>
+          </div>
+          <div class="form-group">
+            <label>Official Email</label>
+            <input type="email" id="regEmail" class="form-control" placeholder="doc@clinic.com" required>
+          </div>
+          <div class="form-group">
+            <label>Create Password</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn-success">✅ Register Doctor Account</button>
+        </form>
+      </div>
+
+      <div id="doctorDashboard" style="display: none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <div>
+            <h3 style="color:#16a34a; font-size:22px;">🟢 Doctor Desk Active</h3>
+            <span id="activeDocInfo" style="font-size:14px; color:var(--text-muted);"></span>
+          </div>
+          <button id="docLogoutBtn" class="btn-delete" style="padding:9px 16px; font-size:13.5px;">Logout</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:20px;">
+          <div style="background:var(--surface); border:1px solid var(--border); padding:18px; border-radius:14px; border-left:4px solid #16a34a;">
+            <small style="color:var(--text-muted); font-weight:700;">Kul Kamai (Total Earnings)</small>
+            <div style="font-size:26px; font-weight:800; color:#16a34a; margin-top:4px;" id="docTotalEarnings">₹0</div>
+          </div>
+          <div style="background:var(--surface); border:1px solid var(--border); padding:18px; border-radius:14px; border-left:4px solid var(--primary);">
+            <small style="color:var(--text-muted); font-weight:700;">Total Consultations</small>
+            <div style="font-size:26px; font-weight:800; color:var(--primary); margin-top:4px;" id="docPatientsCount">0</div>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <div>
+            <div class="ui-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                <h4 style="margin:0; font-size:18px;">📥 Live Patient Queue & Video Actions</h4>
+                <button id="refreshQueueBtn" style="background:none; border:none; color:var(--primary); font-size:13px; cursor:pointer; font-weight:700;">🔄 Refresh List</button>
+              </div>
+              <div id="patientQueueList"></div>
+            </div>
+
+            <div class="ui-card">
+              <h4 style="margin-bottom:14px; color:var(--primary); font-size:18px;">✍️ Issue Official Digital Prescription</h4>
+              <form id="rxForm">
+                <input type="hidden" id="currentConsultId">
+                <div class="form-group">
+                  <label>Selected Patient</label>
+                  <input type="text" id="rxPatientName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Patient Mobile Number</label>
+                  <input type="tel" id="rxPatientPhone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Doctor's Diagnosis</label>
+                  <input type="text" id="rxDiagnosis" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Prescription Medicines (1 per line)</label>
+                  <textarea id="rxMedicines" class="form-control" rows="4" placeholder="1. Tab. Paracetamol 650mg - TDS&#10;2. Cap. Pan-D - OD" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Advice / Precautions</label>
+                  <input type="text" id="rxInstructions" class="form-control" value="Khali pet dawai lein. Paani khoob piyein.">
+                </div>
+                <button type="submit" class="btn-success">⚡ Save & Dispatch Prescription</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="ui-card">
+            <h4 style="margin-bottom:14px; font-size:18px;">Live Prescription Slip Preview</h4>
+            <div class="rx-paper">
+              <div style="text-align:center; border-bottom:1px solid #333; padding-bottom:12px; margin-bottom:14px;">
+                <h3 id="prevDocTitle">Dr. Divakar Nayak (MBBS, MD)</h3>
+                <small>Reg. No: <span id="prevRegId">NMC-RJ-94821</span> | Digital Clinic</small>
+              </div>
+              <p style="font-size:13px;"><b>Patient:</b> <span id="prevPatName">---</span></p>
+              <p style="font-size:13px;"><b>Phone:</b> <span id="prevPatPhone">---</span></p>
+              <p style="font-size:13px;"><b>Diagnosis:</b> <span id="prevPatDiag">---</span></p>
+              <hr style="margin:12px 0; border:0; border-top:1px dashed #666;">
+              <div style="font-size:15px; font-weight:bold; margin-bottom:6px;">Rx (Medicines):</div>
+              <pre id="prevPatMeds" style="font-family:inherit; white-space:pre-wrap; font-size:13px; line-height:1.6;">Patient select karke prescription likhein...</pre>
+              <div style="margin-top:16px; font-size:12px; border-top:1px dashed #666; padding-top:8px;">
+                <b>Advice:</b> <span id="prevPatInst">Follow doctor instructions.</span>
+              </div>
+              <div style="position:absolute; bottom:14px; right:20px; font-size:11px; color:#555;">Digitally Signed & Synced</div>
+            </div>
+            <button onclick="window.print()" class="btn-primary" style="width:100%; margin-top:16px;">🖨️ Print / Save as PDF</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE 4: PHARMACY & CHEMIST DELIVERY APP ECOSYSTEM ================= -->
+    <section id="page-chemist" class="page-view">
+      <div class="ui-card">
+        <div class="tab-nav-bar">
+          <button class="tab-nav-btn active" id="tabPatientPharmacyBtn" onclick="switchPharmacyTab('patient')">
+            🛍️ Patient: Order Medicines & Live Delivery Status
+          </button>
+          <button class="tab-nav-btn" id="tabChemistDeskBtn" onclick="switchPharmacyTab('chemist')">
+            🏪 Chemist Delivery Partner Portal (Store Login / Sign-Up)
+          </button>
+        </div>
+
+        <!-- 1. PATIENT PHARMACY INTERFACE & LIVE DELIVERY STATUS -->
+        <div id="patientPharmacyView">
+          <h3 style="color:#be185d; font-size:20px; margin-bottom:6px;">🛍️ Order Prescribed Medicines (Jan-Aushadhi Delivery)</h3>
+          <p style="color:var(--text-muted); font-size:14px; margin-bottom:16px;">
+            Apna mobile number daal kar authorized doctor parchi load karein, ordered dawaiyon ka bill dekhein aur pass ke medical store se home delivery lein:
+          </p>
+          <div style="display:flex; gap:12px; max-width:550px; margin-bottom:20px;">
+            <input type="tel" id="pharmacySearchPhone" class="form-control" placeholder="Patient's 10-digit mobile number..." maxlength="10">
+            <button id="pharmacyLoadRxBtn" class="btn-primary" style="background:linear-gradient(135deg, #be185d, #db2777); white-space:nowrap;">
+              Load My Prescription
+            </button>
+          </div>
+
+          <div id="patientOrderSection" style="display:none;">
+            <!-- Authorized Doctor Badge -->
+            <div id="authorizedDoctorBadge" style="background:#e0f2fe; border:1px solid #bae6fd; border-radius:12px; padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; gap:10px;">
+              <span style="font-size:20px;">📜</span>
+              <div>
+                <b style="color:#0369a1; font-size:14px;">Authorized Doctor Prescription Attached</b>
+                <div style="font-size:12.5px; color:#0c4a6e;" id="authorizedDocDetailsText">Verified by Dr. Divakar Nayak (Reg: NMC-RJ-94821)</div>
+              </div>
+            </div>
+
+            <!-- Itemized Medicine Bill -->
+            <div style="background:var(--surface-subtle); border:1px solid var(--border); border-radius:14px; padding:18px; margin-bottom:16px;">
+              <h4 style="margin-bottom:10px; color:#be185d;">📋 Aapki Prescribed Dawaiyan (Order Items):</h4>
+              <div id="patientOrderItemsList" style="font-size:14px; line-height:1.6; font-family:monospace; background:white; padding:12px; border-radius:10px; border:1px solid var(--border);"></div>
+              
+              <div class="savings-box" id="savingsMeterBox"></div>
+            </div>
+
+            <div class="two-col-grid">
+              <div style="background:var(--surface-subtle); padding:18px; border-radius:14px; border:1px solid var(--border);">
+                <h4 style="margin-bottom:12px;">🏡 Delivery Address & Confirmation:</h4>
+                <div class="form-group">
+                  <label>Delivery Method</label>
+                  <select id="pharmacyDeliveryType" class="form-control">
+                    <option value="Home Delivery">🏡 Doorstep Home Delivery (Nearby Chemist Delivery Boy)</option>
+                    <option value="Store Pickup">🏬 Store Counter Pickup (Instant Kendra)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Full Delivery Address</label>
+                  <input type="text" id="pharmacyAddress" class="form-control" placeholder="House no, Street, Landmark, Jaipur" required>
+                </div>
+                <button id="btnPlacePharmacyOrder" class="btn-success" style="background:#be185d; margin-top:8px;">
+                  🚴 Place Medicine Delivery Order
+                </button>
+              </div>
+
+              <!-- Live Delivery Card (Realtime Synced) -->
+              <div class="delivery-tracker-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h4 style="margin:0;">📦 Live Delivery Tracking</h4>
+                  <span id="liveStatusBadge" style="background:#e0f2fe; color:#0284c7; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:800;">Waiting for Order</span>
+                </div>
+
+                <div class="tracking-timeline">
+                  <div class="tracking-step done" id="track1">
+                    <div class="tracking-step-circle">✓</div>
+                    <span>Order Placed</span>
+                  </div>
+                  <div class="tracking-step" id="track2">
+                    <div class="tracking-step-circle">2</div>
+                    <span>Store Accepted</span>
+                  </div>
+                  <div class="tracking-step" id="track3">
+                    <div class="tracking-step-circle">3</div>
+                    <span>Rider On Way</span>
+                  </div>
+                  <div class="tracking-step" id="track4">
+                    <div class="tracking-step-circle">4</div>
+                    <span>Delivered</span>
+                  </div>
+                </div>
+
+                <div style="background:var(--surface-subtle); padding:12px; border-radius:10px; margin-top:10px;">
+                  <div style="font-size:13px; font-weight:700;" id="assignedStoreName">🏪 Nearest Store: Sharma Medicos & Jan-Aushadhi</div>
+                  <div style="font-size:12.5px; color:var(--text-muted); margin-top:4px;" id="assignedRiderText">Delivery Partner: Nearest medical associate will be assigned.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. CHEMIST PARTNER PORTAL (LOGIN & SIGN-UP) -->
+        <div id="chemistDeskView" style="display:none;">
+          <div id="chemistAuthContainer" style="max-width:460px; margin:20px auto; background:var(--surface-subtle); padding:24px; border-radius:16px; border:1px solid var(--border);">
+            <div class="auth-switch-bar">
+              <button type="button" class="auth-switch-btn active" id="showChemLoginBtn">🔑 Store Login</button>
+              <button type="button" class="auth-switch-btn" id="showChemSignupBtn">📝 New Medical Store Sign-Up</button>
+            </div>
+
+            <!-- Chemist Login Form -->
+            <form id="chemistLoginForm">
+              <div class="form-group">
+                <label>Chemist Email / ID</label>
+                <input type="email" id="chemEmail" class="form-control" value="jaipur.chemist@medvault.com" required>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="chemPassword" class="form-control" value="123456" required>
+              </div>
+              <button type="submit" class="btn-primary" style="width:100%;">Login as Chemist Partner</button>
+
+              <div style="text-align:center; margin:14px 0; font-size:12px; color:var(--text-muted);">--- YA FIR ---</div>
+              <button type="button" id="quickDemoChemistBtn" style="width:100%; background:var(--purple-gradient); color:white; border:none; padding:12px; border-radius:12px; font-weight:700; cursor:pointer; font-size:13.5px;">
+                ⚡ Instant Chemist Partner Login (Demo Store)
+              </button>
+            </form>
+
+            <!-- Chemist Sign-Up Form -->
+            <form id="chemistSignupForm" style="display:none;">
+              <div class="form-group">
+                <label>Medical Store Name</label>
+                <input type="text" id="regChemStoreName" class="form-control" placeholder="e.g. Nayak Pharmacy & Jan-Aushadhi" required>
+              </div>
+              <div class="form-group">
+                <label>Drug License (DL) Number</label>
+                <input type="text" id="regChemDL" class="form-control" placeholder="RJ-MED-9941" required>
+              </div>
+              <div class="form-group">
+                <label>Owner / Pharmacist Name</label>
+                <input type="text" id="regChemOwner" class="form-control" placeholder="e.g. Ramesh Nayak" required>
+              </div>
+              <div class="form-group">
+                <label>Official Email</label>
+                <input type="email" id="regChemEmail" class="form-control" placeholder="store@medvault.com" required>
+              </div>
+              <div class="form-group">
+                <label>Create Password</label>
+                <input type="password" id="regChemPassword" class="form-control" placeholder="••••••••" required>
+              </div>
+              <button type="submit" class="btn-success">✅ Register Medical Store</button>
+            </form>
+          </div>
+
+          <div id="chemistDashboardContainer" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+              <div>
+                <h3 style="color:#16a34a; font-size:20px;">🟢 Store Active: <span id="activeStoreName">Sharma Medicos & Jan-Aushadhi Kendra</span></h3>
+                <small style="color:var(--text-muted);" id="activeStoreDL">DL No: RJ-MED-9941 | Jaipur Central Hub</small>
+              </div>
+              <button id="chemistLogoutBtn" class="btn-delete" style="padding:8px 14px;">Logout</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom:18px;">
+              <div style="background:var(--surface); border:1px solid var(--border); padding:16px; border-radius:14px; border-left:4px solid #16a34a;">
+                <small style="color:var(--text-muted); font-weight:700;">Chemist Profit Margin (35%)</small>
+                <div style="font-size:24px; font-weight:800; color:#16a34a; margin-top:4px;" id="chemMarginIncome">₹280.00</div>
+              </div>
+              <div style="background:var(--surface); border:1px solid var(--border); padding:16px; border-radius:14px; border-left:4px solid var(--primary);">
+                <small style="color:var(--text-muted); font-weight:700;">Active Delivery Orders</small>
+                <div style="font-size:24px; font-weight:800; color:var(--primary); margin-top:4px;" id="chemOrderCount">0</div>
+              </div>
+            </div>
+
+            <h4 style="margin-bottom:12px;">📥 Incoming Patient Delivery Orders (Claim & Dispatch):</h4>
+            <button id="btnRefreshChemistOrders" class="btn-action" style="margin-bottom:14px;">🔄 Refresh Orders Feed</button>
+            <div id="chemistOrdersQueue"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE 5: PATHOLOGY & DIAGNOSTIC LAB PORTAL ================= -->
+    <section id="page-lab" class="page-view">
+      <div class="ui-card">
+        <div class="tab-nav-bar">
+          <button class="tab-nav-btn active" id="tabPatientLabBtn" onclick="switchLabTab('patient')">
+            🧪 Patient: Book Test & Live Sample Tracker
+          </button>
+          <button class="tab-nav-btn" id="tabPartnerLabBtn" onclick="switchLabTab('lab')">
+            🔬 Lab Partner / Phlebotomist Desk (Store Login / Sign-Up)
+          </button>
+        </div>
+
+        <!-- 1. PATIENT LAB VIEW -->
+        <div id="patientLabView">
+          <h3 style="color:#0891b2; font-size:22px; margin-bottom:6px;">🧪 Diagnostic Pathology & At-Home Blood Test Desk</h3>
+          <p style="color:var(--text-muted); font-size:14px; margin-bottom:18px;">
+            NABL-accredited diagnostic blood tests at 70% subsidized Jan-Aushadhi rates. Trained phlebotomist will visit home for sample pickup:
+          </p>
+
+          <div class="two-col-grid">
+            <div>
+              <h4 style="margin-bottom:12px;">Select Health Test Package:</h4>
+              <div style="display:flex; flex-direction:column; gap:12px;" id="labTestsList"></div>
+            </div>
+
+            <div>
+              <div style="background:var(--surface-subtle); padding:22px; border-radius:16px; border:1px solid var(--border); margin-bottom:18px;">
+                <h4 style="margin-bottom:14px; color:#0891b2;">📅 Book Home Sample Collection</h4>
+                <form id="labBookingForm">
+                  <div class="form-group">
+                    <label>Selected Test Package</label>
+                    <input type="text" id="labSelectedTest" class="form-control" value="Comprehensive Full Body Health Checkup" readonly style="font-weight:700;">
+                  </div>
+                  <div class="form-group">
+                    <label>Subsidized Lab Fee (Pay upon sample pickup)</label>
+                    <input type="text" id="labSelectedPrice" class="form-control" value="₹499 (Market Price: ₹1,500)" readonly style="font-weight:700; color:#0891b2;">
+                  </div>
+                  <div class="form-group">
+                    <label>Patient Full Name</label>
+                    <input type="text" id="labPatientName" class="form-control" placeholder="e.g. Ramesh Chandra" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Contact Phone Number</label>
+                    <input type="tel" id="labPatientPhone" class="form-control" placeholder="10-digit mobile number" maxlength="10" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Home Pickup Address & Pin Code</label>
+                    <input type="text" id="labPatientAddress" class="form-control" placeholder="Complete street address, Jaipur" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Preferred Sample Pickup Slot</label>
+                    <select id="labTimeSlot" class="form-control">
+                      <option value="Morning 7:00 AM - 9:00 AM (Fasting Preferred)">Morning 7:00 AM - 9:00 AM (Fasting)</option>
+                      <option value="Morning 9:00 AM - 11:00 AM">Morning 9:00 AM - 11:00 AM</option>
+                      <option value="Afternoon 1:00 PM - 3:00 PM">Afternoon 1:00 PM - 3:00 PM</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn-primary" style="background:linear-gradient(135deg, #0891b2, #0284c7); width:100%;">
+                    🧪 Confirm Home Collection Booking
+                  </button>
+                </form>
+              </div>
+
+              <!-- Realtime Lab Sample Collection Tracker -->
+              <div class="delivery-tracker-card" id="labTrackerBox" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h4 style="margin:0;">🧪 Live Sample Pickup Tracking</h4>
+                  <span id="labLiveStatusBadge" style="background:#cffafe; color:#0891b2; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:800;">Booking Placed</span>
+                </div>
+
+                <div class="tracking-timeline">
+                  <div class="tracking-step done" id="labTrack1">
+                    <div class="tracking-step-circle">✓</div>
+                    <span>Booked</span>
+                  </div>
+                  <div class="tracking-step" id="labTrack2">
+                    <div class="tracking-step-circle">2</div>
+                    <span>Phlebotomist On Way</span>
+                  </div>
+                  <div class="tracking-step" id="labTrack3">
+                    <div class="tracking-step-circle">3</div>
+                    <span>Sample Collected</span>
+                  </div>
+                  <div class="tracking-step" id="labTrack4">
+                    <div class="tracking-step-circle">4</div>
+                    <span>Report Ready</span>
+                  </div>
+                </div>
+
+                <div style="background:var(--surface-subtle); padding:12px; border-radius:10px; margin-top:10px;">
+                  <div style="font-size:13px; font-weight:700;" id="assignedLabName">🔬 Certified Lab: MedVault Central Pathology Hub</div>
+                  <div style="font-size:12.5px; color:var(--text-muted); margin-top:4px;" id="assignedPhleboText">Phlebotomist: Assigned technician will reach your home in selected slot.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. LAB PARTNER / PHLEBOTOMIST DESK (LOGIN & SIGN-UP) -->
+        <div id="partnerLabView" style="display:none;">
+          <div id="labAuthContainer" style="max-width:460px; margin:20px auto; background:var(--surface-subtle); padding:24px; border-radius:16px; border:1px solid var(--border);">
+            <div class="auth-switch-bar">
+              <button type="button" class="auth-switch-btn active" id="showLabLoginBtn">🔬 Lab Login</button>
+              <button type="button" class="auth-switch-btn" id="showLabSignupBtn">📝 New Diagnostic Lab Sign-Up</button>
+            </div>
+
+            <!-- Lab Login Form -->
+            <form id="labLoginForm">
+              <div class="form-group">
+                <label>Lab Center Email / ID</label>
+                <input type="email" id="labEmail" class="form-control" value="jaipur.lab@medvault.com" required>
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="labPassword" class="form-control" value="123456" required>
+              </div>
+              <button type="submit" class="btn-primary" style="background:linear-gradient(135deg, #0891b2, #0284c7); width:100%;">Login as Lab Partner</button>
+
+              <div style="text-align:center; margin:14px 0; font-size:12px; color:var(--text-muted);">--- YA FIR ---</div>
+              <button type="button" id="quickDemoLabBtn" style="width:100%; background:var(--cyan-gradient); color:white; border:none; padding:12px; border-radius:12px; font-weight:700; cursor:pointer; font-size:13.5px;">
+                ⚡ Instant Demo Lab Partner Login (Central Pathology)
+              </button>
+            </form>
+
+            <!-- Lab Sign-Up Form -->
+            <form id="labSignupForm" style="display:none;">
+              <div class="form-group">
+                <label>Pathology / Diagnostic Center Name</label>
+                <input type="text" id="regLabName" class="form-control" placeholder="e.g. Apex Diagnostics & Imaging" required>
+              </div>
+              <div class="form-group">
+                <label>NABL / ISO Certification Number</label>
+                <input type="text" id="regLabNABL" class="form-control" placeholder="NABL-ISO-15189" required>
+              </div>
+              <div class="form-group">
+                <label>Pathologist / Incharge Name</label>
+                <input type="text" id="regLabIncharge" class="form-control" placeholder="Dr. R. K. Sharma (MD Path)" required>
+              </div>
+              <div class="form-group">
+                <label>Official Lab Email</label>
+                <input type="email" id="regLabEmail" class="form-control" placeholder="lab@diagnostics.com" required>
+              </div>
+              <div class="form-group">
+                <label>Create Password</label>
+                <input type="password" id="regLabPassword" class="form-control" placeholder="••••••••" required>
+              </div>
+              <button type="submit" class="btn-success">✅ Register Pathology Lab</button>
+            </form>
+          </div>
+
+          <div id="labDashboardContainer" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+              <div>
+                <h3 style="color:#0891b2; font-size:20px;">🟢 Diagnostic Hub: <span id="activeLabName">MedVault Central NABL Pathology</span></h3>
+                <small style="color:var(--text-muted);" id="activeLabCert">Accreditation: NABL-ISO-15189 | Jaipur Collection Zone</small>
+              </div>
+              <button id="labLogoutBtn" class="btn-delete" style="padding:8px 14px;">Logout</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom:18px;">
+              <div style="background:var(--surface); border:1px solid var(--border); padding:16px; border-radius:14px; border-left:4px solid #0891b2;">
+                <small style="color:var(--text-muted); font-weight:700;">Home Sample Requests</small>
+                <div style="font-size:24px; font-weight:800; color:#0891b2; margin-top:4px;" id="labRequestCount">0</div>
+              </div>
+              <div style="background:var(--surface); border:1px solid var(--border); padding:16px; border-radius:14px; border-left:4px solid #16a34a;">
+                <small style="color:var(--text-muted); font-weight:700;">Completed Test Reports</small>
+                <div style="font-size:24px; font-weight:800; color:#16a34a; margin-top:4px;" id="labCompletedCount">0</div>
+              </div>
+            </div>
+
+            <h4 style="margin-bottom:12px;">📥 Incoming Home Sample Collection Requests (Assign & Update):</h4>
+            <button id="btnRefreshLabBookings" class="btn-action" style="margin-bottom:14px;">🔄 Refresh Sample Bookings</button>
+            <div id="labBookingsQueue"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PAGE 6: SPECIALISTS ================= -->
+    <section id="page-specialists" class="page-view">
+      <div class="ui-card">
+        <h3 style="color:var(--primary); margin-bottom:6px; font-size:20px;">🩺 Specialist Doctor Finder (14 Specialties)</h3>
+        <p style="color:var(--text-muted); font-size:14px;">Apne lakshan ke anusaar sahi doctor specialist identify karein:</p>
+      </div>
+      <div class="med-grid" id="specialistsContainer"></div>
+    </section>
+
+    <!-- ================= PAGE 7: FIRST AID ================= -->
+    <section id="page-firstaid" class="page-view">
+      <div class="ui-card">
+        <h3 style="color:#dc2626; margin-bottom:6px; font-size:20px;">🩹 Emergency First-Aid Protocol (15 Essential Guides)</h3>
+        <p style="color:var(--text-muted); font-size:14px;">Achanak takleef ya accident hone par pehle 10 critical minute kya karein aur kya na karein:</p>
+      </div>
+      <div class="med-grid" id="firstAidContainer"></div>
+    </section>
+
+    <!-- ================= PAGE 8: PILL REMINDER ================= -->
+    <section id="page-reminders" class="page-view">
+      <div class="ui-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="color:var(--primary); font-size:20px;">⏰ Daily Medicine Schedule Saver</h3>
+            <p style="color:var(--text-muted); font-size:13.5px;">Apni medicines set karein. Exact time aane par loud chime audio aur alert popup aayega:</p>
+          </div>
+          <button id="btnDemoTestAlarm" class="btn-action" style="background:#e0f2fe; color:#0284c7; border-color:#0284c7; font-weight:800;">
+            🔔 Test Audio Alarm Now (Instant 1-Sec Test)
+          </button>
+        </div>
+
+        <form id="reminderForm" style="display:flex; gap:12px; flex-wrap:wrap;">
+          <input type="text" id="rMed" placeholder="Medicine Ka Naam (e.g. Pan-D)" required class="form-control" style="flex:2; min-width:180px;">
+          <input type="time" id="rTime" required class="form-control" style="flex:1; min-width:120px;">
+          <select id="rDose" class="form-control" style="flex:1.2; min-width:160px;">
+            <option value="Khali Pet (Before Food)">Khali Pet</option>
+            <option value="Khane Ke Baad (After Food)">Khane Ke Baad</option>
+            <option value="Sone Se Pehle (At Bedtime)">Bedtime</option>
+          </select>
+          <button type="submit" class="btn-primary" style="flex:1; min-width:140px;">+ Add Schedule</button>
+        </form>
+      </div>
+      <div id="remindersContainer"></div>
+    </section>
+
+  </main>
+
+  <!-- PILL ALARM SOUND POPUP MODAL -->
+  <div class="modal-overlay" id="pillAlarmModal">
+    <div style="background:var(--surface); border-radius:24px; padding:30px; max-width:420px; width:90%; text-align:center; border:3px solid #10b981; box-shadow:0 25px 60px rgba(16,185,129,0.3);">
+      <div style="font-size:54px; animation:ring 1s infinite alternate;">🔔</div>
+      <h2 style="color:#10b981; font-size:24px; margin:12px 0 6px;" id="alarmMedName">Medicine Time!</h2>
+      <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;" id="alarmMedDose">Kripya apni scheduled dawai lein aur paani piyein.</p>
+      <button class="btn-success" id="btnDismissAlarm" style="padding:14px; font-size:15px;">
+        ✅ I Have Taken My Medicine (Stop Alarm)
+      </button>
+    </div>
+  </div>
+
+  <!-- REAL WORKING IN-APP TELE-VIDEO CALL MODAL -->
+  <div class="modal-overlay" id="videoModal">
+    <div class="video-modal-card">
+      <div class="video-modal-header">
+        <div style="font-weight:700; font-size:15px; display:flex; align-items:center; gap:8px;">
+          <span style="color:#10b981;">●</span> Live Encrypted Doctor-Patient Video Tele-Desk
+        </div>
+        <div style="font-size:13px; color:#94a3b8;" id="videoCallTimer">00:00</div>
+        <button id="closeVideoModal" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+      </div>
+      <div class="video-modal-body">
+        <video id="localLiveVideo" autoplay playsinline muted></video>
+        <div class="video-controls">
+          <button class="btn-ctrl" id="btnToggleMic" title="Mute/Unmute Mic">🎤</button>
+          <button class="btn-ctrl" id="btnToggleCam" title="Turn Camera Off">📷</button>
+          <button class="btn-ctrl btn-ctrl-end" id="btnEndLiveCall" title="End Tele-Consultation">📞</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAZORPAY SIMULATOR MODAL -->
+  <div class="rzp-modal-overlay" id="rzpModal">
+    <div class="rzp-modal-card">
+      <div class="rzp-header">
+        <div class="rzp-header-brand">
+          <div class="rzp-logo-circle">⚕</div>
+          <div>
+            <div style="font-weight:800; font-size:16px;">MedVault 360</div>
+            <div style="font-size:12px; opacity:0.85;" id="rzpPatientName">Teleconsultation</div>
+          </div>
+        </div>
+        <div class="rzp-amount-badge">
+          <small>Amount</small>
+          <span id="rzpAmount">₹50.00</span>
+        </div>
+      </div>
+
+      <div class="rzp-body" id="rzpBodyMain">
+        <div class="rzp-section-title">Preferred Payment Methods</div>
+        
+        <div class="rzp-method-list">
+          <div class="rzp-method-item selected" onclick="selectRzpMethod(this)">
+            <div class="rzp-method-left">
+              <div class="rzp-icon-box" style="background:#e0f2fe; color:#0284c7;">📱</div>
+              <div>
+                <div>Google Pay / PhonePe / Paytm</div>
+                <small style="color:#64748b; font-size:12px;">Instant UPI Transfer</small>
+              </div>
+            </div>
+            <span style="color:#0284c7; font-weight:800;">✓</span>
+          </div>
+
+          <div class="rzp-method-item" onclick="selectRzpMethod(this)">
+            <div class="rzp-method-left">
+              <div class="rzp-icon-box" style="background:#fef3c7; color:#d97706;">💳</div>
+              <div>
+                <div>Debit / Credit Cards</div>
+                <small style="color:#64748b; font-size:12px;">Visa, Mastercard, RuPay</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="rzp-method-item" onclick="selectRzpMethod(this)">
+            <div class="rzp-method-left">
+              <div class="rzp-icon-box" style="background:#dcfce7; color:#16a34a;">🏦</div>
+              <div>
+                <div>Netbanking</div>
+                <small style="color:#64748b; font-size:12px;">All Indian Banks Supported</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="rzp-pay-btn" id="rzpSubmitBtn">
+          <span>🔒 Pay</span>
+          <span id="rzpBtnAmount">₹50.00</span>
+        </button>
+
+        <button type="button" id="rzpCloseBtn" style="background:none; border:none; color:#64748b; font-size:13px; font-weight:600; width:100%; margin-top:12px; cursor:pointer;">
+          ✕ Cancel & Go Back
+        </button>
+      </div>
+
+      <div class="rzp-processing" id="rzpProcessing">
+        <div class="rzp-spinner"></div>
+        <h4 style="color:#072654; font-size:17px; margin-bottom:6px;">Processing Payment...</h4>
+        <p style="color:#64748b; font-size:13px;">Securely connecting to UPI Gateway. Please do not refresh.</p>
+      </div>
+
+      <div class="rzp-footer">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        <span>Secured by <b>Razorpay</b> Payments</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOS MODAL -->
+  <div class="modal-overlay" id="sosModal">
+    <div class="modal-box">
+      <h3 style="color:#dc2626; margin-bottom:10px; font-size:20px;">🚨 Emergency Helplines</h3>
+      <a href="tel:108" class="sos-link">🚑 Call 108 (National Ambulance)</a>
+      <a href="tel:112" class="sos-link">🚨 Call 112 (National Emergency)</a>
+      <a href="tel:1075" class="sos-link" style="background:#e0f2fe; color:#0369a1;">📞 Call 1075 (Health Desk)</a>
+      <button id="closeModal" style="width:100%; margin-top:14px; padding:11px; border:1px solid var(--border); background:none; border-radius:10px; color:var(--text); cursor:pointer; font-weight:600;">Close</button>
+    </div>
+  </div>
+
+  <!-- ================= IN-APP AUDIO & TOAST ENGINE ================= -->
+  <script>
+    let globalAudioCtx = null;
+
+    function getAudioContext() {
+      if (!globalAudioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) globalAudioCtx = new AudioContext();
+      }
+      if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+        globalAudioCtx.resume();
+      }
+      return globalAudioCtx;
+    }
+
+    window.playMedVaultChime = function() {
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.frequency.value = 659.25;
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        gain1.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+        osc1.start(ctx.currentTime);
+        osc1.stop(ctx.currentTime + 0.35);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.frequency.value = 880;
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        gain2.gain.setValueAtTime(0.25, ctx.currentTime + 0.15);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.7);
+        osc2.start(ctx.currentTime + 0.15);
+        osc2.stop(ctx.currentTime + 0.7);
+
+        if (navigator.vibrate) navigator.vibrate([150, 80, 150]);
+      } catch (err) {
+        console.warn("Audio chime:", err);
+      }
+    };
+
+    window.showInAppToast = function(title, message, icon = "🔔") {
+      window.playMedVaultChime();
+      const container = document.getElementById("medvaultToastContainer");
+      if (!container) return;
+
+      const toast = document.createElement("div");
+      toast.className = "inapp-toast";
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-body">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(50px)";
+        setTimeout(() => toast.remove(), 300);
+      }, 6000);
+    };
+
+    window.triggerPillAlarmModal = function(medName, dose) {
+      window.playMedVaultChime();
+      document.getElementById("alarmMedName").innerText = "⏰ " + medName;
+      document.getElementById("alarmMedDose").innerText = "Dose: " + dose + " lene ka exact waqt ho gaya hai.";
+      document.getElementById("pillAlarmModal").classList.add("active");
+    };
+
+    document.getElementById("btnDismissAlarm").onclick = () => {
+      document.getElementById("pillAlarmModal").classList.remove("active");
+      window.showInAppToast("✅ Medicine Taken", "Dose recorded successfully for today!", "💊");
+    };
+
+    document.getElementById("btnDemoTestAlarm").onclick = () => {
+      window.triggerPillAlarmModal("Pan-D (Sample Test)", "Khali Pet (Before Food)");
+    };
+
+    document.addEventListener("click", () => { getAudioContext(); }, { once: true });
+
+    let lastAlertedTime = "";
+    setInterval(() => {
+      const reminders = JSON.parse(localStorage.getItem("med_reminders_v2") || "[]");
+      const now = new Date();
+      const currentH = String(now.getHours()).padStart(2, '0');
+      const currentM = String(now.getMinutes()).padStart(2, '0');
+      const currentTimeStr = `${currentH}:${currentM}`;
+
+      if (lastAlertedTime !== currentTimeStr) {
+        reminders.forEach(r => {
+          if (r.time === currentTimeStr) {
+            window.triggerPillAlarmModal(r.name, r.dose);
+            lastAlertedTime = currentTimeStr;
+          }
+        });
+      }
+    }, 15000);
+  </script>
+
+  <!-- ================= REAL WEBCAM & AUDIO VIDEO CONSULTATION DESK ================= -->
+  <script>
+    let localStream = null;
+    let callTimerInterval = null;
+    let callSeconds = 0;
+
+    window.startLiveWebcamCall = async function(patientName) {
+      const modal = document.getElementById("videoModal");
+      const videoEl = document.getElementById("localLiveVideo");
+      const timerEl = document.getElementById("videoCallTimer");
+      
+      modal.classList.add("active");
+      callSeconds = 0;
+      timerEl.innerText = "Connecting...";
+
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        videoEl.srcObject = localStream;
+
+        callTimerInterval = setInterval(() => {
+          callSeconds++;
+          const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+          const secs = String(callSeconds % 60).padStart(2, '0');
+          timerEl.innerText = `● LIVE ${mins}:${secs} with ${patientName}`;
+        }, 1000);
+
+        window.showInAppToast("📹 Video Desk Connected", `Dr. Divakar & ${patientName} live tele-consultation started.`, "🟢");
+      } catch (err) {
+        console.error("Camera access error:", err);
+        timerEl.innerText = "Camera Off (Audio Only Mode)";
+        alert("Camera permission denied or camera in use. Please allow camera permissions in browser address bar.");
+      }
+    };
+
+    function stopLiveWebcamCall() {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+      if (callTimerInterval) clearInterval(callTimerInterval);
+      document.getElementById("localLiveVideo").srcObject = null;
+      document.getElementById("videoModal").classList.remove("active");
+      window.showInAppToast("📞 Call Ended", "Tele-consultation disconnected successfully.", "🔴");
+    }
+
+    document.getElementById("btnEndLiveCall").onclick = stopLiveWebcamCall;
+    document.getElementById("closeVideoModal").onclick = stopLiveWebcamCall;
+
+    document.getElementById("btnToggleMic").onclick = function() {
+      if (localStream) {
+        const audioTrack = localStream.getAudioTracks()[0];
+        if (audioTrack) {
+          audioTrack.enabled = !audioTrack.enabled;
+          this.style.background = audioTrack.enabled ? "rgba(255,255,255,0.2)" : "#dc2626";
+          this.innerText = audioTrack.enabled ? "🎤" : "🔇";
+        }
+      }
+    };
+
+    document.getElementById("btnToggleCam").onclick = function() {
+      if (localStream) {
+        const videoTrack = localStream.getVideoTracks()[0];
+        if (videoTrack) {
+          videoTrack.enabled = !videoTrack.enabled;
+          this.style.background = videoTrack.enabled ? "rgba(255,255,255,0.2)" : "#dc2626";
+          this.innerText = videoTrack.enabled ? "📷" : "🚫";
+        }
+      }
+    };
+
+    window.startCleanWhatsAppChat = function(phone, name) {
+      let clean = String(phone).replace(/\D/g, '');
+      if (clean.length === 10) clean = '91' + clean;
+      else if (clean.length === 11 && clean.startsWith('0')) clean = '91' + clean.substring(1);
+      
+      const msg = encodeURIComponent(`Namaste ${name}! Dr. Divakar Nayak (MBBS, MD) from MedVault 360 is reviewing your case. Please reply here or start Video Call.`);
+      const url = `https://api.whatsapp.com/send?phone=${clean}&text=${msg}`;
+      
+      window.playMedVaultChime();
+      window.open(url, "_blank");
+    };
+  </script>
+
+  <!-- GLOBAL ROUTER & UTILITIES -->
+  <script>
+    window.navigateTo = function(targetPageId) {
+      const pageViews = document.querySelectorAll(".page-view");
+      pageViews.forEach(v => v.classList.remove("active"));
+      
+      const drawerBtns = document.querySelectorAll(".drawer-btn");
+      drawerBtns.forEach(b => b.classList.remove("active"));
+
+      const targetSection = document.getElementById(targetPageId);
+      if (targetSection) targetSection.classList.add("active");
+
+      const matchBtn = document.querySelector(`[data-target="${targetPageId}"]`);
+      if (matchBtn) matchBtn.classList.add("active");
+
+      const sideDrawer = document.getElementById("sideDrawer");
+      const drawerOverlay = document.getElementById("drawerOverlay");
+      if (sideDrawer) sideDrawer.classList.remove("open");
+      if (drawerOverlay) drawerOverlay.classList.remove("open");
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.selectRzpMethod = function(elem) {
+      document.querySelectorAll('.rzp-method-item').forEach(el => {
+        el.classList.remove('selected');
+        const check = el.querySelector('span');
+        if (check) check.remove();
+      });
+      elem.classList.add('selected');
+      const check = document.createElement('span');
+      check.style.color = '#0284c7';
+      check.style.fontWeight = '800';
+      check.innerText = '✓';
+      elem.appendChild(check);
+    };
+
+    window.switchPharmacyTab = function(mode) {
+      const patBtn = document.getElementById("tabPatientPharmacyBtn");
+      const chemBtn = document.getElementById("tabChemistDeskBtn");
+      const patView = document.getElementById("patientPharmacyView");
+      const chemView = document.getElementById("chemistDeskView");
+
+      if (mode === 'patient') {
+        patBtn.classList.add("active");
+        chemBtn.classList.remove("active");
+        patView.style.display = "block";
+        chemView.style.display = "none";
+      } else {
+        chemBtn.classList.add("active");
+        patBtn.classList.remove("active");
+        chemView.style.display = "block";
+        patView.style.display = "none";
+      }
+    };
+
+    window.switchLabTab = function(mode) {
+      const patBtn = document.getElementById("tabPatientLabBtn");
+      const labBtn = document.getElementById("tabPartnerLabBtn");
+      const patView = document.getElementById("patientLabView");
+      const labView = document.getElementById("partnerLabView");
+
+      if (mode === 'patient') {
+        patBtn.classList.add("active");
+        labBtn.classList.remove("active");
+        patView.style.display = "block";
+        labView.style.display = "none";
+      } else {
+        labBtn.classList.add("active");
+        patBtn.classList.remove("active");
+        labView.style.display = "block";
+        patView.style.display = "none";
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const sideDrawer = document.getElementById("sideDrawer");
+      const drawerOverlay = document.getElementById("drawerOverlay");
+      const drawerOpenBtn = document.getElementById("drawerOpenBtn");
+      const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+      const drawerBtns = document.querySelectorAll(".drawer-btn");
+
+      function closeDrawer() {
+        if (sideDrawer) sideDrawer.classList.remove("open");
+        if (drawerOverlay) drawerOverlay.classList.remove("open");
+      }
+
+      if (drawerOpenBtn) {
+        drawerOpenBtn.onclick = () => {
+          if (sideDrawer) sideDrawer.classList.add("open");
+          if (drawerOverlay) drawerOverlay.classList.add("open");
+        };
+      }
+      if (drawerCloseBtn) drawerCloseBtn.onclick = closeDrawer;
+      if (drawerOverlay) drawerOverlay.onclick = closeDrawer;
+
+      drawerBtns.forEach(b => {
+        b.onclick = () => window.navigateTo(b.dataset.target);
+      });
+    });
+  </script>
+
+  <!-- ================= 50+ EMBEDDED GENERIC MEDICINES DIRECTORY (NEVER GOES MISSING) ================= -->
+  <script>
+    const embeddedMedicinesData = [
+      // FEVER & PAIN (8)
+      { brand: "Dolo 650", salt: "Paracetamol 650mg", type: "OTC", category: "pain", uses: "Tez bukhar, sar dard aur sharir dard", genericName: "Jan-Aushadhi Paracetamol 650mg", genericPrice: "₹12 for 10 tabs (Brand ₹35)", warning: "24 ghante me 4g se zyada na lein. Liver ke liye hanikarak." },
+      { brand: "Crocin Advance", salt: "Paracetamol 500mg Fast Release", type: "OTC", category: "pain", uses: "Bukhar aur sadharan dard me instant relief", genericName: "Jan-Aushadhi Paracetamol 500mg", genericPrice: "₹9 for 10 tabs (Brand ₹28)", warning: "Khali pet lene se bachein agar acidity rehti ho." },
+      { brand: "Brufen 400", salt: "Ibuprofen 400mg", type: "Prescription", category: "pain", uses: "Soojan, daant dard aur joint swelling me pain relief", genericName: "Jan-Aushadhi Ibuprofen 400mg", genericPrice: "₹14 for 10 tabs (Brand ₹42)", warning: "Pet me ulcer ya kidney problem wale log doctor bina na lein." },
+      { brand: "Voveran 50", salt: "Diclofenac Sodium 50mg", type: "Prescription", category: "pain", uses: "Arthritis, moch aur sharir ke bhari dard me asarkari", genericName: "Jan-Aushadhi Diclofenac 50mg", genericPrice: "₹8 for 10 tabs (Brand ₹58)", warning: "Heart patients aur high BP wale bina doctor na lein." },
+      { brand: "Zerodol-P", salt: "Aceclofenac 100mg + Paracetamol 325mg", type: "Prescription", category: "pain", uses: "Muscular dard, kamar dard aur haddi ka tez dard", genericName: "Jan-Aushadhi Aceclo-Para Tablet", genericPrice: "₹18 for 10 tabs (Brand ₹85)", warning: "Khane ke baad hi lein. Khali pet pet me jalan kar sakti hai." },
+      { brand: "Meftal-Spas", salt: "Mefenamic Acid 250mg + Dicyclomine 10mg", type: "Prescription", category: "pain", uses: "Periods (mahavari) dard aur pet ke aithan wale dard me", genericName: "Jan-Aushadhi Spas-Mefenamic Tablet", genericPrice: "₹15 for 10 tabs (Brand ₹65)", warning: "Sirf achanak aithan hone par lein, regular na khayein." },
+      { brand: "Ultracet", salt: "Tramadol 37.5mg + Paracetamol 325mg", type: "Prescription", category: "pain", uses: "Surgery ke baad ya asahniya tez dard me painkiller", genericName: "Generic Tramadol-Para Blend", genericPrice: "₹35 for 10 tabs (Brand ₹180)", warning: "Habit-forming dawai hai. Sirf strict doctor prescription par." },
+      { brand: "Ketorol-DT", salt: "Ketorolac Tromethamine 10mg Dispersible", type: "Prescription", category: "pain", uses: "Daant nikalne ya acute dental dard me turant aaram", genericName: "Jan-Aushadhi Ketorolac 10mg", genericPrice: "₹20 for 10 tabs (Brand ₹95)", warning: "5 din se lagatar zyada na lein. Kidney par asar padta hai." },
+
+      // ACIDITY, GAS & STOMACH (10)
+      { brand: "Pan-D", salt: "Pantoprazole 40mg + Domperidone 30mg SR", type: "Prescription", category: "stomach", uses: "Gale me jalan, khatti dakar, ulti jaisa lagna aur tez acidity", genericName: "Jan-Aushadhi Panto-Domperidone SR", genericPrice: "₹28 for 10 caps (Brand ₹165)", warning: "Subah subah khali pet (nahaar muh) paani ke sath lein." },
+      { brand: "Omez 20", salt: "Omeprazole 20mg", type: "OTC", category: "stomach", uses: "Pet ke acid ko kam karna aur peptic ulcer se bachav", genericName: "Jan-Aushadhi Omeprazole 20mg", genericPrice: "₹11 for 10 caps (Brand ₹68)", warning: "Khane se 30 minute pehle lein." },
+      { brand: "Razo 20", salt: "Rabeprazole Sodium 20mg", type: "Prescription", category: "stomach", uses: "Hyper-acidity, GERD aur pet ki andruni soojan", genericName: "Jan-Aushadhi Rabeprazole 20mg", genericPrice: "₹18 for 10 tabs (Brand ₹140)", warning: "Mahaanghi brand ki jagah same salt Jan-Aushadhi Kendra se lein." },
+      { brand: "Rantac 150", salt: "Ranitidine Hydrochloride 150mg", type: "OTC", category: "stomach", uses: "Sadharan gas, pet foolna aur seene ki jalan me halka upchar", genericName: "Jan-Aushadhi Ranitidine 150mg", genericPrice: "₹6 for 10 tabs (Brand ₹38)", warning: "Doctor ki salah anusaar lein." },
+      { brand: "Gelusil MPS", salt: "Aluminium Hydroxide + Magnesium + Simethicone", type: "OTC", category: "stomach", uses: "Instant acidity relief aur pet me gas ke gubbare phodna", genericName: "Jan-Aushadhi Antacid Suspension", genericPrice: "₹25 for 170ml (Brand ₹115)", warning: "Peene se pehle bottle ko acchi tarah hilaayein." },
+      { brand: "Emeset 4", salt: "Ondansetron 4mg", type: "Prescription", category: "stomach", uses: "Ulti aana, chakkar aana ya safar me ulti hona (Motion sickness)", genericName: "Jan-Aushadhi Ondansetron 4mg", genericPrice: "₹12 for 10 tabs (Brand ₹55)", warning: "Muh me ghulne wali tablet hai, jeebh par rakhein." },
+      { brand: "Cremaffin Plus", salt: "Liquid Paraffin + Milk of Magnesia", type: "OTC", category: "stomach", uses: "Purani kabz (constipation) aur bawaseer me pet saaf karne ke liye", genericName: "Jan-Aushadhi Laxative Emulsion", genericPrice: "₹45 for 200ml (Brand ₹195)", warning: "Raat ko sone se pehle gungune paani ke sath lein." },
+      { brand: "Eldoper", salt: "Loperamide Hydrochloride 2mg", type: "OTC", category: "stomach", uses: "Patle dast (diarrhea) ko turant rokne ke liye", genericName: "Jan-Aushadhi Loperamide 2mg", genericPrice: "₹7 for 10 caps (Brand ₹38)", warning: "Bukhar ya khoon aane wale dast me na lein." },
+      { brand: "Electral ORS", salt: "Oral Rehydration Salts (WHO Formula)", type: "OTC", category: "stomach", uses: "Dast ya ulti ke baad dehydration aur kamzori door karna", genericName: "Jan-Aushadhi WHO-ORS Sachet", genericPrice: "₹8 per pack (Brand ₹23)", warning: "1 litre uble thande paani me pura packet gholein." },
+      { brand: "Sucrafil O", salt: "Sucralfate 1000mg + Oxetacaine 20mg", type: "Prescription", category: "stomach", uses: "Pet ke ghaav (Ulcers) par surakshit leep banana", genericName: "Jan-Aushadhi Sucralfate Gel", genericPrice: "₹55 for 100ml (Brand ₹240)", warning: "Khana khane se 1 ghante pehle lein." },
+
+      // ALLERGY, COLD & COUGH (9)
+      { brand: "Cetzine", salt: "Cetirizine Hydrochloride 10mg", type: "OTC", category: "allergy", uses: "Chheenk aana, naak behna, aankhon me khujli aur sardi", genericName: "Jan-Aushadhi Cetirizine 10mg", genericPrice: "₹5 for 10 tabs (Brand ₹32)", warning: "Ise lene ke baad neend aa sakti hai. Driving na karein." },
+      { brand: "Levocet 5", salt: "Levocetirizine 5mg", type: "OTC", category: "allergy", uses: "Allergy, skin par laal daane aur naak band hona", genericName: "Jan-Aushadhi Levocetirizine 5mg", genericPrice: "₹9 for 10 tabs (Brand ₹58)", warning: "Raat ko sone se pehle lena behtar hai." },
+      { brand: "Montair-LC", salt: "Montelukast 10mg + Levocetirizine 5mg", type: "Prescription", category: "allergy", uses: "Allergic asthma, mausam badalne par khansi aur naak band", genericName: "Jan-Aushadhi Montelukast-Levo Tablet", genericPrice: "₹24 for 10 tabs (Brand ₹185)", warning: "Raat ke waqt hi lein, rojana ek nishchit samay par." },
+      { brand: "Allegra 120", salt: "Fexofenadine Hydrochloride 120mg", type: "OTC", category: "allergy", uses: "Severe allergy jisme bilkul neend nahi aati (Non-sedative)", genericName: "Jan-Aushadhi Fexofenadine 120mg", genericPrice: "₹25 for 10 tabs (Brand ₹165)", warning: "Fruit juice ke sath na lein; dawai ka asar kam hota hai." },
+      { brand: "Sinarest", salt: "Paracetamol + Phenylephrine + Chlorpheniramine", type: "OTC", category: "allergy", uses: "Zukam, sar dard, band naak aur bukhar me ek sath aaram", genericName: "Jan-Aushadhi Cold & Flu Tablet", genericPrice: "₹14 for 10 tabs (Brand ₹65)", warning: "BP ke mareez doctor ki salah par hi lein." },
+      { brand: "Ascoril-D Plus", salt: "Dextromethorphan + Phenylephrine + CPM", type: "OTC", category: "allergy", uses: "Sookhi khansi (Dry cough) aur gale ki kharash", genericName: "Jan-Aushadhi Dry Cough Linctus", genericPrice: "₹28 for 100ml (Brand ₹128)", warning: "Balgum wali khansi me ise na lein." },
+      { brand: "Ascoril-LS", salt: "Levosalbutamol + Ambroxol + Guaiphenesin", type: "Prescription", category: "allergy", uses: "Balgum wali geeli khansi aur saans ki nali kholne ke liye", genericName: "Jan-Aushadhi Mucolytic Expectorant", genericPrice: "₹30 for 100ml (Brand ₹135)", warning: "Dil ki dhadkan thodi tez ho sakti hai." },
+      { brand: "Otrivin Nasal Drops", salt: "Xylometazoline Hydrochloride 0.1%", type: "OTC", category: "allergy", uses: "Band naak ko 2 minute me kholna", genericName: "Jan-Aushadhi Nasal Decongestant", genericPrice: "₹18 for 10ml (Brand ₹95)", warning: "Lagatar 5 din se zyada use na karein; aadat pad sakti hai." },
+      { brand: "Avil 25", salt: "Pheniramine Maleate 25mg", type: "OTC", category: "allergy", uses: "Emergency allergy, keede ke katne par khujli aur reaction", genericName: "Jan-Aushadhi Pheniramine 25mg", genericPrice: "₹6 for 10 tabs (Brand ₹24)", warning: "Bohot tez neend aati hai." },
+
+      // ANTIBIOTICS & INFECTIONS (8)
+      { brand: "Augmentin 625 Duo", salt: "Amoxicillin 500mg + Clavulanic Acid 125mg", type: "Prescription", category: "infection", uses: "Gale me infection, chest infection, daant ka ghaav aur pneumonia", genericName: "Jan-Aushadhi Amoxy-Clav 625mg", genericPrice: "₹55 for 10 tabs (Brand ₹210)", warning: "Antibiotic ka pura 5 din ka course khatam karein." },
+      { brand: "Azithral 500", salt: "Azithromycin 500mg", type: "Prescription", category: "infection", uses: "Gale ka dard, tonsils, typhoid aur saans nali ka infection", genericName: "Jan-Aushadhi Azithromycin 500mg", genericPrice: "₹34 for 5 tabs (Brand ₹132)", warning: "Din me sirf ek baar, khana khane se 1 ghante pehle ya baad." },
+      { brand: "Ciplox 500", salt: "Ciprofloxacin 500mg", type: "Prescription", category: "infection", uses: "Pet ka infection, typhoid, peshab me jalan aur dast", genericName: "Jan-Aushadhi Ciprofloxacin 500mg", genericPrice: "₹18 for 10 tabs (Brand ₹52)", warning: "Doodh ya dahi ke sath turant na lein." },
+      { brand: "O2 Tablet", salt: "Ofloxacin 200mg + Ornidazole 500mg", type: "Prescription", category: "infection", uses: "Pecheesh, khooni dast, amoebic infection aur pet kharab", genericName: "Jan-Aushadhi Oflox-Ornidazole", genericPrice: "₹26 for 10 tabs (Brand ₹145)", warning: "Muh me kadwa swad ho sakta hai. Paani khoob piyein." },
+      { brand: "Taxim-O 200", salt: "Cefixime 200mg", type: "Prescription", category: "infection", uses: "Fever, typhoid, kaan ka infection aur urinary tract infection (UTI)", genericName: "Jan-Aushadhi Cefixime 200mg", genericPrice: "₹42 for 10 tabs (Brand ₹185)", warning: "Bina doctor consultation ke antibiotic na shuru karein." },
+      { brand: "Doxy-1 L-DR", salt: "Doxycycline 100mg + Lactic Acid Bacillus", type: "Prescription", category: "infection", uses: "Pimple/acne, gale ka infection aur malaria bachav", genericName: "Jan-Aushadhi Doxycycline 100mg", genericPrice: "₹16 for 10 caps (Brand ₹98)", warning: "Dawai lene ke baad turant bistar par na letein." },
+      { brand: "Flagyl 400", salt: "Metronidazole 400mg", type: "Prescription", category: "infection", uses: "Pet ke keede, daant ka infection aur loose motion", genericName: "Jan-Aushadhi Metronidazole 400mg", genericPrice: "₹7 for 10 tabs (Brand ₹32)", warning: "Is dawai ke dauran sharab (alcohol) bilkul na lein." },
+      { brand: "Forcan 150", salt: "Fluconazole 150mg", type: "Prescription", category: "infection", uses: "Fungal infection, daad, khujli aur guptango me infection", genericName: "Jan-Aushadhi Fluconazole 150mg", genericPrice: "₹9 for 1 tab (Brand ₹45)", warning: "Aamtaur par hafte me sirf ek baar li jaati hai." },
+
+      // VITAMINS & SUPPLEMENTS (8)
+      { brand: "Limcee 500", salt: "Vitamin C (Ascorbic Acid) 500mg Chewable", type: "OTC", category: "vitamins", uses: "Immunity badhana, ghaav bharna aur skin glowing", genericName: "Jan-Aushadhi Chewable Vitamin C", genericPrice: "₹8 for 15 tabs (Brand ₹28)", warning: "Ise chabakar khayein, paani se nigle nahi." },
+      { brand: "Calcirol 60K", salt: "Cholecalciferol (Vitamin D3) 60,000 IU", type: "OTC", category: "vitamins", uses: "Haddiyon ki kamzori, vitamin D ki kami aur joint pain", genericName: "Jan-Aushadhi Vitamin D3 60K", genericPrice: "₹18 for 4 caps (Brand ₹135)", warning: "Hafte me sirf ek baar, doodh ke sath lein." },
+      { brand: "Becosules Z", salt: "B-Complex + Vitamin C + Zinc Capsule", type: "OTC", category: "vitamins", uses: "Muh ke chhale, kamzori, thakan aur baal jhadna", genericName: "Jan-Aushadhi B-Complex + Zinc", genericPrice: "₹12 for 20 caps (Brand ₹55)", warning: "Peshaw ka rang peela ho sakta hai (normal baat hai)." },
+      { brand: "Shelcal 500", salt: "Calcium 500mg + Vitamin D3 250 IU", type: "OTC", category: "vitamins", uses: "Haddiyan mazboot karna, osteoporosis aur daanton ki majbooti", genericName: "Jan-Aushadhi Calcium + D3", genericPrice: "₹22 for 15 tabs (Brand ₹132)", warning: "Khana khane ke baad lein. Kidney stone wale doctor se puchein." },
+      { brand: "Neurobion Forte", salt: "Vitamin B1, B6, B12 Complex", type: "OTC", category: "vitamins", uses: "Nasoon me dard, haath pair me jhanjhanahat aur numbness", genericName: "Jan-Aushadhi Neuro-B Complex", genericPrice: "₹14 for 30 tabs (Brand ₹44)", warning: "Daily ek tablet gungune paani se." },
+      { brand: "Autrin / Orofer", salt: "Ferrous Fumarate (Iron) + Folic Acid", type: "OTC", category: "vitamins", uses: "Khoon ki kami (Anemia), chakkar aana aur pregnancy support", genericName: "Jan-Aushadhi Iron + Folic Acid", genericPrice: "₹15 for 10 tabs (Brand ₹140)", warning: "Chaye ya coffee ke sath na lein; iron absorb nahi hota." },
+      { brand: "Evion 400", salt: "Tocopheryl Acetate (Vitamin E) 400mg", type: "OTC", category: "vitamins", uses: "Skin glow, baalon ki growth aur muscle cramps", genericName: "Jan-Aushadhi Vitamin E 400mg", genericPrice: "₹16 for 10 caps (Brand ₹38)", warning: "Capsule ko nigal kar khayein ya baalon me lagaayein." },
+      { brand: "Supradyn Daily", salt: "Multivitamin + Minerals + Trace Elements", type: "OTC", category: "vitamins", uses: "Daily energy, sharirik kamzori aur stamina badhana", genericName: "Jan-Aushadhi Daily Multivitamin", genericPrice: "₹18 for 15 tabs (Brand ₹65)", warning: "Subah nashte ke baad lein." },
+
+      // OINTMENTS & FIRST AID (7)
+      { brand: "Betadine 5% Ointment", salt: "Povidone Iodine 5% w/w", type: "OTC", category: "firstaid", uses: "Chot, cut, ghaav aur operation ke taanko par antiseptic", genericName: "Jan-Aushadhi Povidone Iodine 5%", genericPrice: "₹22 for 20g (Brand ₹78)", warning: "Ghaav saaf karke patli parat lagayein." },
+      { brand: "Silverex Ionic Gel", salt: "Silver Sulfadiazine + Chlorhexidine", type: "OTC", category: "firstaid", uses: "Ghar me aag, garam paani ya tel se jalne par cooling relief", genericName: "Jan-Aushadhi Burn Relief Gel", genericPrice: "₹35 for 25g (Brand ₹120)", warning: "Jali hui jagah ko pehle saaf nalke ke paani se dhoyen." },
+      { brand: "Volini / Moov Gel", salt: "Diclofenac + Methyl Salicylate + Menthol", type: "OTC", category: "firstaid", uses: "Moch, kamar dard, gardan dard aur joint pain me spray/gel", genericName: "Jan-Aushadhi Pain Relief Gel", genericPrice: "₹28 for 30g (Brand ₹145)", warning: "Khule zakham ya cut par na lagayein." },
+      { brand: "Soframycin Cream", salt: "Framycetin Skin Cream 1%", type: "OTC", category: "firstaid", uses: "Chilna, phoda-phunsi aur skin bacterial infection", genericName: "Jan-Aushadhi Framycetin Cream", genericPrice: "₹15 for 30g (Brand ₹64)", warning: "Aankhon ke aas-paas na lagayein." },
+      { brand: "Candid Dusting Powder", salt: "Clotrimazole Absorbent Powder 1%", type: "OTC", category: "firstaid", uses: "Paseene ki badbu, janghon ki khujli, fungal rash aur ghamoriyan", genericName: "Jan-Aushadhi Clotrimazole Powder", genericPrice: "₹38 for 100g (Brand ₹155)", warning: "Nahane ke baad shareer poori tarah sukha kar lagayein." },
+      { brand: "Quadriderm RF", salt: "Beclomethasone + Clotrimazole + Neomycin", type: "Prescription", category: "firstaid", uses: "Daad, khajli, eczema aur severe daane", genericName: "Jan-Aushadhi Multi-Action Cream", genericPrice: "₹26 for 15g (Brand ₹118)", warning: "Chehre par bina doctor ki salah ke lambe samay tak na lagayein." },
+      { brand: "Hansaplast Bandage", salt: "Medicated Adhesive Strip (Washproof)", type: "OTC", category: "firstaid", uses: "Chote cut par dhool mitti se bachav aur khoon rokna", genericName: "Jan-Aushadhi Medicated Strips", genericPrice: "₹12 for 10 strips (Brand ₹35)", warning: "Roj patti badlein taaki infection na ho." }
+    ];
+  </script>
+
+  <!-- ================= FIREBASE & CORE APPLICATION LOGIC ================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDowYTgb8RxTwwyBjMzSpqdJ1GJtf7Dk6s",
+      authDomain: "medvault-360.firebaseapp.com",
+      projectId: "medvault-360",
+      storageBucket: "medvault-360.firebasestorage.app",
+      messagingSenderId: "834999601142",
+      appId: "1:834999601142:web:a22114d65b98b0360fe9d7",
+      measurementId: "G-XV6XCY4QPG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- 1. 50+ MEDICINES DIRECTORY RENDERER ---
+    let activeCat = "all";
+    const medContainer = document.getElementById("medicinesContainer");
+    const searchInput = document.getElementById("medicineSearch");
+
+    function renderMeds(list) {
+      if (!medContainer) return;
+      medContainer.innerHTML = "";
+      if (!list || list.length === 0) {
+        medContainer.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted);">Koi medicine match nahi hui.</p>`;
+        return;
+      }
+      list.forEach(m => {
+        const isRx = m.type.toLowerCase() === "prescription";
+        const card = document.createElement("div");
+        card.className = "med-card";
+        card.innerHTML = `
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="font-size:18px; font-weight:700;">${m.brand}</h4>
+              <span class="badge ${isRx ? 'badge-rx' : 'badge-otc'}">${m.type}</span>
+            </div>
+            <p style="font-size:13px; color:var(--primary); font-weight:600; margin-bottom:6px;">🔬 Salt: ${m.salt}</p>
+            <p style="font-size:13.5px; margin-bottom:8px; line-height:1.4;"><b>Uses:</b> ${m.uses}</p>
+            <div class="savings-box">💰 <b>Generic Alternative:</b><br>${m.genericName} (${m.genericPrice})</div>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); background:var(--surface-subtle); padding:8px 10px; border-radius:8px;">
+            ⚠️ <b>Precaution:</b> ${m.warning}
+          </div>
+        `;
+        medContainer.appendChild(card);
+      });
+    }
+
+    function filterMedicines() {
+      if (!searchInput) return;
+      const q = searchInput.value.toLowerCase().trim();
+      const filtered = embeddedMedicinesData.filter(m => {
+        const matchCat = (activeCat === "all") || (m.category === activeCat);
+        return matchCat && (m.brand.toLowerCase().includes(q) || m.salt.toLowerCase().includes(q) || m.uses.toLowerCase().includes(q));
+      });
+      renderMeds(filtered);
+    }
+
+    if (searchInput) searchInput.addEventListener("input", filterMedicines);
+    document.querySelectorAll(".cat-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeCat = btn.dataset.cat;
+        filterMedicines();
+      });
+    });
+
+    // Initial render of 50+ medicines
+    renderMeds(embeddedMedicinesData);
+
+    // --- 2. 14 SPECIALISTS DATA & HOME QUICK MATCHER ---
+    const specialists = [
+      { symptom: "Seene me dard, bayen haath me dard, tez paseena", doc: "Cardiologist (Heart Specialist) / ER", urgent: true, keys: ["chest", "heart", "pain", "dard", "paseena"] },
+      { symptom: "Ghabrahat, depression, panic attack, neend na aana", doc: "Psychiatrist / Clinical Psychologist", urgent: false, keys: ["neend", "depression", "tension", "dimag"] },
+      { symptom: "Skin allergy, daad, acne, fungal infection, khujli", doc: "Dermatologist (Skin Specialist)", urgent: false, keys: ["skin", "daad", "khujli", "pimple", "acne"] },
+      { symptom: "Haddi tootna, fracture, moch, ghutno me dard", doc: "Orthopedic Surgeon", urgent: false, keys: ["haddi", "bone", "fracture", "moch", "joint", "ghutna"] },
+      { symptom: "Gale me dard, tonsils, kaan me saayen-saayen ya naak band", doc: "ENT Specialist", urgent: false, keys: ["gala", "kaan", "naak", "tonsil", "ent"] },
+      { symptom: "Sugar badhna (Diabetes), thyroid issue, achanak wazan girna", doc: "Endocrinologist", urgent: false, keys: ["sugar", "diabetes", "thyroid", "wazan"] },
+      { symptom: "Aankhon se paani aana, dhundhla dikhna, motiyabind", doc: "Ophthalmologist (Eye Specialist)", urgent: false, keys: ["aankh", "eye", "dhundhla", "vision"] },
+      { symptom: "Bacchon me bukhar, dast, vaccination, sharirik vikas", doc: "Pediatrician (Child Specialist)", urgent: false, keys: ["baccha", "child", "baby", "pediatric"] },
+      { symptom: "Periods me asahniya dard, pregnancy care, PCOD / PCOS", doc: "Gynecologist (Women's Health)", urgent: false, keys: ["period", "pregnancy", "women", "mahila", "pcod"] },
+      { symptom: "Sir me tez dard (Migraine), jhanjhanahat, mirgi/fits", doc: "Neurologist (Brain & Nerve)", urgent: false, keys: ["migraine", "headache", "sar dard", "fits", "nerve"] },
+      { symptom: "Pet me tez jalan, gas, piles/bawasir, liver infection", doc: "Gastroenterologist", urgent: false, keys: ["pet", "gas", "acidity", "liver", "piles", "bawasir"] },
+      { symptom: "Peshaw me jalan, kidney stone, peshaw me rukawat", doc: "Urologist / Nephrologist", urgent: false, keys: ["kidney", "stone", "peshaw", "urine", "pathri"] },
+      { symptom: "Lagatar khansi, asthma, saans phoolna, balgam me khoon", doc: "Pulmonologist (Chest Specialist)", urgent: true, keys: ["saans", "asthma", "cough", "khansi", "lungs"] },
+      { symptom: "Sadharan bukhar, viral flu, sardi-khansi, kamzori", doc: "General Physician (MBBS)", urgent: false, keys: ["bukhar", "fever", "flu", "sardi", "cold", "viral"] }
+    ];
+
+    const specContainer = document.getElementById("specialistsContainer");
+    if (specContainer) {
+      specialists.forEach(s => {
+        const el = document.createElement("div");
+        el.className = "med-card";
+        el.style.borderLeft = s.urgent ? "4px solid #dc2626" : "4px solid var(--primary)";
+        el.innerHTML = `
+          <h4 style="font-size:16px; margin-bottom:6px;">${s.symptom}</h4>
+          <p style="font-size:14px; font-weight:700; color:var(--primary); margin-bottom:8px;">👉 Consult: ${s.doc}</p>
+          <button onclick="navigateTo('page-patient')" class="btn-action" style="align-self:flex-start;">Book Consultation (₹50)</button>
+        `;
+        specContainer.appendChild(el);
+      });
+    }
+
+    window.quickMatch = function(queryStr) {
+      const q = queryStr.toLowerCase();
+      const resBox = document.getElementById("homeMatchResult");
+      resBox.style.display = "block";
+
+      const match = specialists.find(s => s.keys.some(k => q.includes(k)) || s.symptom.toLowerCase().includes(q));
+      if (match) {
+        resBox.innerHTML = `
+          <div style="background:var(--surface-subtle); padding:12px; border-radius:12px; border-left:4px solid var(--primary);">
+            <div style="font-size:12px; color:var(--text-muted);">Recommended Specialist:</div>
+            <h4 style="color:var(--primary); font-size:15px; margin:2px 0;">👉 ${match.doc}</h4>
+            <button onclick="navigateTo('page-patient')" class="btn-primary" style="padding:6px 12px; font-size:12px; margin-top:6px;">Consult Now (₹50)</button>
+          </div>
+        `;
+      } else {
+        resBox.innerHTML = `
+          <div style="background:var(--surface-subtle); padding:12px; border-radius:12px; border-left:4px solid #0284c7;">
+            <div style="font-size:13px; font-weight:700;">General Physician Recommended</div>
+            <button onclick="navigateTo('page-patient')" class="btn-primary" style="padding:6px 12px; font-size:12px; margin-top:6px;">Consult Doctor (₹50)</button>
+          </div>
+        `;
+      }
+    };
+
+    const homeSymptomSearchBtn = document.getElementById("homeSymptomSearchBtn");
+    if (homeSymptomSearchBtn) {
+      homeSymptomSearchBtn.onclick = () => {
+        const val = document.getElementById("homeSymptomInput").value.trim();
+        if (val) quickMatch(val);
+      };
+    }
+
+    // --- 3. DOCTOR DESK: LOGIN & SIGN-UP ---
+    let currentDoctorProfile = null;
+    let currentSelectedPatientFee = 50;
+
+    const showDocLoginBtn = document.getElementById("showDocLoginBtn");
+    const showDocSignupBtn = document.getElementById("showDocSignupBtn");
+    const docLoginForm = document.getElementById("docLoginForm");
+    const docSignupForm = document.getElementById("docSignupForm");
+    const doctorAuthBox = document.getElementById("doctorAuthContainer");
+    const doctorDashboard = document.getElementById("doctorDashboard");
+    const activeDocInfo = document.getElementById("activeDocInfo");
+
+    if (showDocLoginBtn) {
+      showDocLoginBtn.onclick = () => {
+        docLoginForm.style.display = "block";
+        docSignupForm.style.display = "none";
+        showDocLoginBtn.classList.add("active");
+        showDocSignupBtn.classList.remove("active");
+      };
+    }
+    if (showDocSignupBtn) {
+      showDocSignupBtn.onclick = () => {
+        docLoginForm.style.display = "none";
+        docSignupForm.style.display = "block";
+        showDocSignupBtn.classList.add("active");
+        showDocLoginBtn.classList.remove("active");
+      };
+    }
+
+    function activateDoctorSession(docData) {
+      currentDoctorProfile = docData;
+      if (doctorAuthBox) doctorAuthBox.style.display = "none";
+      if (doctorDashboard) doctorDashboard.style.display = "block";
+      if (activeDocInfo) activeDocInfo.innerText = `${docData.name} | Reg: ${docData.regNo}`;
+      
+      const prevDocTitle = document.getElementById("prevDocTitle");
+      const prevRegId = document.getElementById("prevRegId");
+      if (prevDocTitle) prevDocTitle.innerText = docData.name;
+      if (prevRegId) prevRegId.innerText = docData.regNo;
+      
+      loadPatientQueue();
+      updateDoctorEarnings();
+    }
+
+    const quickDemoBtn = document.getElementById("quickDemoDocBtn");
+    if (quickDemoBtn) {
+      quickDemoBtn.addEventListener("click", () => {
+        const demoDoc = { name: "Dr. Divakar Nayak (MBBS, MD)", regNo: "NMC-RJ-94821", email: "dr.divakar@medvault.com" };
+        activateDoctorSession(demoDoc);
+        alert("Welcome Dr. Divakar! Doctor Desk is ready.");
+      });
+    }
+
+    if (docSignupForm) {
+      docSignupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("regDocName").value.trim();
+        const regNo = document.getElementById("regDocReg").value.trim();
+        const email = document.getElementById("regEmail").value.trim().toLowerCase();
+        const password = document.getElementById("regPassword").value;
+
+        try {
+          const check = await getDocs(query(collection(db, "doctors"), where("email", "==", email)));
+          if (!check.empty) { alert("Yeh email pehle se registered hai! Login karein."); return; }
+          const newDoc = { name, regNo, email, password, createdAt: serverTimestamp() };
+          await addDoc(collection(db, "doctors"), newDoc);
+          alert("Doctor Registration Successful! Welcome Dr. " + name);
+          activateDoctorSession(newDoc);
+        } catch (err) { alert("Registration Error: " + err.message); }
+      });
+    }
+
+    if (docLoginForm) {
+      docLoginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+        const password = document.getElementById("loginPassword").value;
+        try {
+          const snap = await getDocs(query(collection(db, "doctors"), where("email", "==", email), where("password", "==", password)));
+          if (snap.empty) { alert("Email ya Password galat hai!"); return; }
+          activateDoctorSession(snap.docs[0].data());
+        } catch (err) { alert("Login Error: " + err.message); }
+      });
+    }
+
+    const docLogoutBtn = document.getElementById("docLogoutBtn");
+    if (docLogoutBtn) {
+      docLogoutBtn.onclick = () => {
+        currentDoctorProfile = null;
+        if (doctorDashboard) doctorDashboard.style.display = "none";
+        if (doctorAuthBox) doctorAuthBox.style.display = "block";
+      };
+    }
+
+    async function updateDoctorEarnings() {
+      try {
+        const snap = await getDocs(collection(db, "prescriptions"));
+        let totalIncome = 0, count = 0;
+        snap.forEach(d => {
+          totalIncome += Number(d.data().feeEarned || 50);
+          count++;
+        });
+        document.getElementById("docTotalEarnings").innerText = `₹${totalIncome}`;
+        document.getElementById("docPatientsCount").innerText = count;
+      } catch (err) { console.error("Earnings error:", err); }
+    }
+
+    async function loadPatientQueue() {
+      const queueList = document.getElementById("patientQueueList");
+      if (!queueList) return;
+      queueList.innerHTML = "<p style='color:var(--text-muted); font-size:13px;'>Waiting queue load ho rahi hai...</p>";
+      try {
+        const snap = await getDocs(query(collection(db, "consultations"), where("status", "==", "pending")));
+        if (snap.empty) { queueList.innerHTML = "<p style='color:var(--text-muted); font-size:13px;'>Abhi koi patient queue me nahi hai.</p>"; return; }
+        queueList.innerHTML = "";
+        snap.forEach((d) => {
+          const p = d.data();
+          const item = document.createElement("div");
+          item.className = "patient-queue-item";
+          const feeBadge = p.fee ? `<span style="background:#dcfce7; color:#166534; font-size:11px; padding:2px 8px; border-radius:8px; font-weight:700;">Paid: ₹${p.fee}</span>` : `<span style="background:#fef3c7; color:#92400e; font-size:11px; padding:2px 8px; border-radius:8px; font-weight:700;">Paid: ₹50</span>`;
+          
+          item.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong>👤 ${p.patientName} (${p.age} Yrs)</strong>
+              ${feeBadge}
+            </div>
+            <small style="color:var(--text-muted);">📞 ${p.patientPhone} | Ref ID: <b>${p.paymentId || 'pay_DEMO102'}</b></small>
+            <div style="font-size:13px; margin:6px 0;"><b>Lakshan:</b> ${p.symptoms}</div>
+            
+            <div class="queue-action-btns">
+              <a href="tel:${p.patientPhone}" class="btn-connect btn-phone" onclick="event.stopPropagation()">📞 Direct Call</a>
+              <button class="btn-connect btn-live-video" onclick="event.stopPropagation(); window.startLiveWebcamCall('${p.patientName}')">
+                📹 Live Video Call
+              </button>
+              <button class="btn-connect btn-wa-call" onclick="event.stopPropagation(); window.startCleanWhatsAppChat('${p.patientPhone}', '${p.patientName}')">
+                💬 WhatsApp Chat/Call
+              </button>
+            </div>
+          `;
+
+          item.onclick = () => {
+            currentSelectedPatientFee = p.fee || 50;
+            document.getElementById("currentConsultId").value = d.id;
+            document.getElementById("rxPatientName").value = p.patientName;
+            document.getElementById("rxPatientPhone").value = p.patientPhone;
+            document.getElementById("rxDiagnosis").value = p.symptoms.slice(0, 45);
+            document.getElementById("prevPatName").innerText = p.patientName;
+            document.getElementById("prevPatPhone").innerText = p.patientPhone;
+            document.getElementById("prevPatDiag").innerText = p.symptoms.slice(0, 45);
+            window.showInAppToast("Patient Loaded", `${p.patientName} form me load ho gaye hain.`, "📝");
+          };
+          queueList.appendChild(item);
+        });
+      } catch (err) { queueList.innerHTML = "<p style='color:red;'>Queue error: " + err.message + "</p>"; }
+    }
+    const refreshQueueBtn = document.getElementById("refreshQueueBtn");
+    if (refreshQueueBtn) refreshQueueBtn.onclick = loadPatientQueue;
+
+    const rxForm = document.getElementById("rxForm");
+    if (rxForm) {
+      rxForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const consultId = document.getElementById("currentConsultId").value;
+        const pName = document.getElementById("rxPatientName").value.trim();
+        const pPhone = document.getElementById("rxPatientPhone").value.trim();
+        const diag = document.getElementById("rxDiagnosis").value.trim();
+        const meds = document.getElementById("rxMedicines").value.trim();
+        const inst = document.getElementById("rxInstructions").value.trim();
+
+        document.getElementById("prevPatName").innerText = pName;
+        document.getElementById("prevPatPhone").innerText = pPhone;
+        document.getElementById("prevPatDiag").innerText = diag;
+        document.getElementById("prevPatMeds").innerText = meds;
+        document.getElementById("prevPatInst").innerText = inst;
+
+        const doctorName = currentDoctorProfile ? currentDoctorProfile.name : "Dr. Divakar Nayak (MBBS, MD)";
+        const docReg = currentDoctorProfile ? currentDoctorProfile.regNo : "NMC-RJ-94821";
+
+        try {
+          await addDoc(collection(db, "prescriptions"), {
+            doctorName: doctorName,
+            docReg: docReg,
+            patientName: pName,
+            patientPhone: pPhone,
+            diagnosis: diag,
+            medicines: meds,
+            instructions: inst,
+            feeEarned: currentSelectedPatientFee,
+            dispenseStatus: "Prescribed",
+            date: new Date().toLocaleDateString(),
+            createdAt: serverTimestamp()
+          });
+
+          if (consultId) { await updateDoc(doc(db, "consultations", consultId), { status: "completed" }); }
+          
+          window.showInAppToast("🩺 Prescription Dispatched!", `Dr. ${doctorName} ne ${pName} ka prescription issue kar diya hai.`, "✅");
+          alert(`Official Prescription Saved! Dr. ${doctorName} (Reg: ${docReg}) record generate ho gaya.`);
+          loadPatientQueue();
+          updateDoctorEarnings();
+        } catch (err) { alert("Error saving prescription: " + err.message); }
+      });
+    }
+
+    // --- 4. PATIENT CONSULTATION FORM & RAZORPAY SIMULATOR ---
+    let pendingConsultData = null;
+    const consultForm = document.getElementById("consultForm");
+    const rzpModal = document.getElementById("rzpModal");
+    const rzpCloseBtn = document.getElementById("rzpCloseBtn");
+    const rzpSubmitBtn = document.getElementById("rzpSubmitBtn");
+    const rzpBodyMain = document.getElementById("rzpBodyMain");
+    const rzpProcessing = document.getElementById("rzpProcessing");
+
+    if (consultForm) {
+      consultForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const feeRadio = document.querySelector('input[name="consultFee"]:checked');
+        const fee = feeRadio ? Number(feeRadio.value) : 50;
+        
+        pendingConsultData = {
+          name: document.getElementById("pName").value.trim(),
+          age: document.getElementById("pAge").value.trim(),
+          phone: document.getElementById("pPhone").value.trim(),
+          symptoms: document.getElementById("pSymptoms").value.trim(),
+          fee: fee
+        };
+
+        document.getElementById("rzpPatientName").innerText = pendingConsultData.name + " (" + pendingConsultData.phone + ")";
+        document.getElementById("rzpAmount").innerText = `₹${fee}.00`;
+        document.getElementById("rzpBtnAmount").innerText = `₹${fee}.00`;
+
+        rzpBodyMain.style.display = "block";
+        rzpProcessing.style.display = "none";
+        rzpModal.classList.add("active");
+      });
+    }
+
+    if (rzpCloseBtn) rzpCloseBtn.onclick = () => rzpModal.classList.remove("active");
+
+    if (rzpSubmitBtn) {
+      rzpSubmitBtn.addEventListener("click", () => {
+        rzpBodyMain.style.display = "none";
+        rzpProcessing.style.display = "block";
+
+        setTimeout(async () => {
+          const randNum = Math.random().toString(36).substring(2, 10).toUpperCase();
+          const generatedPaymentId = "pay_" + randNum;
+
+          try {
+            await addDoc(collection(db, "consultations"), {
+              patientName: pendingConsultData.name,
+              age: pendingConsultData.age,
+              patientPhone: pendingConsultData.phone,
+              symptoms: pendingConsultData.symptoms,
+              fee: pendingConsultData.fee,
+              paymentId: generatedPaymentId,
+              paymentStatus: "PAID",
+              status: "pending",
+              createdAt: serverTimestamp()
+            });
+
+            rzpModal.classList.remove("active");
+            window.showInAppToast("🎉 Consultation Booked!", `Payment ₹${pendingConsultData.fee} Received. Doctor queue update ho gayi hai.`, "💳");
+            alert(`🎉 Payment Successful via Razorpay!\nTransaction ID: ${generatedPaymentId}\nConsultation request Doctor Desk par bhej di gayi hai.`);
+            consultForm.reset();
+          } catch (err) {
+            rzpModal.classList.remove("active");
+            alert("Database Error: " + err.message);
+          }
+        }, 1500);
+      });
+    }
+
+    // Patient fetch Rx
+    const btnFetchRx = document.getElementById("btnFetchRx");
+    if (btnFetchRx) {
+      btnFetchRx.addEventListener("click", async () => {
+        const phone = document.getElementById("searchPatientPhone").value.trim();
+        const resBox = document.getElementById("patientRxResult");
+        if (!phone) { alert("Mobile number daalein!"); return; }
+
+        resBox.innerHTML = "<p style='color:var(--text-muted);'>Searching...</p>";
+        try {
+          const snap = await getDocs(query(collection(db, "prescriptions"), where("patientPhone", "==", phone)));
+          if (snap.empty) {
+            resBox.innerHTML = `<div style="padding:14px; background:var(--surface-subtle); border-radius:10px; color:#991b1b;">Is mobile number (${phone}) par abhi koi prescription nahi mila.</div>`;
+            return;
+          }
+          resBox.innerHTML = "";
+          snap.forEach(docSnap => {
+            const d = docSnap.data();
+            const card = document.createElement("div");
+            card.className = "rx-paper";
+            card.style.marginBottom = "15px";
+            card.innerHTML = `
+              <div style="text-align:center; border-bottom:1px solid #333; padding-bottom:8px; margin-bottom:10px;">
+                <h3>${d.doctorName}</h3>
+                <small>Reg: ${d.docReg} | Official Rx</small>
+              </div>
+              <p style="font-size:13px;"><b>Patient:</b> ${d.patientName} | <b>Date:</b> ${d.date || 'Recent'}</p>
+              <p style="font-size:13px;"><b>Diagnosis:</b> ${d.diagnosis}</p>
+              <hr style="margin:8px 0; border:0; border-top:1px dashed #666;">
+              <div style="font-weight:bold; font-size:14px;">Rx:</div>
+              <pre style="font-family:inherit; white-space:pre-wrap; font-size:13px; line-height:1.5;">${d.medicines}</pre>
+              <div style="margin-top:10px; font-size:12px; border-top:1px dashed #666; padding-top:6px;"><b>Advice:</b> ${d.instructions}</div>
+              <button onclick="window.print()" class="btn-primary" style="margin-top:14px; width:100%;">🖨️ Download / Print Slip</button>
+            `;
+            resBox.appendChild(card);
+          });
+        } catch (err) { resBox.innerHTML = "<p style='color:red;'>Error: " + err.message + "</p>"; }
+      });
+    }
+
+    // --- 5. REAL-TIME PHARMACY ECOSYSTEM & CHEMIST SIGN-UP/LOGIN ---
+    let currentLoadedRx = null;
+    let realtimePharmacyUnsubscribe = null;
+
+    const pharmacyLoadRxBtn = document.getElementById("pharmacyLoadRxBtn");
+    const patientOrderSection = document.getElementById("patientOrderSection");
+    const savingsMeterBox = document.getElementById("savingsMeterBox");
+    const patientOrderItemsList = document.getElementById("patientOrderItemsList");
+    const authorizedDocDetailsText = document.getElementById("authorizedDocDetailsText");
+
+    if (pharmacyLoadRxBtn) {
+      pharmacyLoadRxBtn.addEventListener("click", async () => {
+        const phone = document.getElementById("pharmacySearchPhone").value.trim();
+        if (!phone) { alert("Mobile number daalein!"); return; }
+
+        try {
+          const snap = await getDocs(query(collection(db, "prescriptions"), where("patientPhone", "==", phone)));
+          if (snap.empty) {
+            alert(`Mobile number (${phone}) par koi doctor prescription nahi mila! Pehle doctor desk se consult karein.`);
+            return;
+          }
+          currentLoadedRx = snap.docs[snap.docs.length - 1].data();
+          patientOrderSection.style.display = "block";
+          patientOrderItemsList.innerText = currentLoadedRx.medicines;
+          authorizedDocDetailsText.innerText = `Verified by: ${currentLoadedRx.doctorName} (Reg: ${currentLoadedRx.docReg}) | Diagnosis: ${currentLoadedRx.diagnosis}`;
+
+          savingsMeterBox.innerHTML = `
+            <div style="font-size:15px; font-weight:800; margin-bottom:6px;">💡 Jan-Aushadhi Generic Savings Calculator:</div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:8px;">
+              <div style="background:var(--surface); padding:8px 12px; border-radius:8px;">Market Brand Price: <del>₹680</del></div>
+              <div style="background:var(--surface); padding:8px 12px; border-radius:8px; color:#16a34a; font-weight:800;">Jan-Aushadhi: ₹125</div>
+              <div style="background:#dcfce7; padding:8px 12px; border-radius:8px; color:#166534; font-weight:800;">Aapki Bachat: ₹555 (81%)</div>
+            </div>
+          `;
+
+          startRealtimePharmacyOrderTracking(phone);
+        } catch (e) { alert("Error: " + e.message); }
+      });
+    }
+
+    function startRealtimePharmacyOrderTracking(phone) {
+      if (realtimePharmacyUnsubscribe) realtimePharmacyUnsubscribe();
+
+      const q = query(collection(db, "pharmacyOrders"), where("patientPhone", "==", phone));
+      realtimePharmacyUnsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const latestDoc = snapshot.docs[snapshot.docs.length - 1].data();
+          updateTrackingUI(latestDoc.status, latestDoc.storeName, latestDoc.riderName);
+        }
+      });
+    }
+
+    function updateTrackingUI(status, store, rider) {
+      const badge = document.getElementById("liveStatusBadge");
+      const s1 = document.getElementById("track1");
+      const s2 = document.getElementById("track2");
+      const s3 = document.getElementById("track3");
+      const s4 = document.getElementById("track4");
+      const storeText = document.getElementById("assignedStoreName");
+      const riderText = document.getElementById("assignedRiderText");
+
+      badge.innerText = status || "Order Placed";
+      if (store) storeText.innerText = "🏪 Assigned Store: " + store;
+      if (rider) riderText.innerText = "🚴 Delivery Associate: " + rider;
+
+      [s1, s2, s3, s4].forEach(s => { s.className = "tracking-step"; });
+      s1.classList.add("done");
+
+      if (status === "Accepted & Packing") {
+        s2.classList.add("done");
+        s2.classList.add("active");
+        badge.style.background = "#fef3c7";
+        badge.style.color = "#92400e";
+        window.showInAppToast("📦 Dawai Packing Shuru!", "Nearby chemist ne aapka order accept kar liya hai.", "🏪");
+      } else if (status === "Out for Delivery") {
+        s2.classList.add("done");
+        s3.classList.add("done");
+        s3.classList.add("active");
+        badge.style.background = "#e0f2fe";
+        badge.style.color = "#0284c7";
+        window.showInAppToast("🚴 Rider Nikal Gaya!", "Rider aapke ghar dawai deliver karne nikal chuka hai.", "🚀");
+      } else if (status === "Delivered") {
+        s2.classList.add("done");
+        s3.classList.add("done");
+        s4.classList.add("done");
+        badge.style.background = "#dcfce7";
+        badge.style.color = "#166534";
+        window.showInAppToast("✅ Medicine Delivered!", "Aapki Jan-Aushadhi medicines deliver ho chuki hain.", "🎉");
+      }
+    }
+
+    const btnPlacePharmacyOrder = document.getElementById("btnPlacePharmacyOrder");
+    if (btnPlacePharmacyOrder) {
+      btnPlacePharmacyOrder.addEventListener("click", async () => {
+        const addr = document.getElementById("pharmacyAddress").value.trim();
+        const dType = document.getElementById("pharmacyDeliveryType").value;
+        if (!addr) { alert("Delivery address bharein!"); return; }
+
+        try {
+          await addDoc(collection(db, "pharmacyOrders"), {
+            patientName: currentLoadedRx.patientName,
+            patientPhone: currentLoadedRx.patientPhone,
+            doctorName: currentLoadedRx.doctorName || "Dr. Divakar Nayak (MBBS, MD)",
+            docReg: currentLoadedRx.docReg || "NMC-RJ-94821",
+            diagnosis: currentLoadedRx.diagnosis || "General Consultation",
+            medicines: currentLoadedRx.medicines,
+            deliveryType: dType,
+            address: addr,
+            status: "Order Placed (Searching Store)",
+            storeName: "Sharma Medicos & Jan-Aushadhi Kendra",
+            riderName: "Rider assigning shortly",
+            estimatedTotal: 125,
+            savings: 555,
+            createdAt: serverTimestamp()
+          });
+
+          updateTrackingUI("Order Placed (Searching Store)", "Sharma Medicos", "Assigning Rider");
+          window.showInAppToast("🛒 Order Placed!", "Nearest Kendra par delivery request chali gayi hai.", "📦");
+          alert("🎉 Order Placed! Nearby chemist ko notification chali gayi hai. Chemist Portal tab me jakar ise accept karke dekhein—patient tracker par instant live update hoga!");
+        } catch (e) { alert("Order Error: " + e.message); }
+      });
+    }
+
+    // CHEMIST AUTH: TOGGLE, SIGN-UP & LOGIN
+    let currentChemistStore = null;
+    const showChemLoginBtn = document.getElementById("showChemLoginBtn");
+    const showChemSignupBtn = document.getElementById("showChemSignupBtn");
+    const chemistLoginForm = document.getElementById("chemistLoginForm");
+    const chemistSignupForm = document.getElementById("chemistSignupForm");
+    const chemistAuthContainer = document.getElementById("chemistAuthContainer");
+    const chemistDashboardContainer = document.getElementById("chemistDashboardContainer");
+    const activeStoreName = document.getElementById("activeStoreName");
+    const activeStoreDL = document.getElementById("activeStoreDL");
+    const quickDemoChemistBtn = document.getElementById("quickDemoChemistBtn");
+    const chemistLogoutBtn = document.getElementById("chemistLogoutBtn");
+
+    if (showChemLoginBtn) {
+      showChemLoginBtn.onclick = () => {
+        chemistLoginForm.style.display = "block";
+        chemistSignupForm.style.display = "none";
+        showChemLoginBtn.classList.add("active");
+        showChemSignupBtn.classList.remove("active");
+      };
+    }
+    if (showChemSignupBtn) {
+      showChemSignupBtn.onclick = () => {
+        chemistLoginForm.style.display = "none";
+        chemistSignupForm.style.display = "block";
+        showChemSignupBtn.classList.add("active");
+        showChemLoginBtn.classList.remove("active");
+      };
+    }
+
+    function activateChemistSession(storeData) {
+      currentChemistStore = storeData;
+      chemistAuthContainer.style.display = "none";
+      chemistDashboardContainer.style.display = "block";
+      activeStoreName.innerText = storeData.name;
+      if (activeStoreDL) activeStoreDL.innerText = `DL No: ${storeData.dlNo || 'RJ-MED-9941'} | Jaipur Central Hub`;
+      loadChemistOrders();
+    }
+
+    if (quickDemoChemistBtn) {
+      quickDemoChemistBtn.onclick = () => {
+        activateChemistSession({ name: "Sharma Medicos & Jan-Aushadhi Kendra (Store #104)", dlNo: "RJ-MED-9941" });
+      };
+    }
+
+    // Chemist Sign-up Submission
+    if (chemistSignupForm) {
+      chemistSignupForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const storeName = document.getElementById("regChemStoreName").value.trim();
+        const dlNo = document.getElementById("regChemDL").value.trim();
+        const ownerName = document.getElementById("regChemOwner").value.trim();
+        const email = document.getElementById("regChemEmail").value.trim().toLowerCase();
+        const password = document.getElementById("regChemPassword").value;
+
+        try {
+          const check = await getDocs(query(collection(db, "chemists"), where("email", "==", email)));
+          if (!check.empty) { alert("Yeh chemist email pehle se registered hai! Login karein."); return; }
+
+          const newStore = { name: storeName, dlNo: dlNo, owner: ownerName, email: email, password: password, createdAt: serverTimestamp() };
+          await addDoc(collection(db, "chemists"), newStore);
+          alert("Medical Store Registration Successful! Welcome " + storeName);
+          activateChemistSession(newStore);
+        } catch (err) { alert("Chemist Sign-Up Error: " + err.message); }
+      };
+    }
+
+    // Chemist Login Submission
+    if (chemistLoginForm) {
+      chemistLoginForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("chemEmail").value.trim().toLowerCase();
+        const password = document.getElementById("chemPassword").value;
+
+        try {
+          const snap = await getDocs(query(collection(db, "chemists"), where("email", "==", email), where("password", "==", password)));
+          if (snap.empty) {
+            // Allow demo fallback if default email used
+            if (email === "jaipur.chemist@medvault.com" && password === "123456") {
+              activateChemistSession({ name: "Sharma Medicos & Jan-Aushadhi Kendra", dlNo: "RJ-MED-9941" });
+              return;
+            }
+            alert("Email ya Password galat hai!");
+            return;
+          }
+          activateChemistSession(snap.docs[0].data());
+        } catch (err) { alert("Chemist Login Error: " + err.message); }
+      };
+    }
+
+    if (chemistLogoutBtn) {
+      chemistLogoutBtn.onclick = () => {
+        currentChemistStore = null;
+        chemistDashboardContainer.style.display = "none";
+        chemistAuthContainer.style.display = "block";
+      };
+    }
+
+    async function loadChemistOrders() {
+      const cont = document.getElementById("chemistOrdersQueue");
+      if (!cont) return;
+      cont.innerHTML = "<p style='color:var(--text-muted);'>Orders feed load ho rahi hai...</p>";
+      try {
+        const snap = await getDocs(collection(db, "pharmacyOrders"));
+        if (snap.empty) { cont.innerHTML = "<p style='color:var(--text-muted);'>Abhi koi live delivery order nahi hai.</p>"; return; }
+        cont.innerHTML = "";
+        let count = 0;
+        snap.forEach(dSnap => {
+          const o = dSnap.data();
+          count++;
+          const card = document.createElement("div");
+          card.className = "ui-card";
+          card.style.marginBottom = "14px";
+          card.style.borderLeft = "4px solid #0284c7";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong>📦 Order #${dSnap.id.slice(0, 6)}: ${o.patientName} (📞 ${o.patientPhone})</strong>
+              <span style="background:#e0f2fe; color:#0284c7; padding:4px 10px; border-radius:8px; font-size:12px; font-weight:800;">${o.status || 'Placed'}</span>
+            </div>
+            
+            <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:8px 12px; border-radius:8px; margin:8px 0; font-size:12.5px;">
+              <b style="color:#166534;">🩺 Authorized Doctor:</b> ${o.doctorName || 'Dr. Divakar Nayak (MBBS)'} (Reg: <b>${o.docReg || 'NMC-RJ-94821'}</b>)<br>
+              <span style="color:#166534;">Diagnosis: ${o.diagnosis || 'Clinical Checkup'}</span>
+            </div>
+
+            <p style="font-size:13px; margin:6px 0;"><b>Delivery Address:</b> ${o.address} | <b>Type:</b> ${o.deliveryType}</p>
+            <div style="background:var(--surface-subtle); padding:10px; border-radius:8px; font-size:13px; font-family:monospace; margin-bottom:12px;">
+              <b>Prescribed Medicines:</b><br>${o.medicines}
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button onclick="updateStoreOrderStatus('${dSnap.id}', 'Accepted & Packing')" class="btn-primary" style="font-size:12px; padding:8px 12px;">📦 1. Accept & Pack</button>
+              <button onclick="updateStoreOrderStatus('${dSnap.id}', 'Out for Delivery')" class="btn-action" style="background:#fef3c7; color:#b45309; font-size:12px; padding:8px 12px; font-weight:700;">🚴 2. Out for Delivery</button>
+              <button onclick="updateStoreOrderStatus('${dSnap.id}', 'Delivered')" class="btn-success" style="font-size:12px; padding:8px 12px; width:auto;">✅ 3. Mark Delivered</button>
+              <button onclick="window.print()" class="btn-action" style="font-size:12px;">🖨️ Chemist Invoice</button>
+            </div>
+          `;
+          cont.appendChild(card);
+        });
+        document.getElementById("chemOrderCount").innerText = count;
+      } catch (e) { cont.innerHTML = "<p style='color:red;'>Error: " + e.message + "</p>"; }
+    }
+    const btnRefreshChemistOrders = document.getElementById("btnRefreshChemistOrders");
+    if (btnRefreshChemistOrders) btnRefreshChemistOrders.onclick = loadChemistOrders;
+
+    window.updateStoreOrderStatus = async function(orderId, newStatus) {
+      try {
+        await updateDoc(doc(db, "pharmacyOrders", orderId), {
+          status: newStatus,
+          riderName: "Rahul Sharma (Rider +91 9829012345)"
+        });
+        window.showInAppToast("Order Updated", `Order marked as "${newStatus}". Patient tracking update ho gayi hai.`, "📦");
+        loadChemistOrders();
+      } catch (e) { alert("Error: " + e.message); }
+    };
+
+    // --- 6. PATHOLOGY LAB PORTAL & LAB SIGN-UP/LOGIN ---
+    const labPackages = [
+      { name: "Comprehensive Full Body Health Checkup", params: "68 Tests (CBC, Liver, Kidney, Lipid, Sugar, Urine)", price: 499, market: 1500 },
+      { name: "Complete Blood Count (CBC) + ESR", params: "Hemoglobin, Platelets, WBC, RBC Count", price: 149, market: 450 },
+      { name: "Lipid Profile (Heart Risk & Cholesterol)", params: "Total Cholesterol, HDL, LDL, Triglycerides", price: 199, market: 650 },
+      { name: "Thyroid Profile (T3, T4, TSH Ultrasensitive)", params: "Complete Thyroid Gland Function", price: 199, market: 600 },
+      { name: "HbA1c & Fasting Blood Sugar (Diabetes Check)", params: "3-Month Average Blood Sugar + Fasting Glucose", price: 249, market: 750 },
+      { name: "Liver Function Test (LFT) + Kidney (KFT)", params: "Bilirubin, SGOT, SGPT, Creatinine, Urea, Uric Acid", price: 349, market: 1100 }
+    ];
+
+    const labTestsList = document.getElementById("labTestsList");
+    if (labTestsList) {
+      labPackages.forEach(pkg => {
+        const item = document.createElement("div");
+        item.style.background = "var(--surface)";
+        item.style.border = "1px solid var(--border)";
+        item.style.padding = "16px";
+        item.style.borderRadius = "14px";
+        item.style.display = "flex";
+        item.style.justifyContent = "space-between";
+        item.style.alignItems = "center";
+        item.style.cursor = "pointer";
+        item.innerHTML = `
+          <div>
+            <h4 style="font-size:15.5px; margin-bottom:4px;">${pkg.name}</h4>
+            <small style="color:var(--text-muted);">${pkg.params}</small>
+            <div style="margin-top:6px; font-size:13px;">
+              <b style="color:#0891b2; font-size:16px;">₹${pkg.price}</b> <del style="color:var(--text-muted); font-size:12px;">₹${pkg.market}</del>
+              <span style="background:#cffafe; color:#0e7490; font-size:11px; padding:2px 6px; border-radius:6px; font-weight:700; margin-left:6px;">70% OFF</span>
+            </div>
+          </div>
+          <button class="btn-action" style="white-space:nowrap;">Select</button>
+        `;
+        item.onclick = () => {
+          document.getElementById("labSelectedTest").value = pkg.name;
+          document.getElementById("labSelectedPrice").value = `₹${pkg.price} (Market MRP: ₹${pkg.market})`;
+        };
+        labTestsList.appendChild(item);
+      });
+    }
+
+    let realtimeLabUnsubscribe = null;
+    const labBookingForm = document.getElementById("labBookingForm");
+    const labTrackerBox = document.getElementById("labTrackerBox");
+
+    if (labBookingForm) {
+      labBookingForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const tName = document.getElementById("labSelectedTest").value;
+        const pName = document.getElementById("labPatientName").value.trim();
+        const pPhone = document.getElementById("labPatientPhone").value.trim();
+        const pAddr = document.getElementById("labPatientAddress").value.trim();
+        const pSlot = document.getElementById("labTimeSlot").value;
+
+        try {
+          const randRef = "LAB-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+          await addDoc(collection(db, "labBookings"), {
+            bookingId: randRef,
+            testName: tName,
+            patientName: pName,
+            patientPhone: pPhone,
+            address: pAddr,
+            slot: pSlot,
+            status: "Booking Confirmed",
+            labCenter: "MedVault Central Pathology Hub",
+            phlebotomistName: "Assigned technician will reach in your slot",
+            createdAt: serverTimestamp()
+          });
+
+          labTrackerBox.style.display = "block";
+          startRealtimeLabTracking(pPhone);
+
+          window.showInAppToast("🧪 Blood Test Booked!", `Ref: ${randRef} - Sample collection confirmed.`, "🩸");
+          alert(`🎉 Lab Booking Confirmed! Ref ID: ${randRef}\nPathologist & Phlebotomist Desk par request receive ho gayi hai.`);
+          labBookingForm.reset();
+        } catch (err) { alert("Booking Error: " + err.message); }
+      });
+    }
+
+    function startRealtimeLabTracking(phone) {
+      if (realtimeLabUnsubscribe) realtimeLabUnsubscribe();
+
+      const q = query(collection(db, "labBookings"), where("patientPhone", "==", phone));
+      realtimeLabUnsubscribe = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const latestDoc = snapshot.docs[snapshot.docs.length - 1].data();
+          updateLabTrackingUI(latestDoc.status, latestDoc.labCenter, latestDoc.phlebotomistName);
+        }
+      });
+    }
+
+    function updateLabTrackingUI(status, lab, phlebo) {
+      const badge = document.getElementById("labLiveStatusBadge");
+      const s1 = document.getElementById("labTrack1");
+      const s2 = document.getElementById("labTrack2");
+      const s3 = document.getElementById("labTrack3");
+      const s4 = document.getElementById("labTrack4");
+      const labText = document.getElementById("assignedLabName");
+      const phleboText = document.getElementById("assignedPhleboText");
+
+      badge.innerText = status || "Booking Confirmed";
+      if (lab) labText.innerText = "🔬 Certified Lab: " + lab;
+      if (phlebo) phleboText.innerText = "🩸 Phlebotomist: " + phlebo;
+
+      [s1, s2, s3, s4].forEach(s => { s.className = "tracking-step"; });
+      s1.classList.add("done");
+
+      if (status === "Phlebotomist On Way") {
+        s2.classList.add("done");
+        s2.classList.add("active");
+        badge.style.background = "#fef3c7";
+        badge.style.color = "#92400e";
+        window.showInAppToast("🚴 Phlebotomist On Way!", "Technician aapke ghar sample lene nikal chuka hai.", "🩸");
+      } else if (status === "Sample Collected") {
+        s2.classList.add("done");
+        s3.classList.add("done");
+        s3.classList.add("active");
+        badge.style.background = "#e0f2fe";
+        badge.style.color = "#0284c7";
+        window.showInAppToast("🩸 Sample Collected!", "Blood sample testing lab bhej diya gaya hai.", "🧪");
+      } else if (status === "Report Ready") {
+        s2.classList.add("done");
+        s3.classList.add("done");
+        s4.classList.add("done");
+        badge.style.background = "#dcfce7";
+        badge.style.color = "#166534";
+        window.showInAppToast("📄 Lab Report Ready!", "Aapki verified diagnostic digital report generate ho chuki hai.", "✅");
+      }
+    }
+
+    // LAB AUTH: TOGGLE, SIGN-UP & LOGIN
+    let currentLabPartner = null;
+    const showLabLoginBtn = document.getElementById("showLabLoginBtn");
+    const showLabSignupBtn = document.getElementById("showLabSignupBtn");
+    const labLoginForm = document.getElementById("labLoginForm");
+    const labSignupForm = document.getElementById("labSignupForm");
+    const labAuthContainer = document.getElementById("labAuthContainer");
+    const labDashboardContainer = document.getElementById("labDashboardContainer");
+    const activeLabName = document.getElementById("activeLabName");
+    const activeLabCert = document.getElementById("activeLabCert");
+    const quickDemoLabBtn = document.getElementById("quickDemoLabBtn");
+    const labLogoutBtn = document.getElementById("labLogoutBtn");
+
+    if (showLabLoginBtn) {
+      showLabLoginBtn.onclick = () => {
+        labLoginForm.style.display = "block";
+        labSignupForm.style.display = "none";
+        showLabLoginBtn.classList.add("active");
+        showLabSignupBtn.classList.remove("active");
+      };
+    }
+    if (showLabSignupBtn) {
+      showLabSignupBtn.onclick = () => {
+        labLoginForm.style.display = "none";
+        labSignupForm.style.display = "block";
+        showLabSignupBtn.classList.add("active");
+        showLabLoginBtn.classList.remove("active");
+      };
+    }
+
+    function activateLabPartnerSession(partnerData) {
+      currentLabPartner = partnerData;
+      labAuthContainer.style.display = "none";
+      labDashboardContainer.style.display = "block";
+      activeLabName.innerText = partnerData.name;
+      if (activeLabCert) activeLabCert.innerText = `Accreditation: ${partnerData.nabl || 'NABL-ISO-15189'} | Jaipur Collection Zone`;
+      loadLabBookingsFeed();
+    }
+
+    if (quickDemoLabBtn) {
+      quickDemoLabBtn.onclick = () => {
+        activateLabPartnerSession({ name: "MedVault NABL Central Pathology (Hub #201)", nabl: "NABL-RJ-84" });
+      };
+    }
+
+    // Lab Sign-up Submission
+    if (labSignupForm) {
+      labSignupForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const labName = document.getElementById("regLabName").value.trim();
+        const nablNo = document.getElementById("regLabNABL").value.trim();
+        const incharge = document.getElementById("regLabIncharge").value.trim();
+        const email = document.getElementById("regLabEmail").value.trim().toLowerCase();
+        const password = document.getElementById("regLabPassword").value;
+
+        try {
+          const check = await getDocs(query(collection(db, "labs"), where("email", "==", email)));
+          if (!check.empty) { alert("Yeh lab email pehle se registered hai! Login karein."); return; }
+
+          const newLab = { name: labName, nabl: nablNo, incharge: incharge, email: email, password: password, createdAt: serverTimestamp() };
+          await addDoc(collection(db, "labs"), newLab);
+          alert("Pathology Lab Registration Successful! Welcome " + labName);
+          activateLabPartnerSession(newLab);
+        } catch (err) { alert("Lab Sign-Up Error: " + err.message); }
+      };
+    }
+
+    // Lab Login Submission
+    if (labLoginForm) {
+      labLoginForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("labEmail").value.trim().toLowerCase();
+        const password = document.getElementById("labPassword").value;
+
+        try {
+          const snap = await getDocs(query(collection(db, "labs"), where("email", "==", email), where("password", "==", password)));
+          if (snap.empty) {
+            if (email === "jaipur.lab@medvault.com" && password === "123456") {
+              activateLabPartnerSession({ name: "MedVault NABL Central Pathology", nabl: "NABL-RJ-84" });
+              return;
+            }
+            alert("Email ya Password galat hai!");
+            return;
+          }
+          activateLabPartnerSession(snap.docs[0].data());
+        } catch (err) { alert("Lab Login Error: " + err.message); }
+      };
+    }
+
+    if (labLogoutBtn) {
+      labLogoutBtn.onclick = () => {
+        currentLabPartner = null;
+        labDashboardContainer.style.display = "none";
+        labAuthContainer.style.display = "block";
+      };
+    }
+
+    async function loadLabBookingsFeed() {
+      const cont = document.getElementById("labBookingsQueue");
+      if (!cont) return;
+      cont.innerHTML = "<p style='color:var(--text-muted);'>Sample collection feed load ho rahi hai...</p>";
+      try {
+        const snap = await getDocs(collection(db, "labBookings"));
+        if (snap.empty) { cont.innerHTML = "<p style='color:var(--text-muted);'>Abhi koi home sample pickup booking nahi hai.</p>"; return; }
+        cont.innerHTML = "";
+        let count = 0, completed = 0;
+        snap.forEach(dSnap => {
+          const b = dSnap.data();
+          count++;
+          if (b.status === "Report Ready") completed++;
+
+          const card = document.createElement("div");
+          card.className = "ui-card";
+          card.style.marginBottom = "14px";
+          card.style.borderLeft = "4px solid #0891b2";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong>🧪 Booking #${b.bookingId || dSnap.id.slice(0, 6)}: ${b.patientName} (📞 ${b.patientPhone})</strong>
+              <span style="background:#cffafe; color:#0891b2; padding:4px 10px; border-radius:8px; font-size:12px; font-weight:800;">${b.status || 'Confirmed'}</span>
+            </div>
+            
+            <p style="font-size:13.5px; margin:6px 0;"><b>Test:</b> ${b.testName}</p>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">
+              <b>Home Pickup Address:</b> ${b.address}<br>
+              <b>Time Slot:</b> ${b.slot}
+            </p>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button onclick="updateLabSampleStatus('${dSnap.id}', 'Phlebotomist On Way')" class="btn-primary" style="background:#0891b2; font-size:12px; padding:8px 12px;">🚴 1. Phlebotomist On Way</button>
+              <button onclick="updateLabSampleStatus('${dSnap.id}', 'Sample Collected')" class="btn-action" style="background:#fef3c7; color:#b45309; font-size:12px; padding:8px 12px; font-weight:700;">🩸 2. Sample Collected</button>
+              <button onclick="updateLabSampleStatus('${dSnap.id}', 'Report Ready')" class="btn-success" style="font-size:12px; padding:8px 12px; width:auto;">📄 3. Report Ready</button>
+              <a href="tel:${b.patientPhone}" class="btn-action" style="font-size:12px; text-decoration:none;">📞 Call Patient</a>
+            </div>
+          `;
+          cont.appendChild(card);
+        });
+        document.getElementById("labRequestCount").innerText = count;
+        document.getElementById("labCompletedCount").innerText = completed;
+      } catch (e) { cont.innerHTML = "<p style='color:red;'>Error: " + e.message + "</p>"; }
+    }
+    const btnRefreshLabBookings = document.getElementById("btnRefreshLabBookings");
+    if (btnRefreshLabBookings) btnRefreshLabBookings.onclick = loadLabBookingsFeed;
+
+    window.updateLabSampleStatus = async function(bookingDocId, newStatus) {
+      try {
+        await updateDoc(doc(db, "labBookings", bookingDocId), {
+          status: newStatus,
+          phlebotomistName: "Vikram Rathore (Phlebotomist +91 9829054321)"
+        });
+        window.showInAppToast("Lab Status Updated", `Status updated to "${newStatus}". Patient screen updated.`, "🧪");
+        loadLabBookingsFeed();
+      } catch (e) { alert("Error: " + e.message); }
+    };
+
+    // --- 7. 15 FIRST AID GUIDES ---
+    const firstAid = [
+      { title: "1. Minor Burns (Ghar me Jalna)", do: "✅ 10-15 minute sadharan thande nalke ke behte paani ke niche rakhein.", dont: "❌ Barf (ice), Colgate, tel ya haldi bilkul na lagayein." },
+      { title: "2. Fainting (Chakkar Aakar Behosh Hona)", do: "✅ Peeth ke bal letakar dono pair 12 inch upar uthayein taaki brain me blood flow badhe.", dont: "❌ Behosh vyakti ke muh me paani na dalein aur na bheed lagayein." },
+      { title: "3. Heavy Bleeding (Khoon Behna)", do: "✅ Saaf kapde ya patti se seedha ghaav par lagatar firm pressure banaye rakhein.", dont: "❌ Baar-baar kapda hata kar ghaav ko na dekhein; bleeding check ruk sakti hai." },
+      { title: "4. Choking (Gale me Khana Fasna)", do: "✅ Peechhe se dono haath pet par lapetkar upar ki taraf dabayein (Heimlich Maneuver).", dont: "❌ Peeth par bina aage jhukaye zor se na peetein." },
+      { title: "5. Heart Attack (Seene me Bhari Dard)", do: "✅ Mariz ko sahara dekar aaram se bithayein, saaf hawa aane dein aur 108 bulayein.", dont: "❌ Mariz ko chalne ya sidhiyan chadhne na dein." },
+      { title: "6. Snake Bite (Saanp Ka Kaatna)", do: "✅ Katne wali jagah ko hilaayein nahi, bilkul shant rakhein aur hospital jayein.", dont: "❌ Zeher choosne ki koshish na karein aur na hi blade se cheera lagayein." },
+      { title: "7. Electric Shock (Current Lagna)", do: "✅ Pehle main switch band karein ya lakdi/plastic se vyakti ko alag karein.", dont: "❌ Nange haathon se ya geeli cheez se mariz ko touch na karein." },
+      { title: "8. Nosebleed (Naak se Khoon Aana)", do: "✅ Aage ki taraf jhukein aur naak ke naram hisse ko 5-10 minute dabaye rakhein.", dont: "❌ Sar ko peechhe ki taraf na jhukayein (khoon gale me ja sakta hai)." },
+      { title: "9. Heatstroke / Loo Lagna", do: "✅ Mariz ko chhaon me layein, geele kapde se shareer pochein aur ORS pilayein.", dont: "❌ Ekdum se barfila paani mariz ke muh me na dalein." },
+      { title: "10. Bone Fracture / Moch (Sprain)", do: "✅ Haddi ko bina hilaye lakdi ya gatte ki patti (splint) se baandh kar sthir karein.", dont: "❌ Tooti haddi ko khud se seedha karne ka prayas na karein." },
+      { title: "11. Dog / Animal Bite (Kutte Ka Kaatna)", do: "✅ Turant 10-15 minute sabun aur behte paani se ghaav ko khoob dhoyen aur Rabies injection lagwayein.", dont: "❌ Ghaav par mirchi, choona ya patti na bandhein." },
+      { title: "12. Low Sugar / Hypoglycemia (Kapkapi)", do: "✅ Sugar mariz ko turant 3-4 chammach cheeni, fruit juice ya meethi toffee dein.", dont: "❌ Agar vyakti behosh ho chuka ho toh muh me zabardasti kuch na dalein." },
+      { title: "13. Fits / Mirgi Ka Daura (Seizure)", do: "✅ Mariz ko ek karwat letayein taaki saans ki nali saaf rahe, aas-paas se cheezein hatayein.", dont: "❌ Joote/chappal na sunghayein aur muh me chamach ya ungli na daalein." },
+      { title: "14. Asthma Attack (Saans Ukhadna)", do: "✅ Mariz ko seedha baithayein, kapde dheele karein aur unka Rescue Inhaler dilwayein.", dont: "❌ Mariz ko peeth ke bal bilkul na letayein." },
+      { title: "15. Chemical in Eye (Aankh me Chemical)", do: "✅ Aankh ko turant 15-20 minute lagatar saaf paani ke halkey bahav se dhote rahein.", dont: "❌ Aankh ko bilkul mat ragdein aur koi eye-drop khud se na dalein." }
+    ];
+
+    const faContainer = document.getElementById("firstAidContainer");
+    if (faContainer) {
+      firstAid.forEach(f => {
+        const el = document.createElement("div");
+        el.className = "med-card";
+        el.innerHTML = `<h4 style="margin-bottom:8px;">${f.title}</h4><p style="color:#16a34a; font-weight:600; font-size:13.5px;">${f.do}</p><p style="color:#dc2626; font-weight:600; font-size:13.5px; margin-top:4px;">${f.dont}</p>`;
+        faContainer.appendChild(el);
+      });
+    }
+
+    // --- 8. PILL REMINDER & THEME ---
+    function getReminders() { return JSON.parse(localStorage.getItem("med_reminders_v2") || "[]"); }
+    function saveReminders(items) { localStorage.setItem("med_reminders_v2", JSON.stringify(items)); renderReminders(); }
+    function renderReminders() {
+      const cont = document.getElementById("remindersContainer");
+      if (!cont) return;
+      const list = getReminders();
+      cont.innerHTML = "";
+      if (list.length === 0) { cont.innerHTML = "<p style='color:var(--text-muted); padding:10px;'>Koi schedule add nahi hai.</p>"; return; }
+      list.forEach((r, idx) => {
+        const item = document.createElement("div");
+        item.className = "reminder-item";
+        item.innerHTML = `
+          <div><strong>💊 ${r.name}</strong><div style="font-size:13px; color:var(--text-muted);">Daily Time: <b>${r.time}</b> | ${r.dose}</div></div>
+          <button class="btn-delete" onclick="deleteReminderItem(${idx})">Delete</button>
+        `;
+        cont.appendChild(item);
+      });
+    }
+    window.deleteReminderItem = (idx) => { const arr = getReminders(); arr.splice(idx, 1); saveReminders(arr); };
+
+    const reminderForm = document.getElementById("reminderForm");
+    if (reminderForm) {
+      reminderForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const arr = getReminders();
+        const medName = document.getElementById("rMed").value.trim();
+        const medTime = document.getElementById("rTime").value;
+        const medDose = document.getElementById("rDose").value;
+
+        arr.push({ name: medName, time: medTime, dose: medDose });
+        saveReminders(arr);
+        document.getElementById("rMed").value = "";
+        document.getElementById("rTime").value = "";
+
+        window.showInAppToast("⏰ Reminder Set!", `${medName} ka alarm daily ${medTime} par set ho gaya hai.`, "🔔");
+      });
+    }
+
+    const themeToggle = document.getElementById("themeToggle");
+    if (themeToggle) {
+      themeToggle.onclick = () => {
+        const curr = document.documentElement.getAttribute("data-theme");
+        document.documentElement.setAttribute("data-theme", curr === "dark" ? "light" : "dark");
+      };
+    }
+
+    const modal = document.getElementById("sosModal");
+    const sosBtn = document.getElementById("sosBtn");
+    const closeModal = document.getElementById("closeModal");
+    if (sosBtn && modal) sosBtn.onclick = () => modal.classList.add("active");
+    if (closeModal && modal) closeModal.onclick = () => modal.classList.remove("active");
+
+    renderReminders();
+  </script>
+</body>
+</html>
