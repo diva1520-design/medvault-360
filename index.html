@@ -11,6 +11,57 @@
 <meta name="theme-color" content="#0284c7">
   
   <style>
+    /* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+  display: none; /* Laptop par hidden rahega */
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background: rgba(9, 13, 22, 0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(2, 132, 199, 0.3);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 9990;
+    padding-bottom: 5px;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: #38bdf8;
+  }
+
+  .nav-item.sos-nav {
+    color: #ef4444;
+  }
+
+  /* Mobile par AI Chat button ko thoda upar shift kar dein taaki bar se na takraye */
+  #ai-chat-container {
+    bottom: 80px !important;
+  }
+}
     /* AI Chat Widget Styles */
 #ai-chat-container {
   position: fixed;
@@ -3407,6 +3458,29 @@
   </div>
   <button id="ai-fab-btn" onclick="toggleChat()">🤖 AI Help</button>
 </div>
+  <!-- Mobile Bottom Navigation Bar -->
+<nav class="mobile-bottom-nav">
+  <a href="#home" class="nav-item active">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Home</span>
+  </a>
+  <a href="#doctors" class="nav-item">
+    <span class="nav-icon">🩺</span>
+    <span class="nav-label">Doctors</span>
+  </a>
+  <a href="#pharmacy" class="nav-item">
+    <span class="nav-icon">💊</span>
+    <span class="nav-label">Pharmacy</span>
+  </a>
+  <a href="#vault" class="nav-item">
+    <span class="nav-icon">📁</span>
+    <span class="nav-label">Vault</span>
+  </a>
+  <a href="#sos" class="nav-item sos-nav">
+    <span class="nav-icon">🚨</span>
+    <span class="nav-label">SOS</span>
+  </a>
+</nav>
 </body>
 </html>
 
