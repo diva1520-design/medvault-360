@@ -11,6 +11,104 @@
 <meta name="theme-color" content="#0284c7">
   
   <style>
+    /* AI Chat Widget Styles */
+#ai-chat-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: Arial, sans-serif;
+}
+#ai-fab-btn {
+  background: linear-gradient(135deg, #0284c7, #1e40af);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+  transition: 0.3s;
+  float: right;
+}
+#ai-fab-btn:hover { transform: scale(1.05); }
+#ai-chat-box {
+  width: 320px;
+  height: 400px;
+  background: #090d16;
+  border: 1px solid #0284c7;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+.chat-header {
+  background: #0284c7;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+.chat-header .close-btn {
+  background: none; border: none; color: white; cursor: pointer; font-size: 16px;
+}
+.chat-body {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.message {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 80%;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.bot-message {
+  background: #1e293b;
+  color: #e2e8f0;
+  align-self: flex-start;
+  border-bottom-left-radius: 2px;
+}
+.user-message {
+  background: #0284c7;
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 2px;
+}
+.chat-footer {
+  display: flex;
+  padding: 10px;
+  background: #1e293b;
+  border-top: 1px solid #334155;
+}
+.chat-footer input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  background: #0f172a;
+  color: white;
+  outline: none;
+}
+.chat-footer button {
+  background: #0284c7;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
     :root {
       --primary: #0284c7;
       --primary-hover: #0369a1;
@@ -3235,6 +3333,80 @@
     });
   }
 </script>
+  <!-- AI Chatbot Logic -->
+  <script>
+    function toggleChat() {
+      const chatBox = document.getElementById('ai-chat-box');
+      chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function handleChatEnter(e) {
+      if (e.key === 'Enter') sendChatMessage();
+    }
+
+    function sendChatMessage() {
+      const inputField = document.getElementById('ai-user-input');
+      const message = inputField.value.trim().toLowerCase();
+      if (!message) return;
+
+      // Add User Message
+      appendMessage(inputField.value, 'user-message');
+      inputField.value = '';
+
+      // Show "Typing..."
+      const chatBody = document.getElementById('chat-body');
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'message bot-message';
+      typingDiv.id = 'typing-indicator';
+      typingDiv.innerText = 'AI is analyzing...';
+      chatBody.appendChild(typingDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      // Offline Smart Fallback (Demo Logic)
+      setTimeout(() => {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+
+        let reply = "Main ek AI Triage Assistant hoon. Kripya apne lakshan aur detail mein batayein, ya kisi specialist doctor se consult karein.";
+        
+        if (message.includes('bukhar') || message.includes('fever') || message.includes('headache') || message.includes('sar dard')) {
+          reply = "Aapke lakshan Viral Fever ya Infection ke ho sakte hain. Kripya hydrated rahein aur aaram karein. Agar bukhar 101°F se zyada hai, toh 'General Physician' se turant appointment lein.";
+        } else if (message.includes('chest') || message.includes('dil') || message.includes('saans')) {
+          reply = "🚨 ALERT: Chest pain ya saans lene mein takleef emergency ho sakti hai! Kripya turant nazdiki aspatal jayein ya MedVault par 'Cardiologist' se emergency consult karein.";
+        } else if (message.includes('skin') || message.includes('khujli') || message.includes('rash')) {
+          reply = "Yeh skin allergy ya dermatitis ho sakta hai. Kripya us jagah ko na khujlayein aur MedVault par hamare 'Dermatologist' se consultation book karein.";
+        }
+
+        appendMessage(reply, 'bot-message');
+      }, 1000);
+    }
+
+    function appendMessage(text, className) {
+      const chatBody = document.getElementById('chat-body');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${className}`;
+      msgDiv.innerText = text;
+      chatBody.appendChild(msgDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+  </script>
+  <!-- AI Chat Widget -->
+<div id="ai-chat-container">
+  <div id="ai-chat-box" style="display: none;">
+    <div class="chat-header">
+      <span>⚕️ MedVault AI Triage</span>
+      <button onclick="toggleChat()" class="close-btn">✖</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="message bot-message">Hello! Main MedVault AI Assistant hoon. Aapko kya lakshan (symptoms) mehsoos ho rahe hain?</div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="ai-user-input" placeholder="Apne symptoms likhein..." onkeypress="handleChatEnter(event)">
+      <button onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+  <button id="ai-fab-btn" onclick="toggleChat()">🤖 AI Help</button>
+</div>
 </body>
 </html>
 
