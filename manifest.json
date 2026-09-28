@@ -1,4 +1,5 @@
 {
+  "id": "medvault-360-app",
   "name": "MedVault 360",
   "short_name": "MedVault",
   "description": "Smart Telehealth, Diagnostics & Pharmacy Ecosystem",
@@ -7,12 +8,25 @@
   "background_color": "#090d16",
   "theme_color": "#0284c7",
   "orientation": "portrait",
+  "categories": ["medical", "health"],
   "icons": [
     {
-      "src": "icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2966/2966327.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ]
 }
