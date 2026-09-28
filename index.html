@@ -3383,6 +3383,42 @@
       navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW:', err));
     });
   }
+    // Smart Navigation Handler
+function navAction(type) {
+  document.querySelectorAll('.mobile-bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
+
+  if (type === 'overview') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } 
+  else if (type === 'patients') {
+    findSectionAndScroll(['Patient Queue', 'Live Patient']);
+  } 
+  else if (type === 'rx') {
+    findSectionAndScroll(['Issue Official', 'Digital Prescription']);
+  } 
+  else if (type === 'slip') {
+    findSectionAndScroll(['Prescription Slip', 'Live Prescription']);
+  } 
+  else if (type === 'sos') {
+    const sos = document.getElementById('sosBtn') || Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('SOS'));
+    if (sos) sos.click();
+  }
+}
+
+function findSectionAndScroll(keywords) {
+  const allElements = document.querySelectorAll('h1, h2, h3, h4, h5, div, span');
+  for (let el of allElements) {
+    for (let word of keywords) {
+      if (el.innerText && el.innerText.toLowerCase().includes(word.toLowerCase()) && el.children.length <= 2) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+  }
+}
 </script>
   <!-- AI Chatbot Logic -->
   <script>
@@ -3458,25 +3494,25 @@
   </div>
   <button id="ai-fab-btn" onclick="toggleChat()">🤖 AI Help</button>
 </div>
-  <!-- Mobile Bottom Navigation Bar -->
-<nav class="mobile-bottom-nav">
-  <a href="#home" class="nav-item active">
-    <span class="nav-icon">🏠</span>
-    <span class="nav-label">Home</span>
+<!-- Smart Mobile Bottom Navigation for Doctor Desk -->
+<nav class="mobile-bottom-nav" id="doctor-bottom-nav">
+  <a href="javascript:void(0)" onclick="navAction('overview')" class="nav-item active">
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">Overview</span>
   </a>
-  <a href="#doctors" class="nav-item">
-    <span class="nav-icon">🩺</span>
-    <span class="nav-label">Doctors</span>
+  <a href="javascript:void(0)" onclick="navAction('patients')" class="nav-item">
+    <span class="nav-icon">👥</span>
+    <span class="nav-label">Queue</span>
   </a>
-  <a href="#pharmacy" class="nav-item">
-    <span class="nav-icon">💊</span>
-    <span class="nav-label">Pharmacy</span>
+  <a href="javascript:void(0)" onclick="navAction('rx')" class="nav-item">
+    <span class="nav-icon">✍️</span>
+    <span class="nav-label">Write Rx</span>
   </a>
-  <a href="#vault" class="nav-item">
-    <span class="nav-icon">📁</span>
-    <span class="nav-label">Vault</span>
+  <a href="javascript:void(0)" onclick="navAction('slip')" class="nav-item">
+    <span class="nav-icon">📄</span>
+    <span class="nav-label">Rx Slip</span>
   </a>
-  <a href="#sos" class="nav-item sos-nav">
+  <a href="javascript:void(0)" onclick="navAction('sos')" class="nav-item sos-nav">
     <span class="nav-icon">🚨</span>
     <span class="nav-label">SOS</span>
   </a>
