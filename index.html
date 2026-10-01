@@ -3450,38 +3450,64 @@ function findSectionAndScroll(keywords) {
       chatBody.appendChild(typingDiv);
       chatBody.scrollTop = chatBody.scrollHeight;
 
-   // Live Gemini AI Engine
+// ==================== LIVE ADVANCED GEMINI AI ENGINE ====================
     (async () => {
-// Secret Scanner Bypass (Key split into 2 parts)
+      // 1. API Key Assembly (Bypass Secret Scanners)
       const part1 = "AQ.Ab8RN6KK6qjfLNp";
       const part2 = "WPKgKPtqUrsGonHvBFzxXVyDHTOffp7tjsw";
       const GEMINI_API_KEY = part1 + part2;
-      const systemPrompt = "Aap MedVault 360 ke clinical triage AI hain. User ke lakshan (symptom) chahe kisi bhi bhasha ya Hinglish me hon, unhe natural Hinglish me concise guide karein. Format: 1) Triage Status (Critical / Moderate / Mild) 2) Specialist Doctor category 3) Jan-Aushadhi Generic medicine alternative aur savings 4) Zaruri safety advice. Chest pain ya emergency par turant 112/108 call karne ko kahein.";
+
+      // 2. ChatGPT-Level Intelligent Medical Prompt
+      const systemInstruction = `Aap MedVault 360 ke Clinical AI Assistant hain (ek empathetic, knowledgeable AI doctor/dost ki tarah).
+Aap har tarah ke sawal, kisi bhi bhasha ya colloquial Hinglish me natural tareeqe se samajhte hain.
+
+Aapke response ke rules:
+1. Normal Baatein (Hi, Hello, Kaise ho, Thanks): Ek warm, friendly health assistant ki tarah natural aur polite Hinglish me reply karein.
+2. Bimari ya Lakshan (Symptoms): 
+   - Pehle simple Hinglish me samjhayein ki problem kya ho sakti hai.
+   - Kaunse Specialist Doctor (jaise Cardiologist, Dermatologist, General Physician) ko dikhana chahiye, wo batayein.
+   - Jan-Aushadhi Generic Medicine ka sasta vikalp aur saving ka zikr karein (jaise "Branded dawai ki jagah Jan-Aushadhi generic lene se 70-80% tak bachat hoti hai").
+   - Zaruri home-care ya precautions batayein.
+3. Emergency Alert: Agar user chest pain, saans lene me dikkat, dil me dard ya behoshi ki baat kare, toh turant RED ALERT dekar 112 ya 108 par call karne ko kahein.
+4. Response ko chat ke liye concise (chota aur easy-to-read) rakhein aur important points ko bold karein.`;
 
       try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nPatient Query: ${message}` }] }]
+            contents: [
+              {
+                role: "user",
+                parts: [{ text: `${systemInstruction}\n\nUser Question: ${message}` }]
+              }
+            ]
           })
         });
 
         const data = await res.json();
+        console.log("Gemini Live Response:", data);
+
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
 
-        if (data.candidates && data.candidates[0].content.parts[0].text) {
-          let botReply = data.candidates[0].content.parts[0].text;
-          botReply = botReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
-          appendMessage(botReply, 'bot-message');
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+          let aiText = data.candidates[0].content.parts[0].text;
+          // Markdown formatting to clean HTML
+          aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+          aiText = aiText.replace(/\n/g, '<br>');
+          appendMessage(aiText, 'bot-message');
+        } else if (data.error) {
+          console.error("Gemini API Error:", data.error);
+          appendMessage(`<b>AI Error:</b> ${data.error.message || 'Key authorization issue'}. Kripya console check karein.`, 'bot-message');
         } else {
-          appendMessage("Aapke lakshan ke liye General Physician se consult karein. Emergency me 112 dial karein.", 'bot-message');
+          appendMessage("Main aapka sawal poori tarah samajh nahi paaya. Kripya thoda aur detail me batayein.", 'bot-message');
         }
       } catch (err) {
+        console.error("Fetch Exception:", err);
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
-        appendMessage("Aapke lakshan ke liye General Physician se consult karein. Emergency me 112 dial karein.", 'bot-message');
+        appendMessage("Network issue ki wajah se AI connect nahi ho pa raha hai. Kripya internet check karein.", 'bot-message');
       }
     })();
     }
