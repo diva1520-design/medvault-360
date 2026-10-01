@@ -3450,30 +3450,45 @@ function findSectionAndScroll(keywords) {
       chatBody.appendChild(typingDiv);
       chatBody.scrollTop = chatBody.scrollHeight;
 
-      // Offline Smart Fallback (Demo Logic)
-      setTimeout(() => {
+   // Live Gemini AI Engine
+    (async () => {
+      const GEMINI_API_KEY ="AQ.Ab8RN6Lb6SK_72bg6a5RKI0_odgxytABttThqXg-GlCtYQPKPQ";
+
+      const systemPrompt = "Aap MedVault 360 ke clinical triage AI hain. User ke lakshan (symptom) chahe kisi bhi bhasha ya Hinglish me hon, unhe natural Hinglish me concise guide karein. Format: 1) Triage Status (Critical / Moderate / Mild) 2) Specialist Doctor category 3) Jan-Aushadhi Generic medicine alternative aur savings 4) Zaruri safety advice. Chest pain ya emergency par turant 112/108 call karne ko kahein.";
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\nPatient Query: ${message}` }] }]
+          })
+        });
+
+        const data = await res.json();
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
 
-        let reply = "Main ek AI Triage Assistant hoon. Kripya apne lakshan aur detail mein batayein, ya kisi specialist doctor se consult karein.";
-        
-        if (message.includes('bukhar') || message.includes('fever') || message.includes('headache') || message.includes('sar dard')) {
-          reply = "Aapke lakshan Viral Fever ya Infection ke ho sakte hain. Kripya hydrated rahein aur aaram karein. Agar bukhar 101°F se zyada hai, toh 'General Physician' se turant appointment lein.";
-        } else if (message.includes('chest') || message.includes('dil') || message.includes('saans')) {
-          reply = "🚨 ALERT: Chest pain ya saans lene mein takleef emergency ho sakti hai! Kripya turant nazdiki aspatal jayein ya MedVault par 'Cardiologist' se emergency consult karein.";
-        } else if (message.includes('skin') || message.includes('khujli') || message.includes('rash')) {
-          reply = "Yeh skin allergy ya dermatitis ho sakta hai. Kripya us jagah ko na khujlayein aur MedVault par hamare 'Dermatologist' se consultation book karein.";
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+          let botReply = data.candidates[0].content.parts[0].text;
+          botReply = botReply.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+          appendMessage(botReply, 'bot-message');
+        } else {
+          appendMessage("Aapke lakshan ke liye General Physician se consult karein. Emergency me 112 dial karein.", 'bot-message');
         }
-
-        appendMessage(reply, 'bot-message');
-      }, 1000);
+      } catch (err) {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+        appendMessage("Aapke lakshan ke liye General Physician se consult karein. Emergency me 112 dial karein.", 'bot-message');
+      }
+    })();
     }
 
     function appendMessage(text, className) {
       const chatBody = document.getElementById('chat-body');
       const msgDiv = document.createElement('div');
       msgDiv.className = `message ${className}`;
-      msgDiv.innerText = text;
+      msgDiv.innerHTML = text;
       chatBody.appendChild(msgDiv);
       chatBody.scrollTop = chatBody.scrollHeight;
     }
