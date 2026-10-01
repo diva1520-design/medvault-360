@@ -3472,45 +3472,46 @@ Aapke response ke rules:
 3. Emergency Alert: Agar user chest pain, saans lene me dikkat, dil me dard ya behoshi ki baat kare, toh turant RED ALERT dekar 112 ya 108 par call karne ko kahein.
 4. Response ko chat ke liye concise (chota aur easy-to-read) rakhein aur important points ko bold karein.`;
 
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" ,
-          "x-goog-api-key": GEMINI_API_KEY
-        },
-          body: JSON.stringify({
-            contents: [
-              {
+  // Multi-model auto switch (503 High Demand se bachne ke liye)
+      const candidateModels = ["gemini-flash-latest", "gemini-2.5-flash-lite", "gemini-3.8-flash", "gemini-3.5-flash"];
+      let aiText = "";
+
+      for (const model of candidateModels) {
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json",
+              "x-goog-api-key": GEMINI_API_KEY
+            },
+            body: JSON.stringify({
+              contents: [{
                 role: "user",
                 parts: [{ text: `${systemInstruction}\n\nUser Question: ${message}` }]
-              }
-            ]
-          })
-        });
+              }]
+            })
+          });
 
-        const data = await res.json();
-        console.log("Gemini Live Response:", data);
-
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
-
-        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
-          let aiText = data.candidates[0].content.parts[0].text;
-          // Markdown formatting to clean HTML
-          aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-          aiText = aiText.replace(/\n/g, '<br>');
-          appendMessage(aiText, 'bot-message');
-        } else if (data.error) {
-          console.error("Gemini API Error:", data.error);
-          appendMessage(`<b>AI Error:</b> ${data.error.message || 'Key authorization issue'}. Kripya console check karein.`, 'bot-message');
-        } else {
-          appendMessage("Main aapka sawal poori tarah samajh nahi paaya. Kripya thoda aur detail me batayein.", 'bot-message');
+          const data = await res.json();
+          if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
+            aiText = data.candidates[0].content.parts[0].text;
+            break; // Kamyabi milte hi loop ruk jayega
+          } else {
+            console.warn(`Model ${model} par demand high hai, next try kar rahe hain...`, data);
+          }
+        } catch (e) {
+          console.warn(`Model ${model} busy hai, next try kar rahe hain...`);
         }
-      } catch (err) {
-        console.error("Fetch Exception:", err);
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) indicator.remove();
-        appendMessage("Network issue ki wajah se AI connect nahi ho pa raha hai. Kripya internet check karein.", 'bot-message');
+      }
+
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+
+      if (aiText) {
+        aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+        appendMessage(aiText, 'bot-message');
+      } else {
+        appendMessage("Server par temporary rush hai, kripya 5 second baad dobara message bhejein.", 'bot-message');
       }
     })();
     }
