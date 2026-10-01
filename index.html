@@ -1054,7 +1054,7 @@
               <span>🩺</span> Instant Specialist Symptom Matcher:
             </div>
             <div style="display:flex; gap:8px; margin-top:8px;">
-              <input type="text" id="homeSymptomInput" class="form-control" style="padding:10px 12px; font-size:13.5px;" placeholder="Lakshan likhein (Chest pain, Sugar, Moch, Skin)...">
+              <input type="text" id="homeSymptomInput" oninput="processSymptomAI(this.value)" class="form-control" style="padding:10px 12px; font-size:13.5px;" placeholder="Lakshan likhein (Chest pain, Sugar, Moch, Skin)...">
               <button class="btn-primary" id="homeSymptomSearchBtn" style="padding:10px 14px; font-size:13px; white-space:nowrap;">Match</button>
             </div>
             <div class="symptom-chips">
@@ -3813,6 +3813,167 @@ function findSectionAndScroll(keywords) {
       openHospitalModal();
     }
   }, true);
+</script>
+  <!-- ==================== MEDVAULT HIGH-LEVEL AI ENGINE ==================== -->
+<script>
+// 1. Comprehensive Clinical Knowledge Base (Hinglish + Triage + Generic Savings)
+const aiMedicalDB = [
+  {
+    category: "Emergency & Cardiology",
+    keywords: ["chest pain", "chhati me dard", "heart", "heart attack", "chhati me jalan", "saans lene me dikkat", "saans fulna", "left arm pain", "ghabrahat"],
+    triage: "CRITICAL",
+    color: "#ef4444",
+    condition: "Possible Acute Coronary Syndrome / Severe Dyspnea",
+    specialist: "Emergency Cardiologist / Trauma Center",
+    protocol: "Immediate Hospital Transfer Required",
+    advice: "Ghar par ilaj ki koshish na karein. Mareez ko seedha baithayein aur turant emergency dispatch karein.",
+    action: "EMERGENCY_SOS"
+  },
+  {
+    category: "General Medicine / Infectious",
+    keywords: ["fever", "bukhar", "body ache", "sir dard", "headache", "cold", "thand", "shivering", "chills"],
+    triage: "MILD",
+    color: "#10b981",
+    condition: "Viral Syndrome / Pyrexia",
+    specialist: "General Physician",
+    branded: "Dolo 650 / Calpol (~₹35)",
+    janAushadhi: "Paracetamol 650mg Tab (Jan-Aushadhi ~₹10)",
+    savings: "Save ~71%",
+    advice: "Khoob paani piyein, aaram karein aur temperature track karein."
+  },
+  {
+    category: "Gastroenterology",
+    keywords: ["gas", "acidity", "pet me jalan", "pet dard", "stomach pain", "indigestion", "heartburn", "khana hazam nahi", "bloating", "vomiting", "ulti"],
+    triage: "MILD",
+    color: "#10b981",
+    condition: "GERD / Functional Dyspepsia",
+    specialist: "Gastroenterologist",
+    branded: "Pan-D / Pantocid-DSR (~₹195)",
+    janAushadhi: "Pantoprazole + Domperidone (Jan-Aushadhi ~₹35)",
+    savings: "Save ~82%",
+    advice: "Teekha aur oily khana band karein. Khana khane ke turant baad na soyein."
+  },
+  {
+    category: "Dermatology",
+    keywords: ["skin", "allergy", "khujli", "rash", "daane", "itching", "red spots"],
+    triage: "MODERATE",
+    color: "#f59e0b",
+    condition: "Allergic Urticaria / Contact Dermatitis",
+    specialist: "Dermatologist (Skin Specialist)",
+    branded: "Allegra 120mg (~₹120)",
+    janAushadhi: "Levocetirizine 5mg (Jan-Aushadhi ~₹12)",
+    savings: "Save ~90%",
+    advice: "Khujli wali jagah par thanda paani lagayein, direct dhoop se bachein."
+  },
+  {
+    category: "Orthopedics & Rheumatology",
+    keywords: ["joint pain", "ghutne me dard", "kamar dard", "back pain", "arthritis", "bone", "neck pain"],
+    triage: "MODERATE",
+    color: "#f59e0b",
+    condition: "Musculoskeletal Strain / Osteoarthritis",
+    specialist: "Orthopedic Surgeon",
+    branded: "Voveran / Combiflam (~₹65)",
+    janAushadhi: "Aceclofenac + Paracetamol (Jan-Aushadhi ~₹15)",
+    savings: "Save ~77%",
+    advice: "Heavy weight na uthayein. Hot/Cold fermentation karein."
+  },
+  {
+    category: "Pulmonology & ENT",
+    keywords: ["cough", "khansi", "sore throat", "gala kharab", "tonsils", "running nose", "balgam"],
+    triage: "MILD",
+    color: "#10b981",
+    condition: "Upper Respiratory Tract Infection (URTI)",
+    specialist: "ENT Specialist",
+    branded: "Ascoril-LS / Grilinctus (~₹130)",
+    janAushadhi: "Ambroxol + Levosalbutamol Syrup (Jan-Aushadhi ~₹30)",
+    savings: "Save ~76%",
+    advice: "Gungune paani se namak ke sath gargle karein."
+  }
+];
+
+// 2. High-Level AI Processor Function
+function processSymptomAI(inputQuery) {
+  const query = inputQuery.toLowerCase().trim();
+  const resultContainer = document.getElementById("homeMatchResult");
+  if (!resultContainer) return;
+
+  // Agar user ne text clear kar diya
+  if (!query) {
+    resultContainer.innerHTML = "";
+    return;
+  }
+
+  // Multi-keyword fuzzy match
+  const match = aiMedicalDB.find(item => 
+    item.keywords.some(kw => query.includes(kw))
+  );
+
+  // Case 1: Koi match na mile toh Safe Fallback
+  if (!match) {
+    resultContainer.innerHTML = `
+      <div style="padding:16px; border-radius:12px; background:#f8fafc; border-left:5px solid #3b82f6; margin-top:14px; text-align:left;">
+        <div style="font-weight:700; color:#1e293b; font-size:15px;">🔍 AI Assessment: Symptom Requires Review</div>
+        <p style="color:#64748b; font-size:13px; margin:6px 0 10px 0;">Aapke diye gaye lakshano ke aadhar par pehle <b>General Physician</b> se physical consultation lena sabse behtar rahega.</p>
+        <span style="font-size:11px; color:#94a3b8;">⚠️ MedVault Clinical AI guidance tool. Always consult a registered doctor.</span>
+      </div>`;
+    return;
+  }
+
+  // Case 2: CRITICAL EMERGENCY (Red Alert + SOS Triage)
+  if (match.triage === "CRITICAL") {
+    resultContainer.innerHTML = `
+      <div style="padding:18px; border-radius:14px; background:#fff1f2; border:2px solid #ef4444; margin-top:14px; text-align:left; box-shadow:0 4px 15px rgba(239,68,68,0.15);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="background:#ef4444; color:#fff; padding:4px 10px; border-radius:6px; font-weight:700; font-size:11px; letter-spacing:0.5px;">🚨 CRITICAL RED TRIAGE</span>
+          <span style="font-size:12px; color:#b91c1c; font-weight:600;">Immediate Action Needed</span>
+        </div>
+        <h3 style="color:#991b1b; margin:10px 0 6px 0; font-size:17px;">${match.condition}</h3>
+        <p style="color:#7f1d1d; font-size:13px; margin:0 0 12px 0; line-height:1.5;">${match.advice}</p>
+        
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="tel:112" style="background:#ef4444; color:#ffffff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:6px;">
+            📞 Dial 112 (National Emergency)
+          </a>
+          <a href="tel:108" style="background:#dc2626; color:#ffffff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:6px;">
+            🚑 Dial 108 (Ambulance)
+          </a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Case 3: ROUTINE / SPECIALIST (Detailed Card + Generic Savings)
+  resultContainer.innerHTML = `
+    <div style="padding:18px; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 4px 14px rgba(0,0,0,0.06); margin-top:14px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="background:${match.color}15; color:${match.color}; border:1px solid ${match.color}40; padding:3px 10px; border-radius:6px; font-weight:700; font-size:11px;">
+          ${match.triage} PRIORITY
+        </span>
+        <span style="background:#ecfdf5; color:#059669; padding:3px 10px; border-radius:6px; font-weight:700; font-size:12px;">
+          ${match.savings}
+        </span>
+      </div>
+
+      <h3 style="margin:4px 0 4px 0; color:#0f172a; font-size:17px;">${match.condition}</h3>
+      <p style="color:#64748b; font-size:13px; margin:0 0 12px 0;">Specialist: <b style="color:#0284c7;">${match.specialist}</b></p>
+      
+      <!-- Jan-Aushadhi Generic Savings Card -->
+      <div style="background:#f8fafc; padding:12px; border-radius:10px; border-left:4px solid #10b981; margin-bottom:12px;">
+        <div style="font-size:12px; color:#64748b;">Branded Equivalent: <del>${match.branded}</del></div>
+        <div style="font-size:13px; color:#0f172a; font-weight:600; margin-top:3px;">
+          Generic Salt: <span style="color:#059669;">${match.janAushadhi}</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px; color:#475569; background:#f1f5f9; padding:8px 12px; border-radius:8px; line-height:1.4;">
+        💡 <b>AI Clinical Advice:</b> ${match.advice}
+      </div>
+
+      <div style="margin-top:10px; font-size:11px; color:#94a3b8; text-align:right;">
+        *MedVault Smart Triage Engine (v2.0)
+      </div>
+    </div>`;
+}
 </script>
 </body>
 </html>
