@@ -4321,70 +4321,78 @@ function processSymptomAI(inputQuery) {
   </div>
 </div>
 
+<!-- Patient Mobile Number Verification Modal -->
+<div id="parchi-lookup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.8); backdrop-filter:blur(5px); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+  <div style="background:#ffffff; width:100%; max-width:380px; border-radius:20px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.35); font-family:sans-serif;">
+    
+    <div style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; padding:16px 20px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h4 style="margin:0; font-size:16px; font-weight:700;">MedVault 360 • e-Prescription</h4>
+        <small style="opacity:0.9; font-size:11px;">Patient Verification Portal</small>
+      </div>
+      <button type="button" onclick="document.getElementById('parchi-lookup-modal').style.display='none'" style="background:none; border:none; color:#fff; font-size:24px; cursor:pointer; line-height:1;">&times;</button>
+    </div>
+
+    <div style="padding:22px 20px; text-align:center;">
+      <div style="font-size:38px; margin-bottom:10px;">📋</div>
+      <h3 style="margin:0 0 6px 0; font-size:17px; color:#0f172a; font-weight:700;">Apni Parchi (Rx) Kholein</h3>
+      <p style="margin:0 0 16px 0; color:#64748b; font-size:12.5px;">Doctor dwara likhi gayi asli prescription dekhne ke liye mobile number darj karein.</p>
+      
+      <div style="margin-bottom:16px; text-align:left;">
+        <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:5px; display:block;">Registered Mobile No.</label>
+        <div style="display:flex; align-items:center; border:1.5px solid #cbd5e1; border-radius:12px; padding:0 12px; background:#f8fafc;">
+          <span style="color:#64748b; font-size:13px; font-weight:600; margin-right:8px;">+91</span>
+          <input type="tel" id="live-parchi-phone" maxlength="10" placeholder="10-digit number" style="width:100%; border:none; background:transparent; padding:12px 0; font-size:15px; outline:none; font-weight:600; color:#0f172a;">
+        </div>
+      </div>
+
+      <button type="button" onclick="submitPatientPhone()" style="width:100%; background:#0284c7; color:#fff; border:none; padding:12px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer;">
+        🔍 Parchi Kholein
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <script>
   function openParchiModal() {
-    const m = document.getElementById('parchi-lookup-modal');
-    if (m) {
-      m.style.display = 'flex';
-      document.getElementById('parchi-input-step').style.display = 'block';
-      document.getElementById('parchi-result-step').style.display = 'none';
-      const inp = document.getElementById('patient-search-phone');
+    const modal = document.getElementById('parchi-lookup-modal');
+    if (modal) {
+      modal.style.display = 'flex';
+      const inp = document.getElementById('live-parchi-phone');
       if (inp) { inp.value = ''; setTimeout(() => inp.focus(), 150); }
     }
   }
 
-  function closeParchiModal() {
-    const m = document.getElementById('parchi-lookup-modal');
-    if (m) m.style.display = 'none';
-  }
-
-  function backToPhoneStep() {
-    document.getElementById('parchi-input-step').style.display = 'block';
-    document.getElementById('parchi-result-step').style.display = 'none';
-  }
-
-  function fetchLivePrescription() {
-    const phone = document.getElementById('patient-search-phone')?.value.trim() || '';
-    if (phone.length < 10) {
+  function submitPatientPhone() {
+    const phone = document.getElementById('live-parchi-phone')?.value.trim();
+    if (!phone || phone.length < 10) {
       alert('Kripya valid 10-digit mobile number enter karein!');
       return;
     }
 
-    document.getElementById('parchi-input-step').style.display = 'none';
-    document.getElementById('parchi-result-step').style.display = 'block';
-    document.getElementById('rx-display-phone').innerText = '+91 ' + phone;
+    // Modal ko turant band karo
+    const modal = document.getElementById('parchi-lookup-modal');
+    if (modal) modal.style.display = 'none';
 
-    const target = document.getElementById('rx-medicines-container');
+    // Direct asli Prescription Slip kholo (Same to same patient flow)
+    if (typeof findSectionAndScroll === 'function') {
+      findSectionAndScroll(['Prescription Slip', 'Live Prescription']);
+    } else if (typeof navAction === 'function') {
+      navAction('slip');
+    }
 
-    // Page par bani asli "Prescription Slip" / "Live Prescription" section ko dhoondhna
-    const headings = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, div, span')).filter(el => {
-      const txt = (el.innerText || '').trim();
-      return (txt.includes('Prescription Slip') || txt.includes('Live Prescription')) && !el.closest('#parchi-lookup-modal');
-    });
-
-    let foundCard = null;
-    for (let h of headings) {
-      const card = h.closest('.card, .portal-card, .section, [class*="slip"], [class*="box"], div[style*="border"]');
-      if (card && card.id !== 'parchi-lookup-modal' && card.innerText.length > 30) {
-        foundCard = card;
-        break;
+    // Parchi card par border highlight animation
+    setTimeout(() => {
+      const allEls = Array.from(document.querySelectorAll('h1, h2, h3, h4, div'));
+      const target = allEls.find(e => (e.innerText || '').includes('Prescription Slip'));
+      const card = target?.closest('.card, div[style*="border"], section') || target;
+      if (card) {
+        card.style.transition = 'all 0.4s ease';
+        card.style.boxShadow = '0 0 0 4px #0284c7, 0 10px 30px rgba(2, 132, 199, 0.4)';
+        setTimeout(() => { card.style.boxShadow = ''; }, 3000);
       }
-    }
-
-    if (foundCard) {
-      // Asli card ka live data clone karke popup mein dikhana
-      target.innerHTML = foundCard.innerHTML;
-    } else {
-      target.innerHTML = `
-        <div style="text-align:center; padding:10px 0;">
-          <p style="margin:0 0 6px 0; font-size:13px; font-weight:700; color:#0f172a;">Doctor Desk par nayi parchi ready hai</p>
-          <p style="margin:0 0 10px 0; font-size:12px; color:#64748b;">Aap niche click karke directly Doctor Desk ka live slip card bhi dekh sakte hain:</p>
-          <button type="button" onclick="closeParchiModal(); findSectionAndScroll(['Prescription Slip', 'Live Prescription']);" style="background:#0284c7; color:#fff; border:none; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer;">
-            📄 Live Slip Card Par Jayein
-          </button>
-        </div>
-      `;
-    }
+    }, 400);
   }
 </script>
 </body>
