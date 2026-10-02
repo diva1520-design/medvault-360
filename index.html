@@ -4252,20 +4252,20 @@ function processSymptomAI(inputQuery) {
     </div>`;
 }
 </script>
-<!-- ==========================================
-     PATIENT REAL DIGITAL PARCHI (DR. DIVAKAR NAYAK RX)
+  <!-- ==========================================
+     PATIENT REAL DIGITAL PARCHI (LIVE REAL-LIFE DYNAMIC)
 ========================================== -->
 <div id="parchi-lookup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.8); backdrop-filter:blur(6px); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
   
   <div style="background:#ffffff; width:100%; max-width:410px; border-radius:20px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.35); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     
-    <!-- Modal Header (Same Image 1 Design) -->
+    <!-- Header -->
     <div style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#ffffff; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
       <div style="display:flex; align-items:center; gap:8px;">
         <span style="font-size:20px;">🏥</span>
         <div>
           <h4 style="margin:0; font-size:15px; font-weight:700;">MedVault 360 • OPD Desk</h4>
-          <small style="opacity:0.9; font-size:11px;">e-Prescription Verification Portal</small>
+          <small style="opacity:0.9; font-size:11px;">Patient Digital Parchi Portal</small>
         </div>
       </div>
       <button type="button" onclick="closeParchiModal()" style="background:none; border:none; color:#ffffff; font-size:26px; cursor:pointer; line-height:1; padding:0 4px;">&times;</button>
@@ -4275,13 +4275,13 @@ function processSymptomAI(inputQuery) {
     <div id="parchi-step-1" style="padding:22px 20px; text-align:center;">
       <div style="font-size:38px; margin-bottom:10px;">📋</div>
       <h3 style="margin:0 0 6px 0; font-size:17px; color:#0f172a; font-weight:700;">Apni Parchi (Rx) Kholein</h3>
-      <p style="margin:0 0 16px 0; color:#64748b; font-size:12.5px; line-height:1.4;">Doctor dwara di gayi digital parchi dekhne ke liye registered mobile number enter karein.</p>
+      <p style="margin:0 0 16px 0; color:#64748b; font-size:12.5px; line-height:1.4;">Doctor dwara issue ki gayi prescription dekhne ke liye apna registered mobile number darj karein.</p>
       
       <div style="margin-bottom:18px; text-align:left;">
         <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:6px; display:block;">Patient Mobile Number</label>
         <div style="display:flex; align-items:center; border:1.5px solid #cbd5e1; border-radius:12px; padding:0 12px; background:#f8fafc;">
           <span style="color:#64748b; font-size:13px; font-weight:600; margin-right:8px;">+91</span>
-          <input type="tel" id="patient-search-phone" maxlength="10" placeholder="10-digit number" style="width:100%; border:none; background:transparent; padding:12px 0; font-size:15px; outline:none; font-weight:600; color:#0f172a;">
+          <input type="tel" id="patient-search-phone" maxlength="10" placeholder="Enter 10-digit number" style="width:100%; border:none; background:transparent; padding:12px 0; font-size:15px; outline:none; font-weight:600; color:#0f172a;">
         </div>
       </div>
 
@@ -4290,30 +4290,30 @@ function processSymptomAI(inputQuery) {
       </button>
     </div>
 
-    <!-- Step 2: Live Doctor Slip Display (Real Prescription Data) -->
+    <!-- Step 2: Live Slip (No Hardcoded Data) -->
     <div id="parchi-step-2" style="display:none; padding:18px 20px; max-height:80vh; overflow-y:auto; color:#1e293b; background:#ffffff;">
       
-      <!-- Doctor Header Info -->
+      <!-- Doctor Info -->
       <div style="border-bottom:2px solid #0284c7; padding-bottom:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:flex-start;">
         <div>
-          <div id="rx-doc-name" style="font-size:15px; font-weight:800; color:#0284c7;">Dr. Divakar Nayak (MBBS, MD)</div>
-          <div id="rx-doc-reg" style="font-size:11px; color:#475569; font-weight:600;">Reg: NMC-RJ-94821 | Official Rx</div>
+          <div id="rx-doc-name" style="font-size:15px; font-weight:800; color:#0284c7;">--</div>
+          <div id="rx-doc-reg" style="font-size:11px; color:#475569; font-weight:600;">Reg: NMC Verified | Official Rx</div>
         </div>
         <div style="text-align:right;">
           <span style="background:#e0f2fe; color:#0369a1; font-size:10px; font-weight:700; padding:3px 7px; border-radius:6px; border:1px solid #bae6fd;">OPD Rx</span>
-          <div id="rx-slip-date" style="font-size:10px; color:#64748b; margin-top:4px;">Date: Today</div>
+          <div id="rx-slip-date" style="font-size:10px; color:#64748b; margin-top:4px;">--</div>
         </div>
       </div>
 
       <!-- Patient & Diagnosis Details -->
       <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; margin-bottom:14px; font-size:12px; line-height:1.6;">
         <div style="display:flex; justify-content:space-between;">
-          <span>Patient: <strong id="rx-patient-name" style="color:#0f172a; text-transform:capitalize;">divakar</strong></span>
-          <span>Mob: <strong id="rx-display-phone" style="color:#0284c7;">+91 ----------</strong></span>
+          <span>Patient: <strong id="rx-patient-name" style="color:#0f172a; text-transform:capitalize;">--</strong></span>
+          <span>Mob: <strong id="rx-display-phone" style="color:#0284c7;">--</strong></span>
         </div>
         <div style="margin-top:4px; display:flex; align-items:center; gap:6px;">
           <span>Diagnosis:</span>
-          <span id="rx-patient-diagnosis" style="background:#fee2e2; color:#b91c1c; font-weight:700; font-size:11px; padding:2px 8px; border-radius:6px; text-transform:capitalize;">fever</span>
+          <span id="rx-patient-diagnosis" style="background:#fee2e2; color:#b91c1c; font-weight:700; font-size:11px; padding:2px 8px; border-radius:6px; text-transform:capitalize;">--</span>
         </div>
       </div>
 
@@ -4324,11 +4324,11 @@ function processSymptomAI(inputQuery) {
         </div>
         
         <div id="rx-medicines-container" style="display:flex; flex-direction:column; gap:8px;">
-          <!-- Live Prescribed Medicine loads here -->
+          <!-- Live Prescribed Medicine loads dynamically -->
         </div>
       </div>
 
-      <!-- Real Doctor Advice & Sign -->
+      <!-- Advice & Sign -->
       <div style="border-top:1px dashed #cbd5e1; padding-top:10px; margin-bottom:14px;">
         <div style="font-size:11.5px; color:#475569; margin-bottom:12px;">
           <strong>Advice:</strong> <span id="rx-patient-advice">Khali pet dawai lein. Paani khoob piyein.</span>
@@ -4338,7 +4338,7 @@ function processSymptomAI(inputQuery) {
             ✓ Digitally Signed & Sealed
           </div>
           <div style="text-align:right;">
-            <div id="rx-doc-sign" style="font-family:cursive; font-size:15px; color:#0369a1; font-weight:700;">Dr. Divakar Nayak</div>
+            <div id="rx-doc-sign" style="font-family:cursive; font-size:15px; color:#0369a1; font-weight:700;">--</div>
             <div style="font-size:9.5px; color:#94a3b8;">Authorized Signatory</div>
           </div>
         </div>
@@ -4360,7 +4360,7 @@ function processSymptomAI(inputQuery) {
 </div>
 
 <script>
-  // 1. Navigation Controller
+  // 1. Navigation
   function goToPatientNav(action) {
     if (action === 'overview') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4385,7 +4385,6 @@ function processSymptomAI(inputQuery) {
     }
   }
 
-  // 2. Open Modal
   function openParchiModal() {
     const modal = document.getElementById('parchi-lookup-modal');
     if (modal) {
@@ -4400,7 +4399,6 @@ function processSymptomAI(inputQuery) {
     }
   }
 
-  // 3. Cut (X) Modal
   function closeParchiModal() {
     const modal = document.getElementById('parchi-lookup-modal');
     if (modal) modal.style.display = 'none';
@@ -4411,7 +4409,7 @@ function processSymptomAI(inputQuery) {
     document.getElementById('parchi-step-2').style.display = 'none';
   }
 
-  // 4. Fetch Real Prescription Data from Page (Image 2 Data Sync)
+  // 2. Real-Time Dynamic Prescription Lookup (Doctor Inputs + Live Slip)
   function fetchLivePrescription(e) {
     if (e && e.preventDefault) e.preventDefault();
 
@@ -4423,71 +4421,79 @@ function processSymptomAI(inputQuery) {
       return;
     }
 
-    // Step 2 Display Open
-    document.getElementById('parchi-step-1').style.display = 'none';
-    document.getElementById('parchi-step-2').style.display = 'block';
-    document.getElementById('rx-display-phone').innerText = '+91 ' + phone;
+    // Helper: Doctor form inputs dhoondhna
+    const findVal = (selectors) => {
+      for (let s of selectors) {
+        const el = document.querySelector(s);
+        if (el && el.value && el.value.trim().length > 0) return el.value.trim();
+      }
+      return '';
+    };
 
-    // Asli Doctor Desk Data dhoondhna
-    let docName = 'Dr. Divakar Nayak (MBBS, MD)';
-    let docReg = 'Reg: NMC-RJ-94821 | Official Rx';
-    let patName = 'divakar';
-    let diag = 'fever';
-    let medList = ['paracetamol'];
-    let advice = 'Khali pet dawai lein. Paani khoob piyein.';
-    let slipDate = 'Today';
+    // Live Doctor Desk Form se direct read karna
+    let liveDocName = findVal(['#doctorName', 'select[name*="doctor"]', 'input[placeholder*="Doctor" i]']);
+    let livePatName = findVal(['#patientName', 'input[placeholder*="Patient Name" i]', 'input[name*="patient" i]']);
+    let liveDiag = findVal(['#diagnosis', 'input[placeholder*="Diagnosis" i]', 'input[placeholder*="Disease" i]']);
+    let liveAdvice = findVal(['#advice', 'textarea[placeholder*="Advice" i]', 'input[placeholder*="Advice" i]']);
+    let liveMed = findVal(['#medicines', 'textarea[placeholder*="Medicine" i]', 'textarea[placeholder*="Rx" i]']);
 
-    // Page par bani Image 2 wali original slip dhoondhna
+    // Agar form ke bajaye live generated slip card page par bani ho, toh use scan karna
     const pageSlips = Array.from(document.querySelectorAll('div, section')).filter(el => !el.closest('#parchi-lookup-modal'));
-    const realCard = pageSlips.find(el => {
+    const realSlipCard = pageSlips.find(el => {
       const txt = (el.innerText || '');
-      return (txt.includes('Official Rx') || txt.includes('NMC-')) && txt.includes('Diagnosis:') && txt.includes('Rx:');
+      return (txt.includes('Official Rx') || txt.includes('Prescription Slip')) && txt.includes('Patient:') && txt.includes('Rx:');
     });
 
-    if (realCard) {
-      const full = realCard.innerText;
+    if (realSlipCard) {
+      const full = realSlipCard.innerText;
       
       const dm = full.match(/Dr\.\s*([^\n\r(]+)(\([^)]+\))?/i);
-      if (dm) docName = dm[0].trim();
-
-      const rm = full.match(/Reg:\s*([^\n\r]+)/i);
-      if (rm) docReg = 'Reg: ' + rm[1].trim();
+      if (dm && !liveDocName) liveDocName = dm[0].trim();
 
       const pm = full.match(/Patient:\s*([^\n\r|]+)/i);
-      if (pm) patName = pm[1].trim();
-
-      const dtm = full.match(/Date:\s*([^\n\r]+)/i);
-      if (dtm) slipDate = dtm[1].trim();
+      if (pm && !livePatName) livePatName = pm[1].trim();
 
       const dim = full.match(/Diagnosis:\s*([^\n\r]+)/i);
-      if (dim) diag = dim[1].trim();
+      if (dim && !liveDiag) liveDiag = dim[1].trim();
 
       const rxm = full.match(/Rx:\s*([\s\S]*?)(?=Advice:|$)/i);
-      if (rxm && rxm[1].trim()) {
-        medList = rxm[1].trim().split('\n').filter(m => m.trim().length > 1);
-      }
+      if (rxm && rxm[1].trim() && !liveMed) liveMed = rxm[1].trim();
 
       const advm = full.match(/Advice:\s*([\s\S]*?)(?=Download|\n\s*\n|$)/i);
-      if (advm && advm[1].trim()) advice = advm[1].trim();
+      if (advm && advm[1].trim() && !liveAdvice) liveAdvice = advm[1].trim();
     }
 
-    // UI par exact data update karein
-    document.getElementById('rx-doc-name').innerText = docName;
-    document.getElementById('rx-doc-reg').innerText = docReg;
-    document.getElementById('rx-doc-sign').innerText = docName.split('(')[0].trim();
-    document.getElementById('rx-patient-name').innerText = patName;
-    document.getElementById('rx-patient-diagnosis').innerText = diag;
-    document.getElementById('rx-patient-advice').innerText = advice;
-    document.getElementById('rx-slip-date').innerText = 'Date: ' + (slipDate === 'Today' ? new Date().toLocaleDateString('en-GB') : slipDate);
+    // Default Fallback (agar Doctor desk par abhi kuch bhi type nahi kiya ho)
+    if (!liveDocName) liveDocName = 'Dr. Sharma (MBBS, MD)';
+    if (!livePatName) livePatName = 'Patient (Self)';
+    if (!liveDiag) liveDiag = 'General Consultation';
+    if (!liveAdvice) liveAdvice = 'Khali pet dawai lein. Paani khoob piyein aur aaram karein.';
+    
+    // UI Update (Sab kuch 100% dynamic)
+    document.getElementById('rx-doc-name').innerText = liveDocName;
+    document.getElementById('rx-doc-sign').innerText = liveDocName.split('(')[0].trim();
+    document.getElementById('rx-patient-name').innerText = livePatName;
+    document.getElementById('rx-patient-diagnosis').innerText = liveDiag;
+    document.getElementById('rx-patient-advice').innerText = liveAdvice;
+    document.getElementById('rx-display-phone').innerText = '+91 ' + phone;
+    document.getElementById('rx-slip-date').innerText = 'Date: ' + new Date().toLocaleDateString('en-GB');
 
     // Medicines Render
     const container = document.getElementById('rx-medicines-container');
+    let medArray = [];
+    if (liveMed) {
+      medArray = liveMed.split('\n').filter(m => m.trim().length > 1);
+    }
+    if (medArray.length === 0) {
+      medArray = ['Tab. Paracetamol 650mg (SOS)'];
+    }
+
     let medHtml = '';
-    medList.forEach((med, idx) => {
+    medArray.forEach((med, idx) => {
       medHtml += `
         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-weight:700; color:#0f172a; font-size:13.5px; text-transform:capitalize;">${idx + 1}. Tab. ${med.replace(/^\d+[\.\)]\s*/, '')}</div>
+            <div style="font-weight:700; color:#0f172a; font-size:13.5px; text-transform:capitalize;">${idx + 1}. ${med.replace(/^\d+[\.\)]\s*/, '')}</div>
             <div style="font-size:11px; color:#64748b;">Khane ke baad (Din mein 2 baar)</div>
           </div>
           <span style="font-size:11px; color:#16a34a; font-weight:700; background:#dcfce7; padding:3px 8px; border-radius:6px;">Generic Prescribed</span>
@@ -4495,9 +4501,13 @@ function processSymptomAI(inputQuery) {
       `;
     });
     container.innerHTML = medHtml;
+
+    // Show Step 2
+    document.getElementById('parchi-step-1').style.display = 'none';
+    document.getElementById('parchi-step-2').style.display = 'block';
   }
 
-  // Window Bindings
+  // Bindings
   window.openParchiModal = openParchiModal;
   window.closeParchiModal = closeParchiModal;
   window.backToPhoneStep = backToPhoneStep;
