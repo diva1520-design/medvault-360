@@ -3537,6 +3537,14 @@ Aapke response ke rules:
       chatBody.appendChild(msgDiv);
       chatBody.scrollTop = chatBody.scrollHeight;
     }
+    function quickSend(txt) {
+  const input = document.querySelector('.chat-footer input, .chat-input-area input');
+  if (input) {
+    input.value = txt;
+    // send button trigger karein
+    document.querySelector('.chat-footer button, .chat-input-area button')?.click();
+  }
+}
   </script>
   <!-- AI Chat Widget -->
 <div id="ai-chat-container">
@@ -3548,6 +3556,11 @@ Aapke response ke rules:
     <div class="chat-body" id="chat-body">
       <div class="message bot-message">Hello! Main MedVault AI Assistant hoon. Aapko kya lakshan (symptoms) mehsoos ho rahe hain?</div>
     </div>
+    <div style="display: flex; gap: 6px; padding: 6px 14px; background: #f8fafc; overflow-x: auto; border-top: 1px solid #f1f5f9;">
+  <button type="button" onclick="quickSend('Mujhe subh se chest me severe pain ho rha hai')" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">🚨 Chest Pain SOS</button>
+  <button type="button" onclick="quickSend('Mujhe gas aur acidity hai, sasti generic dawa batao')" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">💊 Jan-Aushadhi Match</button>
+  <button type="button" onclick="quickSend('Mujhe halka bukhar aur body pain hai')" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; padding:4px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">🩺 Fever Check</button>
+</div>
     <div class="chat-footer">
       <input type="text" id="ai-user-input" placeholder="Apne symptoms likhein..." onkeypress="handleChatEnter(event)">
       <button onclick="sendChatMessage()">➤</button>
@@ -3768,6 +3781,96 @@ Aapke response ke rules:
     border: 1px solid #334155;
     font-weight: 600;
   }
+  /* ===================================================
+   MEDVAULT 360 - MODERN CLINICAL AI INTERFACE
+=================================================== */
+
+/* Chat Window Modal */
+#chat-modal, .chat-container, .chat-box {
+  border-radius: 18px !important;
+  box-shadow: 0 15px 35px rgba(0, 30, 80, 0.18) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  overflow: hidden !important;
+  background: #f8fafc !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Clinical Header */
+.chat-header {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+  color: #ffffff !important;
+  padding: 14px 18px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+}
+
+/* Chat Messages Area */
+#chat-body {
+  background: #f1f5f9 !important;
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+/* User Message Bubble */
+.user-message, .message.user-message {
+  background: linear-gradient(135deg, #0284c7, #2563eb) !important;
+  color: #ffffff !important;
+  padding: 10px 15px !important;
+  border-radius: 16px 16px 2px 16px !important;
+  max-width: 82% !important;
+  align-self: flex-end !important;
+  font-size: 13.5px !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 3px 8px rgba(2, 132, 199, 0.22) !important;
+}
+
+/* AI / Bot Response Bubble */
+.bot-message, .message.bot-message {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  padding: 13px 16px !important;
+  border-radius: 16px 16px 16px 2px !important;
+  max-width: 88% !important;
+  align-self: flex-start !important;
+  font-size: 13.5px !important;
+  line-height: 1.55 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-left: 4px solid #0284c7 !important;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Bold text inside bot bubble (Jan Aushadhi names & alert headers) */
+.bot-message b, .bot-message strong {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* Input Bar & Send Button Area */
+.chat-footer, .chat-input-area {
+  background: #ffffff !important;
+  padding: 10px 14px !important;
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+.chat-footer input, .chat-input-area input {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 25px !important;
+  padding: 10px 16px !important;
+  font-size: 13.5px !important;
+  color: #0f172a !important;
+  transition: all 0.2s ease !important;
+}
+
+.chat-footer input:focus, .chat-input-area input:focus {
+  outline: none !important;
+  border-color: #0284c7 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
 </style>
 
 <div id="hospital-modal">
