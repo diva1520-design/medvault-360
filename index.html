@@ -4253,13 +4253,13 @@ function processSymptomAI(inputQuery) {
 }
 </script>
 <!-- ==========================================
-     PATIENT REAL DIGITAL PARCHI (COMPLETE SYSTEM)
+     PATIENT REAL DIGITAL PARCHI (DR. DIVAKAR NAYAK RX)
 ========================================== -->
 <div id="parchi-lookup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.8); backdrop-filter:blur(6px); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
   
   <div style="background:#ffffff; width:100%; max-width:410px; border-radius:20px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.35); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     
-    <!-- Modal Header -->
+    <!-- Modal Header (Same Image 1 Design) -->
     <div style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#ffffff; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
       <div style="display:flex; align-items:center; gap:8px;">
         <span style="font-size:20px;">🏥</span>
@@ -4290,15 +4290,14 @@ function processSymptomAI(inputQuery) {
       </button>
     </div>
 
-    <!-- Step 2: SAME TO SAME HOSPITAL OPD PRESCRIPTION SLIP -->
+    <!-- Step 2: Live Doctor Slip Display (Real Prescription Data) -->
     <div id="parchi-step-2" style="display:none; padding:18px 20px; max-height:80vh; overflow-y:auto; color:#1e293b; background:#ffffff;">
       
-      <!-- Hospital & Doctor Info Header -->
+      <!-- Doctor Header Info -->
       <div style="border-bottom:2px solid #0284c7; padding-bottom:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:flex-start;">
         <div>
-          <div style="font-size:15px; font-weight:800; color:#0284c7;">MEDVAULT 360 SMART CLINIC</div>
-          <div style="font-size:11px; color:#475569; font-weight:600;">Dr. A. Sharma (MBBS, MD - Gen Medicine)</div>
-          <div style="font-size:10px; color:#94a3b8;">Reg No: MED-IN-2026-4401 | ABDM Verified</div>
+          <div id="rx-doc-name" style="font-size:15px; font-weight:800; color:#0284c7;">Dr. Divakar Nayak (MBBS, MD)</div>
+          <div id="rx-doc-reg" style="font-size:11px; color:#475569; font-weight:600;">Reg: NMC-RJ-94821 | Official Rx</div>
         </div>
         <div style="text-align:right;">
           <span style="background:#e0f2fe; color:#0369a1; font-size:10px; font-weight:700; padding:3px 7px; border-radius:6px; border:1px solid #bae6fd;">OPD Rx</span>
@@ -4306,40 +4305,40 @@ function processSymptomAI(inputQuery) {
         </div>
       </div>
 
-      <!-- Patient Info Box -->
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:8px 12px; margin-bottom:14px; display:flex; justify-content:space-between; font-size:12px;">
-        <div>
-          <span style="color:#64748b;">Patient Mob: </span>
-          <strong id="rx-display-phone" style="color:#0f172a;">+91 ----------</strong>
+      <!-- Patient & Diagnosis Details -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; margin-bottom:14px; font-size:12px; line-height:1.6;">
+        <div style="display:flex; justify-content:space-between;">
+          <span>Patient: <strong id="rx-patient-name" style="color:#0f172a; text-transform:capitalize;">divakar</strong></span>
+          <span>Mob: <strong id="rx-display-phone" style="color:#0284c7;">+91 ----------</strong></span>
         </div>
-        <div>
-          <span style="color:#64748b;">Type: </span>
-          <strong style="color:#16a34a;">Tele-Consult</strong>
+        <div style="margin-top:4px; display:flex; align-items:center; gap:6px;">
+          <span>Diagnosis:</span>
+          <span id="rx-patient-diagnosis" style="background:#fee2e2; color:#b91c1c; font-weight:700; font-size:11px; padding:2px 8px; border-radius:6px; text-transform:capitalize;">fever</span>
         </div>
       </div>
 
-      <!-- Rx Prescribed Medicines Box -->
+      <!-- Real Prescribed Medicine Box -->
       <div style="margin-bottom:14px;">
         <div style="font-size:13px; font-weight:700; color:#0284c7; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
           <span>℞</span> <span>Prescribed Medicines (Dawai)</span>
         </div>
         
         <div id="rx-medicines-container" style="display:flex; flex-direction:column; gap:8px;">
-          <!-- Live Prescribed Medicines load here -->
+          <!-- Live Prescribed Medicine loads here -->
         </div>
       </div>
 
-      <!-- Doctor Advice & Signature -->
+      <!-- Real Doctor Advice & Sign -->
       <div style="border-top:1px dashed #cbd5e1; padding-top:10px; margin-bottom:14px;">
         <div style="font-size:11.5px; color:#475569; margin-bottom:12px;">
-          <strong>Doctor Advice:</strong> Halka khana khayein, paani khoob piyein. Dikkat hone par turant consult karein.
+          <strong>Advice:</strong> <span id="rx-patient-advice">Khali pet dawai lein. Paani khoob piyein.</span>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:flex-end;">
           <div style="font-size:10px; color:#16a34a; font-weight:600;">
             ✓ Digitally Signed & Sealed
           </div>
           <div style="text-align:right;">
-            <div style="font-family:cursive; font-size:14px; color:#0369a1; font-weight:700;">Dr. A. Sharma</div>
+            <div id="rx-doc-sign" style="font-family:cursive; font-size:15px; color:#0369a1; font-weight:700;">Dr. Divakar Nayak</div>
             <div style="font-size:9.5px; color:#94a3b8;">Authorized Signatory</div>
           </div>
         </div>
@@ -4351,7 +4350,7 @@ function processSymptomAI(inputQuery) {
           ← Back
         </button>
         <button type="button" onclick="window.print()" style="flex:2; background:#0284c7; color:#ffffff; border:none; padding:10px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; box-shadow:0 3px 10px rgba(2,132,199,0.3);">
-          🖨️️ Print / Download Slip
+          🖨️ Download / Print Slip
         </button>
       </div>
 
@@ -4386,7 +4385,7 @@ function processSymptomAI(inputQuery) {
     }
   }
 
-  // 2. Open Modal (Reset to Phone Input)
+  // 2. Open Modal
   function openParchiModal() {
     const modal = document.getElementById('parchi-lookup-modal');
     if (modal) {
@@ -4401,7 +4400,7 @@ function processSymptomAI(inputQuery) {
     }
   }
 
-  // 3. Close Modal (X)
+  // 3. Cut (X) Modal
   function closeParchiModal() {
     const modal = document.getElementById('parchi-lookup-modal');
     if (modal) modal.style.display = 'none';
@@ -4412,7 +4411,7 @@ function processSymptomAI(inputQuery) {
     document.getElementById('parchi-step-2').style.display = 'none';
   }
 
-  // 4. Number Submit -> Direct Show OPD Slip (No Modal Close, No Page Jump!)
+  // 4. Fetch Real Prescription Data from Page (Image 2 Data Sync)
   function fetchLivePrescription(e) {
     if (e && e.preventDefault) e.preventDefault();
 
@@ -4424,59 +4423,81 @@ function processSymptomAI(inputQuery) {
       return;
     }
 
-    // Modal ko band nahi karna, Step 1 chhupa kar Step 2 kholna hai!
+    // Step 2 Display Open
     document.getElementById('parchi-step-1').style.display = 'none';
     document.getElementById('parchi-step-2').style.display = 'block';
     document.getElementById('rx-display-phone').innerText = '+91 ' + phone;
 
-    // Live Date update
-    const d = new Date();
-    document.getElementById('rx-slip-date').innerText = 'Date: ' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+    // Asli Doctor Desk Data dhoondhna
+    let docName = 'Dr. Divakar Nayak (MBBS, MD)';
+    let docReg = 'Reg: NMC-RJ-94821 | Official Rx';
+    let patName = 'divakar';
+    let diag = 'fever';
+    let medList = ['paracetamol'];
+    let advice = 'Khali pet dawai lein. Paani khoob piyein.';
+    let slipDate = 'Today';
 
-    // Check doctor desk medicines
-    const container = document.getElementById('rx-medicines-container');
-    
-    // Doctor desk se textarea / input data read karna
-    const docInputs = Array.from(document.querySelectorAll('textarea, input[type="text"]')).filter(el => {
-      return !el.closest('#parchi-lookup-modal') && el.value && el.value.trim().length > 2;
+    // Page par bani Image 2 wali original slip dhoondhna
+    const pageSlips = Array.from(document.querySelectorAll('div, section')).filter(el => !el.closest('#parchi-lookup-modal'));
+    const realCard = pageSlips.find(el => {
+      const txt = (el.innerText || '');
+      return (txt.includes('Official Rx') || txt.includes('NMC-')) && txt.includes('Diagnosis:') && txt.includes('Rx:');
     });
 
-    if (docInputs.length > 0) {
-      let html = '';
-      docInputs.forEach((item, index) => {
-        html += `
-          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-weight:700; color:#0f172a; font-size:13px;">${index + 1}. ${item.value.trim()}</div>
-              <div style="font-size:11px; color:#64748b;">1 Goli subah-shaam khane ke baad (5 Din)</div>
-            </div>
-            <span style="font-size:11px; color:#16a34a; font-weight:700; background:#dcfce7; padding:2px 6px; border-radius:4px;">Generic / Jan Aushadhi</span>
-          </div>
-        `;
-      });
-      container.innerHTML = html;
-    } else {
-      // Standard Verified Medicines
-      container.innerHTML = `
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+    if (realCard) {
+      const full = realCard.innerText;
+      
+      const dm = full.match(/Dr\.\s*([^\n\r(]+)(\([^)]+\))?/i);
+      if (dm) docName = dm[0].trim();
+
+      const rm = full.match(/Reg:\s*([^\n\r]+)/i);
+      if (rm) docReg = 'Reg: ' + rm[1].trim();
+
+      const pm = full.match(/Patient:\s*([^\n\r|]+)/i);
+      if (pm) patName = pm[1].trim();
+
+      const dtm = full.match(/Date:\s*([^\n\r]+)/i);
+      if (dtm) slipDate = dtm[1].trim();
+
+      const dim = full.match(/Diagnosis:\s*([^\n\r]+)/i);
+      if (dim) diag = dim[1].trim();
+
+      const rxm = full.match(/Rx:\s*([\s\S]*?)(?=Advice:|$)/i);
+      if (rxm && rxm[1].trim()) {
+        medList = rxm[1].trim().split('\n').filter(m => m.trim().length > 1);
+      }
+
+      const advm = full.match(/Advice:\s*([\s\S]*?)(?=Download|\n\s*\n|$)/i);
+      if (advm && advm[1].trim()) advice = advm[1].trim();
+    }
+
+    // UI par exact data update karein
+    document.getElementById('rx-doc-name').innerText = docName;
+    document.getElementById('rx-doc-reg').innerText = docReg;
+    document.getElementById('rx-doc-sign').innerText = docName.split('(')[0].trim();
+    document.getElementById('rx-patient-name').innerText = patName;
+    document.getElementById('rx-patient-diagnosis').innerText = diag;
+    document.getElementById('rx-patient-advice').innerText = advice;
+    document.getElementById('rx-slip-date').innerText = 'Date: ' + (slipDate === 'Today' ? new Date().toLocaleDateString('en-GB') : slipDate);
+
+    // Medicines Render
+    const container = document.getElementById('rx-medicines-container');
+    let medHtml = '';
+    medList.forEach((med, idx) => {
+      medHtml += `
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-weight:700; color:#0f172a; font-size:13px;">1. Tab. Pantoprazole 40mg (Pan-40)</div>
-            <div style="font-size:11px; color:#64748b;">1 Goli subah khali pet (5 Din)</div>
+            <div style="font-weight:700; color:#0f172a; font-size:13.5px; text-transform:capitalize;">${idx + 1}. Tab. ${med.replace(/^\d+[\.\)]\s*/, '')}</div>
+            <div style="font-size:11px; color:#64748b;">Khane ke baad (Din mein 2 baar)</div>
           </div>
-          <span style="font-size:11px; color:#16a34a; font-weight:700; background:#dcfce7; padding:2px 6px; border-radius:4px;">₹14.00</span>
-        </div>
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-weight:700; color:#0f172a; font-size:13px;">2. Tab. Paracetamol 650mg (Dolo)</div>
-            <div style="font-size:11px; color:#64748b;">1 Goli bukhar / dard hone par khane ke baad</div>
-          </div>
-          <span style="font-size:11px; color:#16a34a; font-weight:700; background:#dcfce7; padding:2px 6px; border-radius:4px;">₹12.50</span>
+          <span style="font-size:11px; color:#16a34a; font-weight:700; background:#dcfce7; padding:3px 8px; border-radius:6px;">Generic Prescribed</span>
         </div>
       `;
-    }
+    });
+    container.innerHTML = medHtml;
   }
 
-  // Global Attachments
+  // Window Bindings
   window.openParchiModal = openParchiModal;
   window.closeParchiModal = closeParchiModal;
   window.backToPhoneStep = backToPhoneStep;
