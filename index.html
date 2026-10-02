@@ -3556,11 +3556,11 @@ Aapke response ke rules:
     <div class="chat-body" id="chat-body">
       <div class="message bot-message">Hello! Main MedVault AI Assistant hoon. Aapko kya lakshan (symptoms) mehsoos ho rahe hain?</div>
     </div>
-    <div style="display: flex; gap: 6px; padding: 6px 14px; background: #f8fafc; overflow-x: auto; border-top: 1px solid #f1f5f9;">
-  <button type="button" onclick="quickSend('Mujhe subh se chest me severe pain ho rha hai')" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">🚨 Chest Pain SOS</button>
-  <button type="button" onclick="quickSend('Mujhe gas aur acidity hai, sasti generic dawa batao')" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">💊 Jan-Aushadhi Match</button>
-  <button type="button" onclick="quickSend('Mujhe halka bukhar aur body pain hai')" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; padding:4px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">🩺 Fever Check</button>
-</div>
+  <div style="display: flex; gap: 6px; padding: 6px 12px; background: #f8fafc; overflow-x: auto; border-top: 1px solid #e2e8f0;">
+          <button type="button" onclick="quickSend('Mujhe subh se chest me severe pain ho rha hai')" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:5px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">🚨 Chest Pain</button>
+          <button type="button" onclick="quickSend('Mujhe acidity aur gas hai, sasti Jan-Aushadhi dawa batao')" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:5px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">💊 Gas & Acidity</button>
+          <button type="button" onclick="quickSend('Mujhe bukhar aur sardi hai, doctor consult advice do')" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; padding:5px 10px; border-radius:15px; font-size:11px; font-weight:600; cursor:pointer; white-space:nowrap;">🩺 Fever & Cold</button>
+        </div>
     <div class="chat-footer">
       <input type="text" id="ai-user-input" placeholder="Apne symptoms likhein..." onkeypress="handleChatEnter(event)">
       <button onclick="sendChatMessage()">➤</button>
