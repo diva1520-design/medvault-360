@@ -3517,8 +3517,7 @@ Aapke response ke rules:
         if (el.innerText.includes('analyzing') || el.innerText.includes('temporary rush')) el.remove();
       });
 
-      const indicator = document.getElementById('typing-indicator');
-      if (indicator) indicator.remove();
+      document.querySelectorALL('#typing-indicator').forEach(el => el.remove());
 
       // Final Screen Display
       if (aiText) {
@@ -3526,16 +3525,6 @@ Aapke response ke rules:
         appendMessage(aiText, 'bot-message');
       } else {
         appendMessage("Aapke lakshan ke primary evaluation ke liye nazdeeki <b>General Physician</b> se consult karein. Emergency me 112 dial karein.", 'bot-message');
-      }
-
-      const indicator = document.getElementById('typing-indicator');
-      if (indicator) indicator.remove();
-
-      if (aiText) {
-        aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
-        appendMessage(aiText, 'bot-message');
-      } else {
-        appendMessage("Server par temporary rush hai, kripya 5 second baad dobara message bhejein.", 'bot-message');
       }
     })();
     }
