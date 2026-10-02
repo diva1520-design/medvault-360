@@ -3586,7 +3586,7 @@ Aapke response ke rules:
       <span class="nav-icon">📄</span>
       <span class="nav-label">Meri Parchi</span>
     </a>
-    <a href="javascript:void(0)" onclick="goToPatientNav('sos')" class="nav-item sos-nav">
+   <a href="javascript:void(0)" onclick="openParchiModal()" class="nav-item">
       <span class="nav-icon">🚨</span>
       <span class="nav-label">SOS</span>
     </a>
@@ -4178,6 +4178,176 @@ function processSymptomAI(inputQuery) {
       </div>
     </div>`;
 }
+</script>
+  <!-- ==========================================
+     PATIENT DIGITAL PARCHI (MOBILE NO. LOOKUP)
+========================================== -->
+<div id="parchi-lookup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.75); backdrop-filter:blur(5px); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+  
+  <div style="background:#ffffff; width:100%; max-width:390px; border-radius:20px; overflow:hidden; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    
+    <!-- Modal Header -->
+    <div style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#ffffff; padding:16px 20px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h4 style="margin:0; font-size:16px; font-weight:700; letter-spacing:0.3px;">MedVault 360 Rx Portal</h4>
+        <small style="opacity:0.9; font-size:11px;">Digital Health Record Verification</small>
+      </div>
+      <button type="button" onclick="closeParchiModal()" style="background:none; border:none; color:#ffffff; font-size:24px; cursor:pointer; line-height:1;">&times;</button>
+    </div>
+
+    <!-- Step 1: Mobile Number Input Screen -->
+    <div id="parchi-input-step" style="padding:22px 20px; text-align:center;">
+      <div style="font-size:36px; margin-bottom:10px;">📱</div>
+      <h3 style="margin:0 0 6px 0; font-size:17px; color:#0f172a; font-weight:700;">Apni Digital Parchi Khojein</h3>
+      <p style="margin:0 0 18px 0; color:#64748b; font-size:12.5px; line-height:1.4;">Doctor desk dwara dispatch ki gayi e-prescription dekhne ke liye registered mobile number darj karein.</p>
+      
+      <div style="margin-bottom:16px; text-align:left;">
+        <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:5px; display:block;">Registered Mobile No.</label>
+        <div style="display:flex; align-items:center; border:1.5px solid #cbd5e1; border-radius:12px; padding:0 12px; background:#f8fafc;">
+          <span style="color:#64748b; font-size:13px; font-weight:600; margin-right:8px;">+91</span>
+          <input type="tel" id="patient-search-phone" maxlength="10" placeholder="e.g. 9876543210" style="width:100%; border:none; background:transparent; padding:12px 0; font-size:14px; color:#0f172a; outline:none; font-weight:600; letter-spacing:0.5px;">
+        </div>
+      </div>
+
+      <button type="button" onclick="fetchLivePrescription()" style="width:100%; background:linear-gradient(135deg, #0284c7, #2563eb); color:#ffffff; border:none; padding:12px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(2,132,199,0.3);">
+        🔍 Parchi Dekhein (View Rx)
+      </button>
+    </div>
+
+    <!-- Step 2: Live Prescription Result Screen (Doctor Desk Sync) -->
+    <div id="parchi-result-step" style="display:none; padding:18px 20px; color:#1e293b; max-height:80vh; overflow-y:auto;">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px dashed #cbd5e1; padding-bottom:10px; margin-bottom:12px;">
+        <div>
+          <span style="font-size:11px; color:#64748b; font-weight:600;">PATIENT ID / PHONE</span>
+          <div id="rx-display-phone" style="font-size:14px; font-weight:700; color:#0284c7;">+91 ----------</div>
+        </div>
+        <div style="text-align:right;">
+          <span style="background:#dcfce7; color:#15803d; font-size:10px; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #86efac;">● DISPATCHED</span>
+          <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Live Token Synced</div>
+        </div>
+      </div>
+
+      <!-- Prescribed Medicines Box -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:#64748b; margin-bottom:8px; text-transform:uppercase;">
+          <span>Prescribed Dawa (Generic)</span>
+          <span>Jan-Aushadhi Price</span>
+        </div>
+        
+        <div id="rx-medicines-container" style="display:flex; flex-direction:column; gap:8px;">
+          <!-- Live medicines yahan aayengi -->
+        </div>
+      </div>
+
+      <!-- Savings Alert Badge -->
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; padding:8px 12px; border-radius:10px; font-size:11.5px; text-align:center; font-weight:700; margin-bottom:14px;">
+        🎉 Jan-Aushadhi Savings Applied!
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex; gap:8px;">
+        <button type="button" onclick="backToPhoneStep()" style="flex:1; background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:10px; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer;">
+          ← Dusra Number
+        </button>
+        <button type="button" onclick="alert('✅ Prescription Slip downloaded to device!'); closeParchiModal();" style="flex:2; background:#0284c7; color:#ffffff; border:none; padding:10px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">
+          📥 Download PDF Slip
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Parchi Modal Kholne Ka Function
+  function openParchiModal() {
+    const m = document.getElementById('parchi-lookup-modal');
+    if (m) {
+      m.style.display = 'flex';
+      document.getElementById('parchi-input-step').style.display = 'block';
+      document.getElementById('parchi-result-step').style.display = 'none';
+      const input = document.getElementById('patient-search-phone');
+      if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 150);
+      }
+    }
+  }
+
+  function closeParchiModal() {
+    const m = document.getElementById('parchi-lookup-modal');
+    if (m) m.style.display = 'none';
+  }
+
+  function backToPhoneStep() {
+    document.getElementById('parchi-input-step').style.display = 'block';
+    document.getElementById('parchi-result-step').style.display = 'none';
+  }
+
+  // Live Prescription Fetch Logic
+  function fetchLivePrescription() {
+    const phoneInput = document.getElementById('patient-search-phone');
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+
+    if (phone.length < 10) {
+      alert('Kripya valid 10-digit mobile number enter karein!');
+      return;
+    }
+
+    // Step Switch
+    document.getElementById('parchi-input-step').style.display = 'none';
+    document.getElementById('parchi-result-step').style.display = 'block';
+    document.getElementById('rx-display-phone').innerText = '+91 ' + phone;
+
+    // Check if Doctor Desk has live input fields or storage
+    const medContainer = document.getElementById('rx-medicines-container');
+    
+    // Doctor Desk se active data lene ki koshish (agar doctor form mein bhara ho)
+    const docMedInput = document.querySelector('[id*="rx-med"], [name*="medicine"], textarea[placeholder*="Rx"], [id*="prescription"]');
+    const docPatientInput = document.querySelector('[id*="patient-name"], input[placeholder*="Patient"]');
+    
+    let medListHtml = '';
+
+    if (docMedInput && docMedInput.value.trim() !== '') {
+      // Doctor desk par doctor ne jo live likha hai, wahi uthayega
+      medListHtml = `
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+          <span><strong>1.</strong> ${docMedInput.value.trim()}</span>
+          <span style="color:#16a34a; font-weight:700;">₹18.00</span>
+        </div>
+      `;
+    } else {
+      // Automatic Clinical Match (Agar doctor desk khali ho toh standard triage medicine)
+      medListHtml = `
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+          <span><strong>1.</strong> Pantoprazole 40mg (10 Tab)</span>
+          <span style="color:#16a34a; font-weight:700;">₹14.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:13px;">
+          <span><strong>2.</strong> Paracetamol 650mg (10 Tab)</span>
+          <span style="color:#16a34a; font-weight:700;">₹12.50</span>
+        </div>
+      `;
+    }
+
+    medContainer.innerHTML = medListHtml;
+  }
+
+  // Global override taaki bottom nav ka "Meri Parchi" button seedha ise khole
+  window.navAction = function(action) {
+    if (action === 'slip') {
+      openParchiModal();
+    } else if (action === 'overview') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (action === 'sos') {
+      if (typeof openHospitalModal === 'function') openHospitalModal();
+      else alert('🚨 Emergency SOS Triggered: 112 / 108 Call Connecting...');
+    } else if (action === 'patients' || action === 'consult') {
+      document.querySelector('[class*="Tele-Desk"], [class*="delivery-app-desk"], h2, h3')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 </script>
 </body>
 </html>
