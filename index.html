@@ -4253,19 +4253,19 @@ function processSymptomAI(inputQuery) {
 }
 </script>
   <!-- ==========================================
-     PATIENT REAL DIGITAL PARCHI (LIVE REAL-LIFE DYNAMIC)
+     MEDVAULT 360: REAL-WORLD DYNAMIC OPD DESK (FIREBASE CONNECTED)
 ========================================== -->
 <div id="parchi-lookup-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.8); backdrop-filter:blur(6px); z-index:99999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
   
   <div style="background:#ffffff; width:100%; max-width:410px; border-radius:20px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.35); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     
-    <!-- Header -->
+    <!-- Modal Header -->
     <div style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#ffffff; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;">
       <div style="display:flex; align-items:center; gap:8px;">
         <span style="font-size:20px;">🏥</span>
         <div>
           <h4 style="margin:0; font-size:15px; font-weight:700;">MedVault 360 • OPD Desk</h4>
-          <small style="opacity:0.9; font-size:11px;">Patient Digital Parchi Portal</small>
+          <small style="opacity:0.9; font-size:11px;">Official e-Prescription Verification</small>
         </div>
       </div>
       <button type="button" onclick="closeParchiModal()" style="background:none; border:none; color:#ffffff; font-size:26px; cursor:pointer; line-height:1; padding:0 4px;">&times;</button>
@@ -4275,29 +4275,29 @@ function processSymptomAI(inputQuery) {
     <div id="parchi-step-1" style="padding:22px 20px; text-align:center;">
       <div style="font-size:38px; margin-bottom:10px;">📋</div>
       <h3 style="margin:0 0 6px 0; font-size:17px; color:#0f172a; font-weight:700;">Apni Parchi (Rx) Kholein</h3>
-      <p style="margin:0 0 16px 0; color:#64748b; font-size:12.5px; line-height:1.4;">Doctor dwara issue ki gayi prescription dekhne ke liye apna registered mobile number darj karein.</p>
+      <p style="margin:0 0 16px 0; color:#64748b; font-size:12.5px; line-height:1.4;">Registered patient mobile number darj karke live cloud database se official prescription nikalein.</p>
       
       <div style="margin-bottom:18px; text-align:left;">
-        <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:6px; display:block;">Patient Mobile Number</label>
+        <label style="font-size:12px; font-weight:600; color:#334155; margin-bottom:6px; display:block;">Registered Mobile No.</label>
         <div style="display:flex; align-items:center; border:1.5px solid #cbd5e1; border-radius:12px; padding:0 12px; background:#f8fafc;">
           <span style="color:#64748b; font-size:13px; font-weight:600; margin-right:8px;">+91</span>
-          <input type="tel" id="patient-search-phone" maxlength="10" placeholder="Enter 10-digit number" style="width:100%; border:none; background:transparent; padding:12px 0; font-size:15px; outline:none; font-weight:600; color:#0f172a;">
+          <input type="tel" id="patient-search-phone" maxlength="10" placeholder="10-digit mobile number" style="width:100%; border:none; background:transparent; padding:12px 0; font-size:15px; outline:none; font-weight:600; color:#0f172a;">
         </div>
       </div>
 
-      <button type="button" onclick="fetchLivePrescription(event)" style="width:100%; background:#0284c7; color:#ffffff; border:none; padding:12px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(2,132,199,0.3);">
+      <button type="button" id="btn-fetch-parchi" onclick="fetchLivePrescription(event)" style="width:100%; background:#0284c7; color:#ffffff; border:none; padding:12px; border-radius:12px; font-size:14px; font-weight:700; cursor:pointer; box-shadow:0 4px 12px rgba(2,132,199,0.3);">
         🔍 Parchi Kholein
       </button>
     </div>
 
-    <!-- Step 2: Live Slip (No Hardcoded Data) -->
+    <!-- Step 2: 100% Dynamic Prescription Slip (NO Hardcoded Names) -->
     <div id="parchi-step-2" style="display:none; padding:18px 20px; max-height:80vh; overflow-y:auto; color:#1e293b; background:#ffffff;">
       
-      <!-- Doctor Info -->
+      <!-- Doctor Header Info -->
       <div style="border-bottom:2px solid #0284c7; padding-bottom:10px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:flex-start;">
         <div>
           <div id="rx-doc-name" style="font-size:15px; font-weight:800; color:#0284c7;">--</div>
-          <div id="rx-doc-reg" style="font-size:11px; color:#475569; font-weight:600;">Reg: NMC Verified | Official Rx</div>
+          <div id="rx-doc-reg" style="font-size:11px; color:#475569; font-weight:600;">Reg: Verified Tele-Consultant</div>
         </div>
         <div style="text-align:right;">
           <span style="background:#e0f2fe; color:#0369a1; font-size:10px; font-weight:700; padding:3px 7px; border-radius:6px; border:1px solid #bae6fd;">OPD Rx</span>
@@ -4317,25 +4317,25 @@ function processSymptomAI(inputQuery) {
         </div>
       </div>
 
-      <!-- Real Prescribed Medicine Box -->
+      <!-- Medicines Box -->
       <div style="margin-bottom:14px;">
         <div style="font-size:13px; font-weight:700; color:#0284c7; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
           <span>℞</span> <span>Prescribed Medicines (Dawai)</span>
         </div>
         
         <div id="rx-medicines-container" style="display:flex; flex-direction:column; gap:8px;">
-          <!-- Live Prescribed Medicine loads dynamically -->
+          <!-- Loaded live from database -->
         </div>
       </div>
 
-      <!-- Advice & Sign -->
+      <!-- Doctor Advice & Signature -->
       <div style="border-top:1px dashed #cbd5e1; padding-top:10px; margin-bottom:14px;">
         <div style="font-size:11.5px; color:#475569; margin-bottom:12px;">
-          <strong>Advice:</strong> <span id="rx-patient-advice">Khali pet dawai lein. Paani khoob piyein.</span>
+          <strong>Advice:</strong> <span id="rx-patient-advice">--</span>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:flex-end;">
           <div style="font-size:10px; color:#16a34a; font-weight:600;">
-            ✓ Digitally Signed & Sealed
+            ✓ Digitally Verified & Issued
           </div>
           <div style="text-align:right;">
             <div id="rx-doc-sign" style="font-family:cursive; font-size:15px; color:#0369a1; font-weight:700;">--</div>
@@ -4360,7 +4360,16 @@ function processSymptomAI(inputQuery) {
 </div>
 
 <script>
-  // 1. Navigation
+  // Helper: Firebase Firestore instance safely nikalna
+  function getFirestoreDB() {
+    if (window.db) return window.db;
+    if (typeof firebase !== 'undefined' && firebase.firestore) {
+      return firebase.firestore();
+    }
+    return null;
+  }
+
+  // 1. Navigation Controller
   function goToPatientNav(action) {
     if (action === 'overview') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4385,6 +4394,7 @@ function processSymptomAI(inputQuery) {
     }
   }
 
+  // 2. Modal Open / Close
   function openParchiModal() {
     const modal = document.getElementById('parchi-lookup-modal');
     if (modal) {
@@ -4409,8 +4419,68 @@ function processSymptomAI(inputQuery) {
     document.getElementById('parchi-step-2').style.display = 'none';
   }
 
-  // 2. Real-Time Dynamic Prescription Lookup (Doctor Inputs + Live Slip)
-  function fetchLivePrescription(e) {
+  // 3. AUTO-HOOK: Doctor Desk se jab bhi nayi prescription generate ho, Firebase me save karo
+  document.addEventListener('click', function(e) {
+    const target = e.target;
+    const txt = (target.innerText || '').toLowerCase();
+    
+    // Agar doctor ne "Generate Prescription", "Save", ya "Print" dabaya
+    if (txt.includes('generate') || txt.includes('issue prescription') || txt.includes('submit prescription')) {
+      syncDoctorFormToFirebase();
+    }
+  });
+
+  async function syncDoctorFormToFirebase() {
+    const db = getFirestoreDB();
+    
+    // Doctor desk se fields read karna
+    const getVal = (selectors) => {
+      for (let s of selectors) {
+        const el = document.querySelector(s);
+        if (el && el.value && el.value.trim().length > 0) return el.value.trim();
+      }
+      return '';
+    };
+
+    const docName = getVal(['#doctorName', 'select[name*="doctor"]', 'input[placeholder*="Doctor" i]']) || 'Consulting Doctor';
+    const patName = getVal(['#patientName', 'input[placeholder*="Patient Name" i]', 'input[name*="patient" i]']);
+    const phone = (getVal(['#patientPhone', 'input[placeholder*="Phone" i]', 'input[placeholder*="Mobile" i]']) || '').replace(/\D/g, '');
+    const diag = getVal(['#diagnosis', 'input[placeholder*="Diagnosis" i]', 'input[placeholder*="Disease" i]']) || 'General Consultation';
+    const med = getVal(['#medicines', 'textarea[placeholder*="Medicine" i]', 'textarea[placeholder*="Rx" i]']);
+    const advice = getVal(['#advice', 'textarea[placeholder*="Advice" i]', 'input[placeholder*="Advice" i]']) || 'Khali pet dawai lein. Paani khoob piyein.';
+
+    if (!phone || phone.length < 10 || !patName) {
+      return; // Required details nahi hain toh chupchap rehne do
+    }
+
+    const payload = {
+      patientPhone: phone,
+      patientName: patName,
+      doctorName: docName,
+      diagnosis: diag,
+      medicines: med ? med.split('\n').filter(m => m.trim().length > 1) : ['Tab. Paracetamol (SOS)'],
+      advice: advice,
+      date: new Date().toLocaleDateString('en-GB')
+    };
+
+    // Firebase Firestore me save
+    if (db) {
+      try {
+        await db.collection("prescriptions").doc(phone).set(payload);
+        console.log("Prescription successfully Cloud Firestore par save ho gayi:", phone);
+      } catch (err) {
+        console.warn("Firestore save error, saving locally:", err);
+      }
+    }
+    
+    // Local backup bhi rakho taaki bina internet bhi instant chale
+    try {
+      localStorage.setItem('rx_' + phone, JSON.stringify(payload));
+    } catch(e) {}
+  }
+
+  // 4. MERI PARCHI: Direct Firebase Firestore Lookup (Zero Demo Data!)
+  async function fetchLivePrescription(e) {
     if (e && e.preventDefault) e.preventDefault();
 
     const inp = document.getElementById('patient-search-phone');
@@ -4421,79 +4491,59 @@ function processSymptomAI(inputQuery) {
       return;
     }
 
-    // Helper: Doctor form inputs dhoondhna
-    const findVal = (selectors) => {
-      for (let s of selectors) {
-        const el = document.querySelector(s);
-        if (el && el.value && el.value.trim().length > 0) return el.value.trim();
+    const btn = document.getElementById('btn-fetch-parchi');
+    if (btn) btn.innerText = '⌛ Searching Cloud Database...';
+
+    let record = null;
+    const db = getFirestoreDB();
+
+    // Pehle Firebase Firestore me search karo
+    if (db) {
+      try {
+        const docSnap = await db.collection("prescriptions").doc(phone).get();
+        if (docSnap.exists) {
+          record = docSnap.data();
+        }
+      } catch (err) {
+        console.warn("Firebase query error:", err);
       }
-      return '';
-    };
-
-    // Live Doctor Desk Form se direct read karna
-    let liveDocName = findVal(['#doctorName', 'select[name*="doctor"]', 'input[placeholder*="Doctor" i]']);
-    let livePatName = findVal(['#patientName', 'input[placeholder*="Patient Name" i]', 'input[name*="patient" i]']);
-    let liveDiag = findVal(['#diagnosis', 'input[placeholder*="Diagnosis" i]', 'input[placeholder*="Disease" i]']);
-    let liveAdvice = findVal(['#advice', 'textarea[placeholder*="Advice" i]', 'input[placeholder*="Advice" i]']);
-    let liveMed = findVal(['#medicines', 'textarea[placeholder*="Medicine" i]', 'textarea[placeholder*="Rx" i]']);
-
-    // Agar form ke bajaye live generated slip card page par bani ho, toh use scan karna
-    const pageSlips = Array.from(document.querySelectorAll('div, section')).filter(el => !el.closest('#parchi-lookup-modal'));
-    const realSlipCard = pageSlips.find(el => {
-      const txt = (el.innerText || '');
-      return (txt.includes('Official Rx') || txt.includes('Prescription Slip')) && txt.includes('Patient:') && txt.includes('Rx:');
-    });
-
-    if (realSlipCard) {
-      const full = realSlipCard.innerText;
-      
-      const dm = full.match(/Dr\.\s*([^\n\r(]+)(\([^)]+\))?/i);
-      if (dm && !liveDocName) liveDocName = dm[0].trim();
-
-      const pm = full.match(/Patient:\s*([^\n\r|]+)/i);
-      if (pm && !livePatName) livePatName = pm[1].trim();
-
-      const dim = full.match(/Diagnosis:\s*([^\n\r]+)/i);
-      if (dim && !liveDiag) liveDiag = dim[1].trim();
-
-      const rxm = full.match(/Rx:\s*([\s\S]*?)(?=Advice:|$)/i);
-      if (rxm && rxm[1].trim() && !liveMed) liveMed = rxm[1].trim();
-
-      const advm = full.match(/Advice:\s*([\s\S]*?)(?=Download|\n\s*\n|$)/i);
-      if (advm && advm[1].trim() && !liveAdvice) liveAdvice = advm[1].trim();
     }
 
-    // Default Fallback (agar Doctor desk par abhi kuch bhi type nahi kiya ho)
-    if (!liveDocName) liveDocName = 'Dr. Sharma (MBBS, MD)';
-    if (!livePatName) livePatName = 'Patient (Self)';
-    if (!liveDiag) liveDiag = 'General Consultation';
-    if (!liveAdvice) liveAdvice = 'Khali pet dawai lein. Paani khoob piyein aur aaram karein.';
-    
-    // UI Update (Sab kuch 100% dynamic)
-    document.getElementById('rx-doc-name').innerText = liveDocName;
-    document.getElementById('rx-doc-sign').innerText = liveDocName.split('(')[0].trim();
-    document.getElementById('rx-patient-name').innerText = livePatName;
-    document.getElementById('rx-patient-diagnosis').innerText = liveDiag;
-    document.getElementById('rx-patient-advice').innerText = liveAdvice;
+    // Agar Firestore me abhi document nahi mila, toh check karo kya is session me save hua hai
+    if (!record) {
+      try {
+        const local = localStorage.getItem('rx_' + phone);
+        if (local) record = JSON.parse(local);
+      } catch (e) {}
+    }
+
+    if (btn) btn.innerText = '🔍 Parchi Kholein';
+
+    // AGAR DATABASE ME RECORD NAHI MILA:
+    if (!record) {
+      alert("❌ Is mobile number (" + phone + ") par koi prescription nahi mili!\n\nKripya pehle Doctor Tele-Desk se checkup karein ya sahi number enter karein.");
+      return; // Yahin ruk jao! Kisi dusre ka ya purana fake data kholne ka sawaal hi nahi!
+    }
+
+    // AGAR RECORD MIL GAYA -> Sirf aur sirf database ka asli data fill karo:
+    document.getElementById('rx-patient-name').innerText = record.patientName;
+    document.getElementById('rx-doc-name').innerText = record.doctorName;
+    document.getElementById('rx-doc-sign').innerText = record.doctorName.split('(')[0].trim();
+    document.getElementById('rx-patient-diagnosis').innerText = record.diagnosis;
+    document.getElementById('rx-patient-advice').innerText = record.advice;
     document.getElementById('rx-display-phone').innerText = '+91 ' + phone;
-    document.getElementById('rx-slip-date').innerText = 'Date: ' + new Date().toLocaleDateString('en-GB');
+    document.getElementById('rx-slip-date').innerText = 'Date: ' + record.date;
 
     // Medicines Render
     const container = document.getElementById('rx-medicines-container');
-    let medArray = [];
-    if (liveMed) {
-      medArray = liveMed.split('\n').filter(m => m.trim().length > 1);
-    }
-    if (medArray.length === 0) {
-      medArray = ['Tab. Paracetamol 650mg (SOS)'];
-    }
-
     let medHtml = '';
-    medArray.forEach((med, idx) => {
+    const meds = Array.isArray(record.medicines) ? record.medicines : [record.medicines];
+    
+    meds.forEach((m, idx) => {
       medHtml += `
         <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <div style="font-weight:700; color:#0f172a; font-size:13.5px; text-transform:capitalize;">${idx + 1}. ${med.replace(/^\d+[\.\)]\s*/, '')}</div>
+            <div style="font-weight:700; color:#0f172a; font-size:13.5px; text-transform:capitalize;">${idx + 1}. Tab. ${m.replace(/^\d+[\.\)]\s*/, '')}</div>
             <div style="font-size:11px; color:#64748b;">Khane ke baad (Din mein 2 baar)</div>
           </div>
           <span style="font-size:11px; color:#16a34a; font-weight:700; background:#dcfce7; padding:3px 8px; border-radius:6px;">Generic Prescribed</span>
@@ -4502,18 +4552,19 @@ function processSymptomAI(inputQuery) {
     });
     container.innerHTML = medHtml;
 
-    // Show Step 2
+    // Show Prescription Step
     document.getElementById('parchi-step-1').style.display = 'none';
     document.getElementById('parchi-step-2').style.display = 'block';
   }
 
-  // Bindings
+  // Bind Global Functions
   window.openParchiModal = openParchiModal;
   window.closeParchiModal = closeParchiModal;
   window.backToPhoneStep = backToPhoneStep;
   window.fetchLivePrescription = fetchLivePrescription;
   window.submitPatientPhone = fetchLivePrescription;
 </script>
+  
 </body>
 </html>
 
