@@ -4577,6 +4577,118 @@ function processSymptomAI(inputQuery) {
   document.body.removeChild(a);
   window.URL.revokeObjectURL(a.href);
 }
+ /* ============================================================
+   MEDVAULT 360 - PILL ALARM SOUND & MODAL ENGINE
+============================================================ */
+
+let alarmAudioCtx = null;
+let alarmTimer = null;
+let isAlarmRinging = false;
+
+// 1. Loud Alert Ringtone Generator (Web Audio API - Bina kisi MP3 file ke 100% bajeega)
+function playBeepTone() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!alarmAudioCtx) {
+      alarmAudioCtx = new AudioContext();
+    }
+    if (alarmAudioCtx.state === 'suspended') {
+      alarmAudioCtx.resume();
+    }
+
+    const osc = alarmAudioCtx.createOscillator();
+    const gain = alarmAudioCtx.createGain();
+
+    osc.type = 'sawtooth'; // Loud medical alert chime
+    osc.frequency.setValueAtTime(950, alarmAudioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1800, alarmAudioCtx.currentTime + 0.18);
+
+    gain.gain.setValueAtTime(0.9, alarmAudioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, alarmAudioCtx.currentTime + 0.35);
+
+    osc.connect(gain);
+    gain.connect(alarmAudioCtx.destination);
+
+    osc.start();
+    osc.stop(alarmAudioCtx.currentTime + 0.35);
+  } catch (err) {
+    console.warn("Audio Context alert:", err);
+  }
+}
+
+// 2. Alarm Ringtone Chalu Karna
+function startAlarmSound() {
+  if (isAlarmRinging) return;
+  isAlarmRinging = true;
+
+  playBeepTone();
+  alarmTimer = setInterval(() => {
+    playBeepTone();
+  }, 600); // Har 600ms me loud beep repeat hoga
+
+  // Phone vibration
+  if (navigator.vibrate) {
+    navigator.vibrate([400, 200, 400, 200, 400]);
+  }
+}
+
+// 3. Alarm Ringtone Band Karna (Stop Action)
+function stopPillAlarm() {
+  isAlarmRinging = false;
+  if (alarmTimer) {
+    clearInterval(alarmTimer);
+    alarmTimer = null;
+  }
+  if (navigator.vibrate) {
+    navigator.vibrate(0);
+  }
+
+  // Modal ko band karo
+  const modal = document.getElementById("pillAlarmModal");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.style.display = "none";
+  }
+}
+
+// 4. Modal Open Aur Sound Trigger Karne Ka Main Function
+function triggerPillReminder(medicineName) {
+  const modal = document.getElementById("pillAlarmModal");
+  const medNameElem = document.getElementById("alarmMedName");
+
+  if (medNameElem) {
+    medNameElem.innerText = medicineName || "Dawai Lene Ka Time Ho Gaya!";
+  }
+
+  if (modal) {
+    modal.classList.add("active");
+    modal.style.display = "flex";
+  }
+
+  // Sound start karo
+  startAlarmSound();
+
+  // Background System Notification (Agar tab minimized ho)
+  if ("Notification" in window) {
+    if (Notification.permission === "granted") {
+      new Notification("⏰ MedVault Pill Reminder", {
+        body: `${medicineName || "Medicine"} lene ka waqt ho gaya hai!`,
+        icon: "https://cdn-icons-png.flaticon.com/512/883/883407.png",
+        requireInteraction: true
+      });
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission();
+    }
+  }
+}
+
+// 5. Button Par Click Event Attach Karna
+document.addEventListener("DOMContentLoaded", function() {
+  const dismissBtn = document.getElementById("btnDismissAlarm");
+  if (dismissBtn) {
+    dismissBtn.addEventListener("click", stopPillAlarm);
+  }
+});
 </script>
 
 </body>
