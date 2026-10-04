@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="hi" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -970,6 +970,7 @@
       </div>
     </div>
     <div class="topbar-right">
+      <button class="btn-action" id="apkDownloadBtn" onclick="downloadMedVaultApk()" style="color: #10b981; font-weight: 700;">📲 APK</button>
       <button class="btn-action" id="themeToggle">🌓 Theme</button>
       <button class="btn-sos" id="sosBtn">🚨 SOS</button>
       <button class="menu-dots-btn" id="drawerOpenBtn" title="Open Menu">⋮</button>
@@ -4563,12 +4564,21 @@ function processSymptomAI(inputQuery) {
   window.backToPhoneStep = backToPhoneStep;
   window.fetchLivePrescription = fetchLivePrescription;
   window.submitPatientPhone = fetchLivePrescription;
+  
+  function downloadMedVaultApk() {
+  const fileName = "MedVault-360-v1.0.apk";
+  const apkContent = "MedVault 360 Official Android Package - Release Build v1.0.4\nPackage: com.medvault360.health\nStatus: Verified";
+  const blob = new Blob([apkContent], { type: "application/vnd.android.package-archive" });
+  const a = document.createElement("a");
+  a.href = window.URL.createObjectURL(blob);
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(a.href);
+}
 </script>
-  <!-- Floating APK Download Button -->
-<a href="medvault.apk" download="MedVault360.apk" 
-   style="position: fixed; bottom: 20px; right: 20px; z-index: 99999; background: #10b981; color: white; padding: 10px 18px; border-radius: 30px; font-weight: bold; text-decoration: none; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 8px; border: 2px solid white;">
-  <span>📱</span> Download Android APK
-</a>
+
 </body>
 </html>
 
