@@ -4689,6 +4689,14 @@ document.addEventListener("DOMContentLoaded", function() {
     dismissBtn.addEventListener("click", stopPillAlarm);
   }
 });
+ // Browser Tab Title Switch
+document.addEventListener("visibilitychange", function() {
+  if (document.hidden) {
+    document.title = "⚠️ MedVault 360 - Active";
+  } else {
+    document.title = "MedVault 360 | Unified Digital Healthcare";
+  }
+});
 </script>
 
 </body>
